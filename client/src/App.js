@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LandingPage from './pages/LadingPage';
+import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 // import Admin from './components/Admin';
 // import Seller from './components/Seller';

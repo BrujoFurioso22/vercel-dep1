@@ -1,0 +1,37 @@
+:root {
+    --color-primario: #0056b3;
+    --color-secundario: #009688;
+    --color-terciario: #ffc107; 
+
+    --fondo-principal: #ffffff;
+    --fondo-secundario: #f4f4f8;
+    --fondo-terciario: #e2e2e2;
+
+    --texto-principal: #333333;
+    --texto-secundario: #757575;
+    --texto-destacado: #0056b3;
+
+    --boton-fondo-primario: #0056b3;
+    --boton-texto-primario: #ffffff;
+    --boton-fondo-secundario: #f4f4f8;
+    --boton-texto-secundario: #333333;
+
+    --sombra-ligera: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --sombra-intensa: 0 4px 6px rgba(0, 0, 0, 0.15);
+
+    --borde-ligero: #dddddd;
+    --borde-destacado: #0056b3;
+
+    --estado-hover: #004494;
+    --estado-focus: #009688;
+    --estado-active: #002d62;
+
+    --alerta-exito: #4CAF50;
+    --alerta-error: #f44336;
+    --alerta-advertencia: #ffeb3b;
+
+    --color-negro: #000000;
+    --color-blanco: #ffffff;
+
+    --altura-header: 250px;
+}
