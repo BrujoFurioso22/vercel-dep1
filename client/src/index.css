@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
 :root {
-    --color-primario: #0056b3;
-    --color-secundario: #009688;
-    --color-terciario: #ffc107; 
+    --color-1: #0056b3;
+    --color-2: #009688;
+    --color-3: #ffc107; 
 
     --fondo-principal: #ffffff;
     --fondo-secundario: #f4f4f8;
@@ -33,5 +35,35 @@
     --color-negro: #000000;
     --color-blanco: #ffffff;
 
-    --altura-header: 250px;
+    --altura-header: 50px;
+}
+
+body {
+    font-family: "Source Sans 3", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    background-color: var(--fondo-bingo);
+    color: var(--texto-bingo);
+}
+
+button.primary {
+    background-color: var(--azul-bingo);
+    color: white;
+}
+
+button.secondary {
+    background-color: var(--verde-bingo);
+    color: white;
+}
+
+.alert {
+    background-color: var(--amarillo-bingo);
+    color: black;
+}
+
+h1, h2, h3 {
+    color: var(--azul-bingo);
 }
