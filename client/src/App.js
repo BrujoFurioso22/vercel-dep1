@@ -2,10 +2,10 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LadingPage';
 import Login from './pages/Login';
-import Admin from './components/Admin';
-import Seller from './components/Seller';
-import User from './components/User';
-import NotFound from './components/NotFound';
+// import Admin from './components/Admin';
+// import Seller from './components/Seller';
+// import User from './components/User';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -13,9 +13,9 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/admin/*" element={<Admin />} />
+        {/* <Route path="/admin/*" element={<Admin />} />
         <Route path="/seller/*" element={<Seller />} />
-        <Route path="/user/*" element={<User />} />
+        <Route path="/user/*" element={<User />} /> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
