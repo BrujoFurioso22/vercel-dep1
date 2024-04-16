@@ -68,4 +68,4 @@ const userController = {
     // }
 }
 
-module.exports = bookController
+module.exports = userController

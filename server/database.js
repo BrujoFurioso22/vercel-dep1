@@ -1,14 +1,9 @@
-import pg from "pg";
-
-const { Pool } = pg;
+const { Pool } = require("pg");
+require("dotenv").config();
 
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-});
-
-pool.connect((err) => {
-  if (err) throw err;
-  console.log("Connect to PostgreSQL successfully!");
+  connectionString:
+    "postgres://default:AIl7cEO3GMXm@ep-red-truth-a2kily8j-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require",
 });
 
 module.exports = pool;
