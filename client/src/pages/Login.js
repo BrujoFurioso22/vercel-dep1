@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ObtenerUsuario } from "../consultasBE/User";
+import { ObtenerUsuario, VerificarUsuario } from "../consultasBE/User";
 import { ContenedorPadre } from "../components/styled-componets/ComponentsPrincipales";
 import { InputFieldCustom } from "../components/styled-componets/ComponentsPrincipales";
 import styled from "styled-components";
@@ -30,11 +30,12 @@ const BotonRegreso = styled.div`
 
 function Login() {
   const navigate = useNavigate();
-  const [user, setUser] = useState("");
+  const [email,setEmail] =useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const users = await ObtenerUsuario();
+    const users = await VerificarUsuario(email,password);
     console.log(users);
     // Aquí iría la lógica de autenticación
     // Simulación de asignación de rol
@@ -51,7 +52,8 @@ function Login() {
       <ContenedorLogin>
         <Formulario onSubmit={handleLogin}>
           <h1>Inicio de Sesión</h1>
-          <InputFieldCustom onChange={setUser} label={"Usuario"} />
+          <InputFieldCustom onChange={setEmail} label={"Correo"} />
+          <InputFieldCustom onChange={setPassword} label={"Password"} />
           <button type="submit">Iniciar Sesión</button>
         </Formulario>
       </ContenedorLogin>

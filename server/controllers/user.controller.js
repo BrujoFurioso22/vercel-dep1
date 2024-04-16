@@ -1,71 +1,80 @@
-const postgre = require('../database')
+const postgre = require("../database");
 const userController = {
-    getAll: async(req, res) => {
-        try {
-            const { rows } = await postgre.query("select * from users;")
-            res.json({msg: "OK", data: rows})
-        } catch (error) {
-            res.json({msg: error.msg})
+  getAll: async (req, res) => {
+    try {
+      const { rows } = await postgre.query("select * from users;");
+      res.json({ msg: "OK", data: rows });
+    } catch (error) {
+      res.json({ msg: error.msg });
+    }
+  },
+  getVerificationUser: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const userQuery = await pool.query(
+        "SELECT password FROM users WHERE email = $1",
+        [email]
+      );
+
+      if (userQuery.rows.length > 0) {
+        const validPassword = await bcrypt.compare(
+          password,
+          userQuery.rows[0].password
+        );
+        if (validPassword) {
+          return res.status(200).json({ exists: true });
         }
-    },
-    // getById: async(req, res) => {
-    //     try {
-    //         const { rows } = await postgre.query("select * from books where book_id = $1", [req.params.id])
+      }
+      return res.status(404).json({ exists: false });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
+  // create: async(req, res) => {
+  //     try {
+  //         const { name, price } = req.body
 
-    //         if (rows[0]) {
-    //             return res.json({msg: "OK", data: rows})
-    //         }
+  //         const sql = 'INSERT INTO books(name, price) VALUES($1, $2) RETURNING *'
 
-    //         res.status(404).json({msg: "not found"})
-    //     } catch (error) {
-    //         res.json({msg: error.msg})
-    //     }
-    // },
-    // create: async(req, res) => {
-    //     try {
-    //         const { name, price } = req.body
+  //         const { rows } = await postgre.query(sql, [name, price])
 
-    //         const sql = 'INSERT INTO books(name, price) VALUES($1, $2) RETURNING *'
+  //         res.json({msg: "OK", data: rows[0]})
 
-    //         const { rows } = await postgre.query(sql, [name, price])
+  //     } catch (error) {
+  //         res.json({msg: error.msg})
+  //     }
+  // },
+  // updateById: async(req, res) => {
+  //     try {
+  //         const { name, price } = req.body
 
-    //         res.json({msg: "OK", data: rows[0]})
+  //         const sql = 'UPDATE books set name = $1, price = $2 where book_id = $3 RETURNING *'
 
-    //     } catch (error) {
-    //         res.json({msg: error.msg})
-    //     }
-    // },
-    // updateById: async(req, res) => {
-    //     try {
-    //         const { name, price } = req.body
+  //         const { rows } = await postgre.query(sql, [name, price, req.params.id])
 
-    //         const sql = 'UPDATE books set name = $1, price = $2 where book_id = $3 RETURNING *'
+  //         res.json({msg: "OK", data: rows[0]})
 
-    //         const { rows } = await postgre.query(sql, [name, price, req.params.id])
+  //     } catch (error) {
+  //         res.json({msg: error.msg})
+  //     }
+  // },
+  // deleteById: async(req, res) => {
+  //     try {
+  //         const sql = 'DELETE FROM books where book_id = $1 RETURNING *'
 
-    //         res.json({msg: "OK", data: rows[0]})
+  //         const { rows } = await postgre.query(sql, [req.params.id])
 
-    //     } catch (error) {
-    //         res.json({msg: error.msg})
-    //     }
-    // },
-    // deleteById: async(req, res) => {
-    //     try {
-    //         const sql = 'DELETE FROM books where book_id = $1 RETURNING *'
+  //         if (rows[0]) {
+  //             return res.json({msg: "OK", data: rows[0]})
+  //         }
 
-    //         const { rows } = await postgre.query(sql, [req.params.id])
+  //         return res.status(404).json({msg: "not found"})
 
-    //         if (rows[0]) {
-    //             return res.json({msg: "OK", data: rows[0]})
-    //         }
+  //     } catch (error) {
+  //         res.json({msg: error.msg})
+  //     }
+  // }
+};
 
-    //         return res.status(404).json({msg: "not found"})
-            
-
-    //     } catch (error) {
-    //         res.json({msg: error.msg})
-    //     }
-    // }
-}
-
-module.exports = userController
+module.exports = userController;

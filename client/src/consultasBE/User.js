@@ -9,3 +9,14 @@ export async function ObtenerUsuario() {
     return err;
   }
 }
+export async function VerificarUsuario(email,password) {
+  try {
+    const res = await axios.post(`${url}/api/users/userverif/`,{
+      email: email,
+      password: password,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
