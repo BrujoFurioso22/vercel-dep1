@@ -1,15 +1,12 @@
 const express = require("express");
 const app = express();
+const { corsMiddleware } = require("./middleware/cors");
 
 require("dotenv").config();
 
-// Permitir peticiones de cualquier origen
-app.use(cors());
 
-// O configurar CORS para solo permitir un origen específico
-app.use(cors({
-    origin: 'https://vercel-dep1-client.vercel.app'
-}));
+app.use(corsMiddleware());
+app.disable('x-powered-by');
 
 app.use(express.json());
 
