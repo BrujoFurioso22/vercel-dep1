@@ -11,16 +11,16 @@ const userController = {
   getVerificationUser: async (req, res) => {
     try {
       const { email, password } = req.body;
-      const userQuery = await pool.query(
-        "SELECT password FROM users WHERE email = $1",
-        [email]
+      const { rows } = await postgre.query(
+        `SELECT password FROM users WHERE email = '${email}'`
       );
+      console.log(rows);
 
-      if (userQuery.rows.length > 0) {
-        const validPassword = await bcrypt.compare(
-          password,
-          userQuery.rows[0].password
-        );
+      if (rows.length > 0) {
+        let validPassword = false;
+        if (rows[0].password === password) {
+          validPassword = true;
+        }
         if (validPassword) {
           return res.status(200).json({ exists: true });
         }
