@@ -37,6 +37,7 @@ function Login() {
     event.preventDefault();
     const users = await VerificarUsuario(email, password);
     if (users.data) {
+      console.log(users.data.exist)
       if (users.data.exist === true) {
         console.log("Ingresado Correctamente");
       }
