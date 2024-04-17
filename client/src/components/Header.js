@@ -6,12 +6,17 @@ import { BotonTipo1 } from "./styled-componets/ComponentsPrincipales";
 
 const ContenedorHeader = styled.div`
   display: flex;
-  position: relative;
+  position: absolute;
   top: 0;
   width: 100%;
   height: var(--altura-header);
-  border-bottom: solid 1px var(--borde-ligero);
-  background-color: var(--fondo-secundario);
+  /* border-bottom: solid 1px var(--borde-ligero); */
+  background: rgba(255, 255, 255, 0.10);
+  /* border-radius: 16px; */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3.5px);
+  -webkit-backdrop-filter: blur(3.5px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
 `;
 
 const ContenedorHeader1 = styled.div`
@@ -48,14 +53,16 @@ const ContenedorDerecho = styled.div`
   justify-content: center;
   align-items: center;
   gap: 15px;
-`
+  color: var(--color-blanco);
+`;
 
 const Header = () => {
   const { logout } = useAuth();
   return (
     <ContenedorHeader>
       <ContenedorHeader1>
-        <ContenedorLogo>LOGO</ContenedorLogo>
+        <ContenedorLogo></ContenedorLogo>
+        <ContenedorLogo></ContenedorLogo>
         <ContenedorLogin>
           {localStorage.getItem("id") ? (
             <ContenedorDerecho>
