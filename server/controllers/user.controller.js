@@ -14,7 +14,6 @@ const userController = {
       const { rows } = await postgre.query(
         `SELECT password FROM users WHERE email = '${email}'`
       );
-      console.log(rows);
 
       if (rows.length > 0) {
         let validPassword = false;
