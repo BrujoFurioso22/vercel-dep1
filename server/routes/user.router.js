@@ -4,7 +4,7 @@ const router = express.Router()
 const userController = require('../controllers/user.controller')
 
 router.get("/", userController.getAll)
-router.post("/userverif", userController.getVerificationUser)
+router.get("/userverif", userController.getVerificationUser)
 // router.get("/:id", bookController.getById)
 // router.post("/", bookController.create)
 // router.put("/:id", bookController.updateById)
