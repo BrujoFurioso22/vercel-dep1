@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import { useAuth } from "../auth/AuthContext";
@@ -14,7 +14,7 @@ const ContenedorPadre = styled.div`
   width: 100%;
   /* background-image: url("/back1.webp"), rgba(255, 255, 255, 0.1); */
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.2)),
-    url("/back1.webp");
+    url("/bingobg1.webp");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -26,9 +26,8 @@ const ContenedorRevisarTablas = styled.div`
   position: absolute;
   top: calc(var(--altura-header) + 5px);
   width: 100%;
-  height: 5vh;
+  height: var(--altura-mensaje);
   column-gap: 5vw;
-  padding: 20px 0;
   background-color: var(--color-3);
   .texto {
     font-size: 1.3rem;
@@ -53,15 +52,59 @@ const BingoText = styled.h1`
   font-family: "Chewy", system-ui;
   font-weight: 500;
   font-style: normal;
+  position: relative;
   font-size: 9rem;
-  padding-top:var(--altura-mensaje);
+  margin: 0;
+  margin-top: calc(var(--altura-mensaje));
+  height: calc(100vh - var(--altura-header) - var(--altura-mensaje));
   color: var(--color-blanco);
   text-shadow: var(--sombra-intensa);
 `;
 const ContenidoPagina = styled.div`
-  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: auto;
+  width: 100%;
+`;
+
+const ContenedorElemento1 = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  .imgTabla {
+    width: 50%;
+    height: 40%;
+    background: var(--color-5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  & > .contenedor1 {
+    display: flex;
+    flex-direction: row;
+    height: 600px;
+    width: 100%;
+    & > div {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .d1 {
+      background-color: var(--color-2);
+    }
+    .d2 {
+      background-color: var(--color-1);
+    }
+  }
 `;
 function LandingPage() {
+  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [usu, setUsu] = useState(null);
   useEffect(() => {
@@ -72,19 +115,44 @@ function LandingPage() {
     }
   }, [isAuthenticated]);
 
+  const handleClickTablas = () => {
+    navigate("/user/tablas");
+  };
+
   return (
     <ContenedorPadre>
       <Header />
       {usu !== null && (
         <ContenedorRevisarTablas>
           <div className="texto">Revisa tus tablas aqui {">"}</div>
-          <button className="boton">Tablas</button>
+          <button onClick={handleClickTablas} className="boton">
+            Tablas
+          </button>
         </ContenedorRevisarTablas>
       )}
       <ContenidoPagina>
         <BingoText style={{ textAlign: "center" }}>
-          BINGO <br /> CHABELITA
+          BINGO
+          <br />
+          CHABELITA
         </BingoText>
+        <ContenedorElemento1>
+          <h2>Esta semana se juega...</h2>
+          <div className="contenedor1">
+            <div className="d1">
+              <h3>El tal 1</h3>
+              <div className="imgTabla">
+                ...
+              </div>
+            </div>
+            <div className="d2">
+              <h3>El tal 2</h3>
+              <div className="imgTabla">
+                ...
+              </div>
+            </div>
+          </div>
+        </ContenedorElemento1>
       </ContenidoPagina>
     </ContenedorPadre>
   );

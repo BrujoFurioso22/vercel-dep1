@@ -14,6 +14,7 @@ const ContenedorLogin = styled.div`
   justify-content: center;
   align-items: flex-start;
   padding-top: 5%;
+  
 `;
 
 const Formulario = styled.form`
@@ -25,16 +26,38 @@ const Formulario = styled.form`
   flex-direction: column;
   gap: 10px;
   border: solid 1px var(--borde-ligero);
+  background-color: var(--color-4);
   box-shadow: var(--sombra-ligera);
   & span {
     font-weight: 700;
     font-size: 1.5rem;
   }
+  & hr {
+    width: 90%;
+  }
+
+  & button[type="submit"] {
+    border: none;
+    padding: 10px 30px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background: linear-gradient(70deg, var(--color-1), var(--color-2));
+    color: var(--color-blanco);
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+    &:hover{
+      transform: scale(1.05);
+    }
+  }
+  & > .msgError {
+    font-size: 13px;
+    color: var(--alerta-error);
+  }
 `;
 
 const BotonRegreso = styled.div`
   position: absolute;
-  top: var(--altura-header);
+  top: 0;
   left: 0px;
   padding: 3px 10px 5px 5px;
   border-radius: 0 0 15px 0;
@@ -44,12 +67,20 @@ const BotonRegreso = styled.div`
     color: var(--color-blanco);
   }
 `;
+const ContenedorPagina = styled.div`
+  position: relative;
+  margin-top: var(--altura-header);
+
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+`;
 
 function Login() {
   const navigate = useNavigate();
   const { isAuthenticated, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [verificacion, setVerificacion] = useState(true);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -67,24 +98,38 @@ function Login() {
         navigate("/");
       }
     } else {
+      setVerificacion(false);
+      setTimeout(() => {
+        setVerificacion(true);
+      }, 10000);
       console.log("Error de ingreso");
     }
   };
 
   return (
     <ContenedorPadre>
-      <Header />
-      <BotonRegreso>
-        <Link to="/">{"<"} Regresar</Link>
-      </BotonRegreso>
-      <ContenedorLogin>
-        <Formulario onSubmit={handleLogin}>
-          <span>Inicio de Sesión</span>
-          <InputFieldCustom onChange={setEmail} label={"Correo"} />
-          <InputFieldCustom onChange={setPassword} label={"Password"} />
-          <button type="submit">Iniciar Sesión</button>
-        </Formulario>
-      </ContenedorLogin>
+      <Header oculta={true} />
+      <ContenedorPagina>
+        {/* <BotonRegreso>
+          <Link to="/">{"<"} Regresar</Link>
+        </BotonRegreso> */}
+        <ContenedorLogin>
+          <Formulario onSubmit={handleLogin}>
+            <span>Bienvenido</span>
+            <hr />
+            {!verificacion && (
+              <label className="msgError">* Credenciales no validas</label>
+            )}
+            <InputFieldCustom onChange={setEmail} label={"Correo"} />
+            <InputFieldCustom
+              onChange={setPassword}
+              type={"password"}
+              label={"Password"}
+            />
+            <button type="submit">Iniciar Sesión</button>
+          </Formulario>
+        </ContenedorLogin>
+      </ContenedorPagina>
     </ContenedorPadre>
   );
 }

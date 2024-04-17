@@ -4,6 +4,8 @@
   --color-1: #0056b3;
   --color-2: #009688;
   --color-3: #ffc107;
+  --color-4: #edededa9;
+  --color-5: #00000040;
 
   --fondo-principal: #ffffff;
   --fondo-secundario: #f4f4f8;
@@ -36,7 +38,7 @@
   --color-blanco: #ffffff;
 
   --altura-header: 50px;
-  --altura-mensaje: 10vh;
+  --altura-mensaje: 60px;
 }
 
 body {

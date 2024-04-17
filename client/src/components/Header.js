@@ -1,22 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../auth/AuthContext";
 import { BotonTipo1 } from "./styled-componets/ComponentsPrincipales";
 
 const ContenedorHeader = styled.div`
   display: flex;
-  position: absolute;
+  position: sticky;
   top: 0;
   width: 100%;
   height: var(--altura-header);
   /* border-bottom: solid 1px var(--borde-ligero); */
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
   /* border-radius: 16px; */
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(3.5px);
   -webkit-backdrop-filter: blur(3.5px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  z-index: 100;
 `;
 
 const ContenedorHeader1 = styled.div`
@@ -31,6 +32,9 @@ const ContenedorHeader1 = styled.div`
 
 const ContenedorLogo = styled.div`
   display: flex;
+  & span {
+    cursor: pointer;
+  }
 `;
 
 const ContenedorLogin = styled.div`
@@ -56,24 +60,29 @@ const ContenedorDerecho = styled.div`
   color: var(--color-blanco);
 `;
 
-const Header = () => {
+const Header = ({ oculta }) => {
   const { logout } = useAuth();
+
+  const navigate = useNavigate();
   return (
     <ContenedorHeader>
       <ContenedorHeader1>
-        <ContenedorLogo></ContenedorLogo>
+        <ContenedorLogo>
+          <span onClick={() => navigate("/")}>HOME</span>{" "}
+        </ContenedorLogo>
         <ContenedorLogo></ContenedorLogo>
         <ContenedorLogin>
-          {localStorage.getItem("id") ? (
-            <ContenedorDerecho>
-              Bienvenido {localStorage.getItem("id")}
-              <BotonTipo1 onClick={logout}>Salir</BotonTipo1>
-            </ContenedorDerecho>
-          ) : (
-            <Link className="botonRedireccion" to="/login">
-              Iniciar Sesión
-            </Link>
-          )}
+          {!oculta &&
+            (localStorage.getItem("id") ? (
+              <ContenedorDerecho>
+                Bienvenido {localStorage.getItem("id")}
+                <BotonTipo1 onClick={logout}>Salir</BotonTipo1>
+              </ContenedorDerecho>
+            ) : (
+              <Link className="botonRedireccion" to="/login">
+                Iniciar Sesión
+              </Link>
+            ))}
         </ContenedorLogin>
       </ContenedorHeader1>
     </ContenedorHeader>
