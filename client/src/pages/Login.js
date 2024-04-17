@@ -30,13 +30,19 @@ const BotonRegreso = styled.div`
 
 function Login() {
   const navigate = useNavigate();
-  const [email,setEmail] =useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const users = await VerificarUsuario(email,password);
-    console.log(users);
+    const users = await VerificarUsuario(email, password);
+    if (users.data) {
+      if (users.data.exist === true) {
+        console.log("Ingresado Correctamente");
+      }
+    } else {
+      console.log("Error de ingreso");
+    }
     // Aquí iría la lógica de autenticación
     // Simulación de asignación de rol
     // const roles = { 'admin': '/admin', 'seller': '/seller', 'user': '/user' };
