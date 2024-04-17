@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ObtenerUsuario, VerificarUsuario } from "../consultasBE/User";
 import { ContenedorPadre } from "../components/styled-componets/ComponentsPrincipales";
 import { InputFieldCustom } from "../components/styled-componets/ComponentsPrincipales";
 import styled from "styled-components";
+import { useAuth } from "../auth/AuthContext";
 
 const ContenedorLogin = styled.div`
   display: flex;
@@ -30,25 +31,28 @@ const BotonRegreso = styled.div`
 
 function Login() {
   const navigate = useNavigate();
+  const { isAuthenticated, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/user");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
     const users = await VerificarUsuario(email, password);
     if (users.data) {
-      console.log(users.data.exist)
-      if (users.data.exist === true) {
+      if (users.data.exists === true) {
         console.log("Ingresado Correctamente");
+        login(email);
+        navigate("/user");
       }
     } else {
       console.log("Error de ingreso");
     }
-    // Aquí iría la lógica de autenticación
-    // Simulación de asignación de rol
-    // const roles = { 'admin': '/admin', 'seller': '/seller', 'user': '/user' };
-    // const role = roles[user]; // 'user' sería determinado por la autenticación real
-    // navigate(role);
   };
 
   return (

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useAuth } from "../auth/AuthContext";
 
 const ContenedorHeader = styled.div`
   display: flex;
@@ -42,14 +43,22 @@ const ContenedorLogin = styled.div`
 `;
 
 const Header = () => {
+  const { logout } = useAuth();
   return (
     <ContenedorHeader>
       <ContenedorHeader1>
         <ContenedorLogo>LOGO</ContenedorLogo>
         <ContenedorLogin>
-          <Link className="botonRedireccion" to="/login">
-            Iniciar Sesión
-          </Link>
+          {localStorage.getItem("id") ? (
+            <div>
+              Bienvenido {localStorage.getItem("id")}
+              <button onClick={logout}>Salir</button>
+            </div>
+          ) : (
+            <Link className="botonRedireccion" to="/login">
+              Iniciar Sesión
+            </Link>
+          )}
         </ContenedorLogin>
       </ContenedorHeader1>
     </ContenedorHeader>
