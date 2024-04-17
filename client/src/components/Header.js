@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../auth/AuthContext";
+import { BotonTipo1 } from "./styled-componets/ComponentsPrincipales";
 
 const ContenedorHeader = styled.div`
   display: flex;
@@ -42,6 +43,13 @@ const ContenedorLogin = styled.div`
   }
 `;
 
+const ContenedorDerecho = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+`
+
 const Header = () => {
   const { logout } = useAuth();
   return (
@@ -50,10 +58,10 @@ const Header = () => {
         <ContenedorLogo>LOGO</ContenedorLogo>
         <ContenedorLogin>
           {localStorage.getItem("id") ? (
-            <div>
+            <ContenedorDerecho>
               Bienvenido {localStorage.getItem("id")}
-              <button onClick={logout}>Salir</button>
-            </div>
+              <BotonTipo1 onClick={logout}>Salir</BotonTipo1>
+            </ContenedorDerecho>
           ) : (
             <Link className="botonRedireccion" to="/login">
               Iniciar Sesión

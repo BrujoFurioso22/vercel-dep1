@@ -5,6 +5,17 @@ export const ContenedorPadre = styled.div`
   position: relative;
   width: 100%;
 `;
+export const BotonTipo1 = styled.button`
+  border: solid 1px var(--color-1);
+  border-radius: 5px;
+  padding: 5px 10px;
+  outline: none;
+  cursor: pointer;
+  background-color: var(--fondo-secundario);
+  color: var(--color-1);
+`;
+
+
 
 const InputField = styled.div`
   position: relative;

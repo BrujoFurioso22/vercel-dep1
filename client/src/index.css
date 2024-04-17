@@ -1,69 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 
 :root {
-    --color-1: #0056b3;
-    --color-2: #009688;
-    --color-3: #ffc107; 
+  --color-1: #0056b3;
+  --color-2: #009688;
+  --color-3: #ffc107;
 
-    --fondo-principal: #ffffff;
-    --fondo-secundario: #f4f4f8;
-    --fondo-terciario: #e2e2e2;
+  --fondo-principal: #ffffff;
+  --fondo-secundario: #f4f4f8;
+  --fondo-terciario: #e2e2e2;
 
-    --texto-principal: #333333;
-    --texto-secundario: #757575;
-    --texto-destacado: #0056b3;
+  --texto-principal: #333333;
+  --texto-secundario: #757575;
+  --texto-destacado: #0056b3;
 
-    --boton-fondo-primario: #0056b3;
-    --boton-texto-primario: #ffffff;
-    --boton-fondo-secundario: #f4f4f8;
-    --boton-texto-secundario: #333333;
+  --boton-fondo-primario: #0056b3;
+  --boton-texto-primario: #ffffff;
+  --boton-fondo-secundario: #f4f4f8;
+  --boton-texto-secundario: #333333;
 
-    --sombra-ligera: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --sombra-intensa: 0 4px 6px rgba(0, 0, 0, 0.15);
+  --sombra-ligera: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --sombra-intensa: 0 4px 6px rgba(0, 0, 0, 0.15);
 
-    --borde-ligero: #dddddd;
-    --borde-destacado: #0056b3;
+  --borde-ligero: #dddddd;
+  --borde-destacado: #0056b3;
 
-    --estado-hover: #004494;
-    --estado-focus: #009688;
-    --estado-active: #002d62;
+  --estado-hover: #004494;
+  --estado-focus: #009688;
+  --estado-active: #002d62;
 
-    --alerta-exito: #4CAF50;
-    --alerta-error: #f44336;
-    --alerta-advertencia: #ffeb3b;
+  --alerta-exito: #4caf50;
+  --alerta-error: #f44336;
+  --alerta-advertencia: #ffeb3b;
 
-    --color-negro: #000000;
-    --color-blanco: #ffffff;
+  --color-negro: #000000;
+  --color-blanco: #ffffff;
 
-    --altura-header: 50px;
+  --altura-header: 50px;
 }
 
 body {
-    font-family: "Source Sans 3", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
-    margin: 0;
-    padding: 0;
-    background-color: var(--fondo-bingo);
-    color: var(--texto-bingo);
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  background-color: var(--fondo-bingo);
+  color: var(--texto-bingo);
 }
 
 button.primary {
-    background-color: var(--azul-bingo);
-    color: white;
+  background-color: var(--azul-bingo);
+  color: white;
 }
 
 button.secondary {
-    background-color: var(--verde-bingo);
-    color: white;
+  background-color: var(--verde-bingo);
+  color: white;
 }
 
 .alert {
-    background-color: var(--amarillo-bingo);
-    color: black;
+  background-color: var(--amarillo-bingo);
+  color: black;
 }
 
-h1, h2, h3 {
-    color: var(--azul-bingo);
+h1,
+h2,
+h3 {
+  color: var(--azul-bingo);
+}
+
+button.boton-tipo-1 {
+  border: solid 1px var(--color-1);
+  border-radius: 5px;
+  padding: 5px 10px;
+  outline: none;
+  cursor: pointer;
+  background-color: var(--fondo-secundario);
+  color: var(--color-negro);
 }
