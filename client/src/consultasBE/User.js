@@ -11,7 +11,7 @@ export async function ObtenerUsuario() {
 }
 export async function VerificarUsuario(email,password) {
   try {
-    const res = await axios.post(`${url}/api/users/userverif/`,{
+    const res = await axios.post(`${url}/api/users/userverif`,{
       email: email,
       password: password,
     });
