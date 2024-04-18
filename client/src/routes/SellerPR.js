@@ -1,5 +1,5 @@
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 
 export function SellerPR({ children }) {
   const { isAuthenticated, rol } = useAuth();
@@ -7,10 +7,10 @@ export function SellerPR({ children }) {
 
   if (!isAuthenticated) {
     // Redirigir a Login, recordando la última ubicación
-    if (rol !== 23) {
-      return <Navigate to="/" state={{ from: location }} replace />;
-    }
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  if (rol !== 23) {
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   return children;
