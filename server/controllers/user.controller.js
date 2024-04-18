@@ -10,9 +10,9 @@ const userController = {
   },
   getVerificationUser: async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { cedulacelular, password } = req.body;
       const { rows } = await postgre.query(
-        `SELECT password FROM users WHERE email = '${email}'`
+        `SELECT password, rol FROM users WHERE cc = '${cedulacelular}'`
       );
 
       if (rows.length > 0) {
@@ -21,7 +21,7 @@ const userController = {
           validPassword = true;
         }
         if (validPassword) {
-          return res.status(200).json({ exists: true });
+          return res.status(200).json({ exists: true, rol: rows[0].rol });
         }
       }
       return res.status(404).json({ exists: false });

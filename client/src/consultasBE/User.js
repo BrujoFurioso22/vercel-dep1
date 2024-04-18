@@ -9,10 +9,10 @@ export async function ObtenerUsuario() {
     return err;
   }
 }
-export async function VerificarUsuario(email,password) {
+export async function VerificarUsuario(cedulacelular,password) {
   try {
     const res = await axios.post(`${url}/api/users/userverif`,{
-      email: email,
+      cedulacelular: cedulacelular,
       password: password,
     });
     return res;

@@ -9,14 +9,16 @@ export const AuthProvider = ({ children }) => {
     () => localStorage.getItem("isAuthenticated") === "true"
   );
 
-  const login = (id) => {
+  const login = (id,rol) => {
     localStorage.setItem("isAuthenticated", "true");
     localStorage.setItem("id", id);
+    localStorage.setItem("rol", rol);
     setIsAuthenticated(true);
   };
   const logout = () => {
     localStorage.setItem("isAuthenticated", "false");
     localStorage.removeItem("id");
+    localStorage.removeItem("rol");
 
     setIsAuthenticated(false);
   };

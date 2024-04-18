@@ -10,16 +10,18 @@ import Header from "../components/Header";
 const ContenedorLogin = styled.div`
   display: flex;
   width: 100%;
-  height: 80vh;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 5%;
-  
+  /* padding-top: 5%; */
+  height: 100%;
+
+  /* padding-top: 5%; */
 `;
 
 const Formulario = styled.form`
   display: flex;
   padding: 20px;
+  margin-top: 5%;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
@@ -45,7 +47,7 @@ const Formulario = styled.form`
     color: var(--color-blanco);
     cursor: pointer;
     transition: all 0.4s ease-in-out;
-    &:hover{
+    &:hover {
       transform: scale(1.05);
     }
   }
@@ -69,7 +71,7 @@ const BotonRegreso = styled.div`
 `;
 const ContenedorPagina = styled.div`
   position: relative;
-  margin-top: var(--altura-header);
+  height: calc(100vh - var(--altura-header) - 1px);
 
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -78,7 +80,7 @@ const ContenedorPagina = styled.div`
 function Login() {
   const navigate = useNavigate();
   const { isAuthenticated, login } = useAuth();
-  const [email, setEmail] = useState("");
+  const [cedulacelular, setCedulaCelular] = useState("");
   const [password, setPassword] = useState("");
   const [verificacion, setVerificacion] = useState(true);
 
@@ -90,11 +92,12 @@ function Login() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const users = await VerificarUsuario(email, password);
+    const users = await VerificarUsuario(cedulacelular, password);
     if (users.data) {
       if (users.data.exists === true) {
+        const rol = users.data.rol;
         console.log("Ingresado Correctamente");
-        login(email);
+        login(cedulacelular, rol);
         navigate("/");
       }
     } else {
@@ -120,7 +123,10 @@ function Login() {
             {!verificacion && (
               <label className="msgError">* Credenciales no validas</label>
             )}
-            <InputFieldCustom onChange={setEmail} label={"Correo"} />
+            <InputFieldCustom
+              onChange={setCedulaCelular}
+              label={"Cédula/Celular (Ejem: +593XXXXXXXXX)"}
+            />
             <InputFieldCustom
               onChange={setPassword}
               type={"password"}
