@@ -61,7 +61,7 @@ const ContenedorDerecho = styled.div`
 `;
 
 const Header = ({ oculta }) => {
-  const { logout } = useAuth();
+  const { logout, rol } = useAuth();
 
   const navigate = useNavigate();
   return (
@@ -70,7 +70,14 @@ const Header = ({ oculta }) => {
         <ContenedorLogo>
           <span onClick={() => navigate("/")}>HOME</span>{" "}
         </ContenedorLogo>
-        <ContenedorLogo></ContenedorLogo>
+        <ContenedorLogo>
+          {rol === 23 && (
+            <div>
+              <Link to="/seller/vender">Vender</Link>
+              <Link to="/seller/consultarT">Consultar</Link>
+            </div>
+          )}
+        </ContenedorLogo>
         <ContenedorLogin>
           {!oculta &&
             (localStorage.getItem("id") ? (

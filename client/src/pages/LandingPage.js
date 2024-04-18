@@ -105,7 +105,7 @@ const ContenedorElemento1 = styled.div`
 `;
 function LandingPage() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, rol } = useAuth();
   const [usu, setUsu] = useState(null);
   useEffect(() => {
     if (isAuthenticated) {
@@ -122,7 +122,7 @@ function LandingPage() {
   return (
     <ContenedorPadre>
       <Header />
-      {usu !== null && (
+      {usu !== null && rol === 0 && (
         <ContenedorRevisarTablas>
           <div className="texto">Revisa tus tablas aqui {">"}</div>
           <button onClick={handleClickTablas} className="boton">

@@ -4,10 +4,12 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 // import Admin from './components/Admin';
 // import Seller from './components/Seller';
-import UserPage from "./pages/UserPages/UserPage";
+import UserRoutes from "./pages/PaginasPadre/UserRoutes";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./auth/AuthContext";
-import { UserRoute } from "./routes/UserRoute";
+import { UserPR } from "./routes/UserPR";
+import { SellerPR } from "./routes/SellerPR";
+import SellerRoutes from "./pages/PaginasPadre/SellerRoutes";
 
 function App() {
   return (
@@ -21,9 +23,17 @@ function App() {
           <Route
             path="/user/*"
             element={
-              <UserRoute>
-                <UserPage />
-              </UserRoute>
+              <UserPR>
+                <UserRoutes />
+              </UserPR>
+            }
+          />
+          <Route
+            path="/seller/*"
+            element={
+              <SellerPR>
+                <SellerRoutes />
+              </SellerPR>
             }
           />
           <Route path="*" element={<NotFound />} />

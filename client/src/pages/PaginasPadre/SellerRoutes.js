@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import Tablas from "./Tablas";
 import styled from "styled-components";
+import VenderTablas from "../SellerPages/VenderTablas";
+import ConsultarTablas from "../SellerPages/ConsultarTablas";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -18,14 +19,15 @@ const ContenedorPadre = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
 `;
-const UserPage = () => {
+const SellerRoutes = () => {
   return (
     <ContenedorPadre>
       <Routes>
-        <Route path="tablas" element={<Tablas />} />
+        <Route path="vender" element={<VenderTablas />} />
+        <Route path="consultarT" element={<ConsultarTablas />} />
       </Routes>
     </ContenedorPadre>
   );
 };
 
-export default UserPage;
+export default SellerRoutes;
