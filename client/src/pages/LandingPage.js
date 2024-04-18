@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import { useAuth } from "../auth/AuthContext";
+import { BotonWpp } from "../components/styled-componets/ComponentsPrincipales";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -76,7 +77,7 @@ const ContenedorElemento1 = styled.div`
   width: 100%;
   .imgTabla {
     width: 50%;
-    height: 40%;
+    height: 70%;
     background: var(--color-5);
     display: flex;
     justify-content: center;
@@ -86,11 +87,12 @@ const ContenedorElemento1 = styled.div`
   & > .contenedor1 {
     display: flex;
     flex-direction: row;
-    height: 600px;
+    height: 500px;
     width: 100%;
     & > div {
       display: flex;
       width: 100%;
+      height: auto;
       justify-content: center;
       align-items: center;
       flex-direction: column;
@@ -105,7 +107,8 @@ const ContenedorElemento1 = styled.div`
 `;
 function LandingPage() {
   const navigate = useNavigate();
-  const { isAuthenticated, rol } = useAuth();
+  const { isAuthenticated } = useAuth();
+  const rol = localStorage.getItem("rol") ?? "99";
   const [usu, setUsu] = useState(null);
   useEffect(() => {
     if (isAuthenticated) {
@@ -122,7 +125,7 @@ function LandingPage() {
   return (
     <ContenedorPadre>
       <Header />
-      {usu !== null && rol === 0 && (
+      {usu !== null && rol === "0" && (
         <ContenedorRevisarTablas>
           <div className="texto">Revisa tus tablas aqui {">"}</div>
           <button onClick={handleClickTablas} className="boton">
@@ -140,15 +143,28 @@ function LandingPage() {
           <h2>Esta semana se juega...</h2>
           <div className="contenedor1">
             <div className="d1">
-              <h3>El tal 1</h3>
-              <div className="imgTabla">
-                ...
+              <h3>Cartilla 1</h3>
+              <div className="imgTabla">...</div>
+              <div>
+                <BotonWpp
+                  phoneNumber={"593939188903"}
+                  message={
+                    "¡Hola! Estoy interesado en adquirir una tabla de tipo *1*. Me gustaría saber cuál es el precio actual y si tienen disponibilidad. Gracias de antemano por su atención."
+                  }
+                />
               </div>
             </div>
             <div className="d2">
-              <h3>El tal 2</h3>
-              <div className="imgTabla">
-                ...
+              <h3>Cartilla 2</h3>
+              <div className="imgTabla">...</div>
+              <div>
+                {" "}
+                <BotonWpp
+                  phoneNumber={"593939188903"}
+                  message={
+                    "¡Hola! Estoy interesado en adquirir una tabla de tipo *2*. Me gustaría saber cuál es el precio actual y si tienen disponibilidad. Gracias de antemano por su atención."
+                  }
+                />
               </div>
             </div>
           </div>

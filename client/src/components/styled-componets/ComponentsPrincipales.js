@@ -78,14 +78,15 @@ const InputField = styled.div`
     cursor: pointer;
     z-index: 3;
     user-select: none;
-
   }
 `;
 
 export const InputFieldCustom = ({ onChange, label, type }) => {
-  const [inputType, setInputType] = useState(type === 'password' ? 'password' : 'text');
+  const [inputType, setInputType] = useState(
+    type === "password" ? "password" : "text"
+  );
   const toggleType = () => {
-    setInputType(inputType === 'password' ? 'text' : 'password');
+    setInputType(inputType === "password" ? "text" : "password");
   };
   return (
     <InputField>
@@ -96,12 +97,35 @@ export const InputFieldCustom = ({ onChange, label, type }) => {
         onChange={(e) => onChange(e.target.value)}
       />
       <label htmlFor="my-input">{label}</label>
-      {type === 'password' && (
+      {type === "password" && (
         <div className="boton-ver" onClick={toggleType}>
           {/* Aquí puedes usar un ícono como <EyeIcon /> si tienes uno, o un emoji como alternativa simple */}
-          {inputType === 'password' ? '👁️' : '👁️‍🗨️'}
+          {inputType === "password" ? "👁️" : "👁️‍🗨️"}
         </div>
       )}
     </InputField>
+  );
+};
+
+const Botonwpp = styled.a`
+  padding: 5px 10px;
+  background-color: var(--color-wpp);
+  color: var(--color-blanco);
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+export const BotonWpp = ({ phoneNumber, message }) => {
+  const encodedMessage = encodeURIComponent(message);
+  return (
+    <Botonwpp
+      href={`https://wa.me/${phoneNumber}?text=${encodedMessage}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Enviar Mensaje a WhatsApp
+    </Botonwpp>
   );
 };

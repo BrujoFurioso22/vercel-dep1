@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../auth/AuthContext";
@@ -28,6 +28,9 @@ const ContenedorHeader1 = styled.div`
   align-items: center;
   padding: 15px;
   justify-content: space-between;
+  & > div {
+    width: 100%;
+  }
 `;
 
 const ContenedorLogo = styled.div`
@@ -36,10 +39,32 @@ const ContenedorLogo = styled.div`
     cursor: pointer;
   }
 `;
+const ContenedorMenu = styled.div`
+  display: flex;
+  justify-content: center;
+  & > div {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    
+  }
+  & a {
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--color-negro);
+      padding: 4px 15px;
+      border-radius:10px;
+      transition: all 0.3s ease;
+      &:hover{
+        background-color: var(--color-1);
+        color: var(--color-blanco);
+      }
+    }
+`;
 
 const ContenedorLogin = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   & .botonRedireccion {
     padding: 8px 15px;
@@ -61,23 +86,26 @@ const ContenedorDerecho = styled.div`
 `;
 
 const Header = ({ oculta }) => {
-  const { logout, rol } = useAuth();
-console.log(rol)
+  const { logout } = useAuth();
+  // console.log(rol);
   const navigate = useNavigate();
+  const Menu = () => {
+    return (
+      <div>
+        <Link to="/seller/vender">Vender</Link>
+        <Link to="/seller/consultarT">Consultar</Link>
+      </div>
+    );
+  };
   return (
     <ContenedorHeader>
       <ContenedorHeader1>
         <ContenedorLogo>
           <span onClick={() => navigate("/")}>HOME</span>{" "}
         </ContenedorLogo>
-        <ContenedorLogo>
-          {localStorage.getItem("rol") === 23 && (
-            <div>
-              <Link to="/seller/vender">Vender</Link>
-              <Link to="/seller/consultarT">Consultar</Link>
-            </div>
-          )}
-        </ContenedorLogo>
+        <ContenedorMenu>
+          {localStorage.getItem("rol") === "23" && <Menu />}
+        </ContenedorMenu>
         <ContenedorLogin>
           {!oculta &&
             (localStorage.getItem("id") ? (

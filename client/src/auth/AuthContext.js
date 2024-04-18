@@ -8,14 +8,14 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => localStorage.getItem("isAuthenticated") === "true"
   );
-  const [rol, setRol] = useState(localStorage.getItem("rol"));
+  const [rol, setRol] = useState(() => localStorage.getItem("rol"));
 
   const login = (id, rol) => {
     localStorage.setItem("isAuthenticated", "true");
     localStorage.setItem("id", id);
     localStorage.setItem("rol", rol);
     setIsAuthenticated(true);
-    setRol(rol)
+    setRol(rol);
   };
   const logout = () => {
     localStorage.setItem("isAuthenticated", "false");
@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("rol");
 
     setIsAuthenticated(false);
+    setRol(null);
   };
 
   return (
