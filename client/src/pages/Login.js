@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { VerificarUsuario } from "../consultasBE/User";
 import { ContenedorPadre } from "../components/styled-componets/ComponentsPrincipales";
 import { InputFieldCustom } from "../components/styled-componets/ComponentsPrincipales";
@@ -57,18 +57,18 @@ const Formulario = styled.form`
   }
 `;
 
-const BotonRegreso = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0px;
-  padding: 3px 10px 5px 5px;
-  border-radius: 0 0 15px 0;
-  background-color: var(--color-1);
-  & a {
-    text-decoration: none;
-    color: var(--color-blanco);
-  }
-`;
+// const BotonRegreso = styled.div`
+//   position: absolute;
+//   top: 0;
+//   left: 0px;
+//   padding: 3px 10px 5px 5px;
+//   border-radius: 0 0 15px 0;
+//   background-color: var(--color-1);
+//   & a {
+//     text-decoration: none;
+//     color: var(--color-blanco);
+//   }
+// `;
 const ContenedorPagina = styled.div`
   position: relative;
   height: calc(100vh - var(--altura-header) - 1px);

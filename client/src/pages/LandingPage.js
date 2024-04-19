@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import { useAuth } from "../auth/AuthContext";
@@ -56,8 +56,8 @@ const BingoText = styled.h1`
   position: relative;
   font-size: 9rem;
   margin: 0;
-  margin-top: calc(var(--altura-mensaje));
-  height: calc(100vh - var(--altura-header) - var(--altura-mensaje));
+  margin-top: -50px;
+  /* margin-top: calc(var(--altura-mensaje)); */
   color: var(--color-blanco);
   text-shadow: var(--sombra-intensa);
 `;
@@ -67,6 +67,55 @@ const ContenidoPagina = styled.div`
   flex-direction: column;
   height: auto;
   width: 100%;
+`;
+
+const ContenedorPP = styled.div`
+  height: calc(100vh - var(--altura-header));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+const ContenedorVerMas = styled.div`
+  position: absolute;
+  bottom: 20px;
+  /* background-color: var(--color-1); */
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  .c1 {
+    width: fit-content;
+    height: fit-content;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    border: none;
+    background-color: var(--color-blanco);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    flex-direction: column;
+    line-height: 15px;
+    box-shadow: var(--sombra-intensa);
+    cursor: pointer;
+    animation: identifier 1s infinite alternate
+      cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+    & > span {
+      padding-top: 10px;
+    }
+  }
+
+  @keyframes identifier {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-10px);
+    }
+  }
 `;
 
 const ContenedorElemento1 = styled.div`
@@ -122,6 +171,13 @@ function LandingPage() {
     navigate("/user/tablas");
   };
 
+  const scrollToElement = () => {
+    const element = document.getElementById("elemento1");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <ContenedorPadre>
       <Header />
@@ -134,12 +190,20 @@ function LandingPage() {
         </ContenedorRevisarTablas>
       )}
       <ContenidoPagina>
-        <BingoText style={{ textAlign: "center" }}>
-          BINGO
-          <br />
-          CHABELITA
-        </BingoText>
-        <ContenedorElemento1>
+        <ContenedorPP>
+          <BingoText style={{ textAlign: "center" }}>
+            BINGO
+            <br />
+            CHABELITA
+          </BingoText>
+          <ContenedorVerMas>
+            <div className="c1" onClick={scrollToElement}>
+              <span>Ver más</span>
+              <i className="bi bi-arrow-down-short"></i>
+            </div>
+          </ContenedorVerMas>
+        </ContenedorPP>
+        <ContenedorElemento1 id="elemento1">
           <h2>Esta semana se juega...</h2>
           <div className="contenedor1">
             <div className="d1">

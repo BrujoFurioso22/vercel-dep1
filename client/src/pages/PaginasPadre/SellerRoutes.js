@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import VenderTablas from "../SellerPages/VenderTablas";
 import ConsultarTablas from "../SellerPages/ConsultarTablas";
