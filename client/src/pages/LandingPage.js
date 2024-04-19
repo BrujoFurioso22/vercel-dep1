@@ -85,6 +85,7 @@ const ContenedorVerMas = styled.div`
   height: auto;
   display: flex;
   justify-content: center;
+  user-select: none;
   .c1 {
     width: fit-content;
     height: fit-content;
