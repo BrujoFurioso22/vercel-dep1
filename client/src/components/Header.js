@@ -68,6 +68,7 @@ const ContenedorMenu = styled.div`
     padding: 4px 15px;
     border-radius: 10px;
     transition: all 0.3s ease;
+    text-align: center;
 
     &.active-link {
       background-color: var(--color-1); /* Color verde */

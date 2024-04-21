@@ -78,7 +78,7 @@ const ContenidoPagina = styled.div`
 `;
 
 const ContenedorPP = styled.div`
-  height: calc(100vh - var(--altura-header));
+  height: calc(100dvh - var(--altura-header));
   position: relative;
   display: flex;
   flex-direction: column;
