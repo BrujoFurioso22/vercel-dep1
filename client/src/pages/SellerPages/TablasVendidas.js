@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-
+import GeneratePdfButton, { downloadPdf } from "../../components/pdfMaker/pdfMaker";
 // const ContenedorPadre = styled.div`
 //   display: flex;
 //   flex-direction: column;
@@ -165,9 +165,10 @@ const Tablas = ({ datos }) => {
                   <td key={`${venta.idVenta}-${header}`}>{venta[header]}</td>
                 ))}
                 <td>
-                  <button>
+                  {/* <button onClick={downloadPdf}>
                     Descargar <i className="bi bi-download"></i>
-                  </button>
+                  </button> */}
+                  <GeneratePdfButton/>
                 </td>
               </tr>
             ))}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      .page {
+        font-family: "Arial", sans-serif;
+        width: 210mm;
+        min-height: 297mm;
+        padding: 2mm;
+        background: white;
+        color: black;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        padding: 5mm 10mm;
+        background-color: #f1f1f1;
+        text-align: center;
+        border: solid 1px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        gap: 2mm;
+        justify-content: space-evenly;
+      }
+      .c2-header {
+        display: flex;
+        flex-direction: column;
+      }
+      .c2-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 3mm;
+        row-gap: 1.5mm;
+        border: solid 1px rgba(0, 0, 0, 0.3);
+        padding: 1mm 2mm;
+        border-radius: 2mm;
+      }
+
+      .footer {
+        padding: 2mm;
+        background-color: #f1f1f1;
+        text-align: center;
+        border: solid 1px black;
+        border-radius: 10px;
+        bottom: 0;
+      }
+      .bingo-container {
+        display: flex;
+        width: 100%;
+        padding: 10mm;
+      }
+      .bingo-container-u {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10mm;
+      }
+      .bingo-card {
+        width: 100%;
+        height: 120mm;
+        padding: 10mm;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="header">
+        <div class="c1-header">
+          <h3>Premio de $10000</h3>
+        </div>
+        <div class="c2-header">
+          <div class="c2-tit">Los premios seran:</div>
+          <div class="c2-content">
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+            <div>licuadora</div>
+          </div>
+        </div>
+        <div class="c3-header">
+          <div>BINGO CHABELITA</div>
+        </div>
+      </div>
+
+      <div class="bingo-container">
+        <div class="bingo-container-u">
+          <div class="bingo-card">
+            <h2>Tabla #202342</h2>
+            <div class="bingo-table">Tabla1</div>
+          </div>
+          <div class="bingo-card">
+            <h2>Tabla #202342</h2>
+            <div class="bingo-table">Tabla1</div>
+          </div>
+          <div class="bingo-card">
+            <h2>Tabla #202342</h2>
+            <div class="bingo-table">Tabla1</div>
+          </div>
+          <div class="bingo-card">
+            <h2>Tabla #202342</h2>
+            <div class="bingo-table">Tabla1</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">CÓDIGO DE HOJA: kj345uhf39jskd23</div>
+    </div>
+  </body>
+</html>

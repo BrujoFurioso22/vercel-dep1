@@ -1,8 +1,15 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useMatch,
+  useNavigate,
+  useResolvedPath,
+} from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../auth/AuthContext";
 import { BotonTipo1 } from "./styled-componets/ComponentsPrincipales";
+import logo from "../imgs/LogoChabelita1.ico"
 
 const ContenedorHeader = styled.div`
   display: flex;
@@ -35,6 +42,10 @@ const ContenedorHeader1 = styled.div`
 
 const ContenedorLogo = styled.div`
   display: flex;
+  & > img {
+    width: 50px;
+    cursor: pointer;
+  }
   & span {
     cursor: pointer;
   }
@@ -46,20 +57,21 @@ const ContenedorMenu = styled.div`
     display: flex;
     justify-content: center;
     gap: 10px;
-    
   }
+
   & a {
-      cursor: pointer;
-      text-decoration: none;
-      color: var(--color-negro);
-      padding: 4px 15px;
-      border-radius:10px;
-      transition: all 0.3s ease;
-      &:hover{
-        background-color: var(--color-1);
-        color: var(--color-blanco);
-      }
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--color-negro);
+    padding: 4px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+
+    &.active-link {
+      background-color: var(--color-1); /* Color verde */
+      color: white; /* Color de texto blanco */
     }
+  }
 `;
 
 const ContenedorLogin = styled.div`
@@ -85,16 +97,34 @@ const ContenedorDerecho = styled.div`
   color: var(--color-blanco);
 `;
 
+function CustomNavLink({ to, children }) {
+  // Resuelve la ruta de manera que se considere la ubicación base si la hubiera
+  let resolved = useResolvedPath(to);
+  // Usa el hook useMatch para verificar si la ruta actual coincide con el enlace
+  let match = useMatch({ path: resolved.pathname, end: true });
+
+  return (
+    <NavLink to={to} className={match && "active-link"}>
+      {children}
+    </NavLink>
+  );
+}
+
 const Header = ({ oculta }) => {
   const { logout } = useAuth();
   // console.log(rol);
   const navigate = useNavigate();
+
   const Menu = () => {
     return (
       <div>
-        <Link to="/seller/vender">Vender</Link>
-        <Link to="/seller/tablasVendidas">Tablas Vendidas</Link>
-        <Link to="/seller/tablasenvivo">Consultar Tablas</Link>
+        <CustomNavLink to="/seller/vender">Vender</CustomNavLink>
+        <CustomNavLink to="/seller/tablasVendidas">
+          Tablas Vendidas
+        </CustomNavLink>
+        <CustomNavLink to="/seller/tablasenvivo">
+          Consultar Tablas
+        </CustomNavLink>
       </div>
     );
   };
@@ -102,7 +132,8 @@ const Header = ({ oculta }) => {
     <ContenedorHeader>
       <ContenedorHeader1>
         <ContenedorLogo>
-          <span onClick={() => navigate("/")}>HOME</span>{" "}
+          <img onClick={() => navigate("/")} src={logo} alt="logo Bingo Chabelita" />
+          {/* <span onClick={() => navigate("/")}>HOME</span>{" "} */}
         </ContenedorLogo>
         <ContenedorMenu>
           {localStorage.getItem("rol") === "23" && <Menu />}

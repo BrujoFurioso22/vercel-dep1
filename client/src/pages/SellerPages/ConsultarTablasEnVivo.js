@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
+import GeneratePdfButton from "../../components/pdfMaker/pdfMaker";
+import BingoPdfTemplate from "../../components/pdfMaker/Juego2Template";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -65,6 +67,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
           />
           <ButtonVerif>Verificar</ButtonVerif>
         </div>
+        <GeneratePdfButton />
       </Contenedor1>
     </>
   );
