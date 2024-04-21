@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -45,7 +46,6 @@ const VentanaEmergente = styled.div`
   top: 0;
   width: 100%;
   border-radius: 10px;
-
   height: 100%;
   display: flex;
   justify-content: center;
@@ -60,16 +60,34 @@ const VentanaEmergente = styled.div`
     border-radius: 10px;
     box-shadow: var(--sombra-intensa);
     display: flex;
-    align-items: flex-start;
     flex-direction: column;
+    justify-content: center;
     & > .titulo {
       font-size: 1.4rem;
       font-weight: 700;
+      text-align: center;
+    }
+  }
+  .gridDatos {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* O 1fr 1fr, dependiendo de cómo desees distribuir el espacio */
+    align-items: start;
+    gap: 10px;
+    padding: 10px;
+    width: 100%; /* Divide el contenedor en dos columnas */
+    .dato {
+      display: contents; /* Esto permite que cada span actúe como si estuviera directamente en la grilla */
+      .dato1 {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
     }
   }
 
   .contenedorBotones {
     display: flex;
+    grid-column: 1 / -1;
     justify-content: center;
     gap: 10px;
     align-items: center;
@@ -132,23 +150,53 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
       <div className="modal">
         <span className="titulo">Confirmar Venta</span>
         <hr />
-        {/* Muestra la información ingresada aquí */}
-        <span>Tipo de identificación: {datos.tipoIdentificacion}</span>
-        <span>Identificación: {datos.identificacion}</span>
-        <span>Nombre del comprador: {datos.nombreComprador}</span>
-        <ul>
-          {datos.juegosSeleccionados.map((juego) => (
-            <li key={juego}>{`${juego}: ${datos.cantidades[juego]}`}</li>
-          ))}
-        </ul>
-        <div className="contenedorBotones">
-          <button className="cancelar" onClick={onClose}>
-            Cancelar
-          </button>
-          <button className="confirmar" onClick={onConfirm}>
-            Confirmar Venta
-          </button>
+        <div className="gridDatos">
+          <div className="dato">
+            <div className="dato1">
+              <span className="label">Identificación:</span>
+            </div>
+
+            <span>{datos.identificacion}</span>
+          </div>
+          <div className="dato">
+            <div className="dato1">
+              <span className="label">Nombre del comprador:</span>
+            </div>
+            <span>{datos.nombreComprador}</span>
+          </div>
+          <div className="dato">
+            <div className="dato1">
+              <span className="label">Juegos seleccionados:</span>
+            </div>
+            <div
+              className="gridDatos"
+              style={{
+                padding: "0",
+                gridTemplateColumns: "auto auto",
+                width: "fit-content",
+              }}
+            >
+              {datos.juegosSeleccionados.map((juego) => (
+                <div className="dato" key={juego}>
+                  <div className="dato1">
+                    {juego}
+                    {" -"}
+                  </div>
+                  <span>{datos.cantidades[juego]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="contenedorBotones">
+            <button className="cancelar" onClick={onClose}>
+              Cancelar
+            </button>
+            <button className="confirmar" onClick={onConfirm}>
+              Confirmar Venta
+            </button>
+          </div>
         </div>
+        {/* Grid de datos */}
       </div>
     </VentanaEmergente>
   );
@@ -168,8 +216,19 @@ const FormularioVenta = () => {
 
   // useEffect para avanzar a la etapa 2
   useEffect(() => {
-    if (tipoIdentificacion && identificacion.length > 10) {
-      setEtapa(2); // Avanzar a la etapa de ingresar el nombre del comprador
+    let valid = false;
+    if (tipoIdentificacion === "telefono") {
+      const regex = /^\+\d{1,3}\s*\d{1,3}\s*\d{1,4}\s*\d{1,4}$/;
+      valid = regex.test(identificacion);
+    }
+    if (tipoIdentificacion === "cedula") {
+      const regex = /^\d{10}$/;
+      valid = regex.test(identificacion);
+    }
+    if (valid) {
+      setEtapa(2);
+    } else {
+      setEtapa(1);
     }
   }, [tipoIdentificacion, identificacion]);
 
@@ -224,10 +283,43 @@ const FormularioVenta = () => {
     setModalIsOpen(false);
     // Aquí se manejaría la confirmación de la venta
   };
+  const handleIdentificacionChange = (event) => {
+    const input = event.target.value;
+    if (tipoIdentificacion === "cedula") {
+      if (input.length <= 10) {
+        setIdentificacion(input);
+      }
+    } else if (tipoIdentificacion === "telefono") {
+      if (input.length <= 15) {
+        setIdentificacion(input);
+      }
+    }
+    if (tipoIdentificacion === "telefono" && input !== "") {
+      try {
+        const phoneNumber = parsePhoneNumberFromString(input, "EC");
+        if (phoneNumber && phoneNumber.isValid()) {
+          setIdentificacion(phoneNumber.formatInternational()); // Formatea si es válido
+        }
+      } catch (error) {
+        console.error("Error formateando el teléfono:", error);
+        // Manejar el error según sea necesario
+      }
+    }
+  };
+
   return (
     <ContenedorContenido>
       <FormulariodeVenta onSubmit={registrarVenta}>
-        <span style={{ fontWeight: "700", fontSize:"1.5rem", textAlign: "center", width: "100%", display:"flex",justifyContent:"center"}}>
+        <span
+          style={{
+            fontWeight: "700",
+            fontSize: "1.5rem",
+            textAlign: "center",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           Vender Cartillas
         </span>
         {etapa >= 1 && (
@@ -251,8 +343,9 @@ const FormularioVenta = () => {
                 {tipoIdentificacion === "cedula" ? "Cédula:" : "Teléfono:"}
                 <InputField
                   type="text"
+                  max={tipoIdentificacion === "telefono" ? 15 : 10}
                   value={identificacion}
-                  onChange={(e) => setIdentificacion(e.target.value)}
+                  onChange={handleIdentificacionChange}
                 />
               </label>
             )}

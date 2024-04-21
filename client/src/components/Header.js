@@ -93,7 +93,8 @@ const Header = ({ oculta }) => {
     return (
       <div>
         <Link to="/seller/vender">Vender</Link>
-        <Link to="/seller/consultarT">Consultar</Link>
+        <Link to="/seller/tablasVendidas">Tablas Vendidas</Link>
+        <Link to="/seller/tablasenvivo">Consultar Tablas</Link>
       </div>
     );
   };

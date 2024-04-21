@@ -2,7 +2,8 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import VenderTablas from "../SellerPages/VenderTablas";
-import ConsultarTablas from "../SellerPages/ConsultarTablas";
+import TablasVendidas from "../SellerPages/TablasVendidas";
+import ConsultarTablasEnVivo from "../SellerPages/ConsultarTablasEnVivo";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -24,7 +25,8 @@ const SellerRoutes = () => {
     <ContenedorPadre>
       <Routes>
         <Route path="vender" element={<VenderTablas />} />
-        <Route path="consultarT" element={<ConsultarTablas />} />
+        <Route path="tablasVendidas" element={<TablasVendidas />} />
+        <Route path="tablasenvivo" element={<ConsultarTablasEnVivo />} />
       </Routes>
     </ContenedorPadre>
   );
