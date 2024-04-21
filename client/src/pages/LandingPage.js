@@ -60,6 +60,14 @@ const BingoText = styled.h1`
   /* margin-top: calc(var(--altura-mensaje)); */
   color: var(--color-blanco);
   text-shadow: var(--sombra-intensa);
+  @media screen and (max-width: 480px){
+  font-size: 4rem;
+    
+  }
+  @media screen and (min-width: 481px) and (max-width: 1024px){
+  font-size: 7rem;
+    
+  }
 `;
 const ContenidoPagina = styled.div`
   display: flex;

@@ -9,7 +9,8 @@ import {
 import styled from "styled-components";
 import { useAuth } from "../auth/AuthContext";
 import { BotonTipo1 } from "./styled-componets/ComponentsPrincipales";
-import logo from "../imgs/LogoChabelita1.ico"
+import { device } from "./styled-componets/MediaQ";
+import logo from "../imgs/LogoChabelita1.ico";
 
 const ContenedorHeader = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ const ContenedorMenu = styled.div`
   & > div {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 10px;
   }
 
@@ -93,8 +95,60 @@ const ContenedorDerecho = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   gap: 15px;
+  height: 100%;
+  width: 40%;
   color: var(--color-blanco);
+  & > .cuenta {
+    position: relative;
+    height: var(--altura-header);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    & > i {
+      font-size: 28px;
+    }
+    &:hover > .cuentaDrop {
+      display: flex;
+    }
+    & > .cuentaDrop {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      display: none;
+      & > div {
+        background-color: var(--color-4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5px;
+        padding: 15px;
+        box-shadow: var(--sombra-intensa);
+        color: black;
+        gap: 10px;
+        border-radius: 10px;
+        &>.botonSalir{
+          border: solid 2px var(--color-1);
+          background-color: var(--color-4);
+          color: var(--color-1);
+          padding: 5px 10px;
+          width: 100%;
+          outline: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  @media ${device.mobile} {
+    & > span {
+      display: none;
+    }
+  }
 `;
 
 function CustomNavLink({ to, children }) {
@@ -132,7 +186,11 @@ const Header = ({ oculta }) => {
     <ContenedorHeader>
       <ContenedorHeader1>
         <ContenedorLogo>
-          <img onClick={() => navigate("/")} src={logo} alt="logo Bingo Chabelita" />
+          <img
+            onClick={() => navigate("/")}
+            src={logo}
+            alt="logo Bingo Chabelita"
+          />
           {/* <span onClick={() => navigate("/")}>HOME</span>{" "} */}
         </ContenedorLogo>
         <ContenedorMenu>
@@ -142,8 +200,15 @@ const Header = ({ oculta }) => {
           {!oculta &&
             (localStorage.getItem("id") ? (
               <ContenedorDerecho>
-                Bienvenido {localStorage.getItem("id")}
-                <BotonTipo1 onClick={logout}>Salir</BotonTipo1>
+                <div className="cuenta">
+                  <i className="bi bi-person-circle" />
+                  <div className="cuentaDrop">
+                    <div>
+                      <span>{localStorage.getItem("id")}</span>
+                      <button className="botonSalir" onClick={logout}>Salir</button>
+                    </div>
+                  </div>
+                </div>
               </ContenedorDerecho>
             ) : (
               <Link className="botonRedireccion" to="/login">
