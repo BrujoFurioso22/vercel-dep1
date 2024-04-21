@@ -12,7 +12,7 @@ const ContenedorPadre = styled.div`
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  height: calc(100vh);
+  height: calc(100dvh);
   width: 100%;
   /* background-image: url("/back1.webp"), rgba(255, 255, 255, 0.1); */
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.2)),
@@ -77,7 +77,7 @@ const ContenidoPagina = styled.div`
 `;
 
 const ContenedorPP = styled.div`
-  height: calc(100dvh);
+  height: calc(100dvh - var(--altura-header));
   position: relative;
   display: flex;
   flex-direction: column;
