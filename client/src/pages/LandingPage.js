@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Header from "../components/Header";
 import { useAuth } from "../auth/AuthContext";
 import { BotonWpp } from "../components/styled-componets/ComponentsPrincipales";
+import { device } from "../components/styled-componets/MediaQ";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -60,13 +61,11 @@ const BingoText = styled.h1`
   /* margin-top: calc(var(--altura-mensaje)); */
   color: var(--color-blanco);
   text-shadow: var(--sombra-intensa);
-  @media screen and (max-width: 480px){
-  font-size: 4rem;
-    
+  @media screen and (max-width: 480px) {
+    font-size: 4rem;
   }
-  @media screen and (min-width: 481px) and (max-width: 1024px){
-  font-size: 7rem;
-    
+  @media screen and (min-width: 481px) and (max-width: 1024px) {
+    font-size: 7rem;
   }
 `;
 const ContenidoPagina = styled.div`
@@ -147,6 +146,10 @@ const ContenedorElemento1 = styled.div`
     flex-direction: row;
     height: 500px;
     width: 100%;
+    @media ${device.mobile} {
+      flex-direction: column;
+      height: 80dvh;
+    }
     & > div {
       display: flex;
       width: 100%;
@@ -154,6 +157,10 @@ const ContenedorElemento1 = styled.div`
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      padding: 20px;
+      @media ${device.mobile} {
+        height: 45dvh;
+      }
     }
     .d1 {
       background-color: var(--color-2);
@@ -216,7 +223,7 @@ function LandingPage() {
           <h2>Esta semana se juega...</h2>
           <div className="contenedor1">
             <div className="d1">
-              <h3>Cartilla 1</h3>
+              <span>Cartilla 1</span>
               <div className="imgTabla">...</div>
               <div>
                 <BotonWpp
@@ -228,7 +235,7 @@ function LandingPage() {
               </div>
             </div>
             <div className="d2">
-              <h3>Cartilla 2</h3>
+              <span>Cartilla 2</span>
               <div className="imgTabla">...</div>
               <div>
                 {" "}
