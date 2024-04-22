@@ -3,10 +3,11 @@ const app = express();
 const corsMiddleware = require("./middleware/cors")
 
 require("dotenv").config();
-app.use(express.json());
 
 app.use(corsMiddleware());
 // app.disable('x-powered-by');
+
+app.use(express.json());
 
 const userRouter = require("./routes/user.router");
 
