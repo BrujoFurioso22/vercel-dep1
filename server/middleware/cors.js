@@ -1,23 +1,29 @@
-const cors = require("cors");
+import cors from "cors";
 
-const ACCEPTED_ORIGINS = [
+const DEFAULT_ACCEPTED_ORIGINS = [
   "https://vercel-dep1-client.vercel.app",
   // "http://localhost:3005",
 ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) {
-      // Permite a las herramientas de desarrollo locales sin CORS
-      return callback(null, true);
-    }
-    if (ACCEPTED_ORIGINS.includes(origin)) {
-      return callback(null, true);
-    } else {
-      // Rechaza el resto de orígenes
-      return callback(new Error('Origen no permitido por la política CORS'), false);
-    }
-  }
-};
+export const corsMiddleware = ({
+  acceptedOrigins = DEFAULT_ACCEPTED_ORIGINS,
+} = {}) =>
+  cors({
+    origin: (origin, callback) => {
+      // Permitir solicitudes sin origen (como herramientas de desarrollo local)
+      if (!origin) {
+        console.log("Solicitud recibida sin origen específico:", origin);
+        // return callback(null, false);
+      }
 
-module.exports = corsOptions;
+      // Permitir solicitudes de orígenes que están en la lista de aceptados
+      if (acceptedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Rechazar cualquier otro origen con un mensaje de error específico
+      const msg =
+        "El origen de tu solicitud no está permitido por la política de CORS";
+      return callback(msg, false);
+    },
+  });

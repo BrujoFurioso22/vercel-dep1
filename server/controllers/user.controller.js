@@ -1,8 +1,9 @@
-const postgre = require("../database");
-const userController = {
+import { pool } from "../database.js";
+
+export const userController = {
   getAll: async (req, res) => {
     try {
-      const { rows } = await postgre.query("select * from users;");
+      const { rows } = await pool.query("select * from users;");
       res.json({ msg: "OK", data: rows });
     } catch (error) {
       res.json({ msg: error.msg });
@@ -11,7 +12,7 @@ const userController = {
   getVerificationUser: async (req, res) => {
     try {
       const { cedulacelular, password } = req.body;
-      const { rows } = await postgre.query(
+      const { rows } = await pool.query(
         `SELECT password, rol FROM users WHERE cc = '${cedulacelular}'`
       );
 
@@ -76,4 +77,3 @@ const userController = {
   // }
 };
 
-module.exports = userController;

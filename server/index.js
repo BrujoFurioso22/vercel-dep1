@@ -1,19 +1,28 @@
-const express = require("express");
-const cors = require("cors");
+// Importar módulos necesarios
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { userRouter } from './routes/user.router.js';
+import { corsMiddleware } from './middleware/cors.js';
+
+// Cargar las variables de entorno
+dotenv.config();
+
 const app = express();
 
-const corsOptions = require("./middleware/cors");
-// const corsMiddleware = require("./middleware/cors")
+// Importar opciones de CORS desde un módulo
 
-require("dotenv").config();
+// Aplicar middleware de CORS con las opciones importadas
+app.use(corsMiddleware());
 
-app.use(cors(corsOptions));
-// app.disable('x-powered-by');
+// Desactivar la cabecera 'x-powered-by'
+app.disable('x-powered-by');
 
+// Middleware para parsear JSON
 app.use(express.json());
 
-const userRouter = require("./routes/user.router");
-
+// Utilizar el enrutador de usuarios
 app.use("/api/users", userRouter);
 
-app.listen(process.env.PORT, () => console.log("Server started on PORT 5000"));
+// Escuchar en el puerto definido en las variables de entorno
+app.listen(process.env.PORT, () => console.log(`Server started on PORT ${process.env.PORT}`));
