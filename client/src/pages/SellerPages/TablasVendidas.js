@@ -82,7 +82,7 @@ const TablaPersonalizada = styled.table`
   }
 
   /* Responsive design: Mejorando la visualización en dispositivos móviles */
-  @media ${device.mobile} {
+  @media (max-width: 700px) {
     display: none;
     /* table {
       display: flex;
@@ -184,7 +184,7 @@ const visibleColumns = {
 };
 
 const TablaCard = styled.div`
-  @media (min-width: 481px) {
+  @media (min-width: 701px) {
     display: none;
   }
   display: flex;

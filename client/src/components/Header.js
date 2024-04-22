@@ -70,9 +70,9 @@ const ContenedorMenu = styled.div`
     border-radius: 10px;
     transition: all 0.3s ease;
     text-align: center;
+    line-height: 15px;
     @media ${device.mobile} {
       font-size: 15px;
-      line-height: 15px;
     }
 
     &.active-link {
