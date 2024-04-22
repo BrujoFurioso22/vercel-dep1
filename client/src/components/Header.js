@@ -54,6 +54,7 @@ const ContenedorLogo = styled.div`
 const ContenedorMenu = styled.div`
   display: flex;
   justify-content: center;
+  
   & > div {
     display: flex;
     justify-content: center;
@@ -69,6 +70,10 @@ const ContenedorMenu = styled.div`
     border-radius: 10px;
     transition: all 0.3s ease;
     text-align: center;
+    @media ${device.mobile} {
+      font-size: 15px;
+      line-height: 15px;
+    }
 
     &.active-link {
       background-color: var(--color-1); /* Color verde */

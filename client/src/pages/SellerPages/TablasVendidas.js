@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import GeneratePdfButton, { downloadPdf } from "../../components/pdfMaker/pdfMaker";
+import GeneratePdfButton, {
+  downloadPdf,
+} from "../../components/pdfMaker/pdfMaker";
+import { device } from "../../components/styled-componets/MediaQ";
 // const ContenedorPadre = styled.div`
 //   display: flex;
 //   flex-direction: column;
@@ -56,7 +59,6 @@ const TablaPersonalizada = styled.table`
     font-weight: bold;
   }
 
-  /* Estilos para las filas: colores alternos y efectos de hover */
   tr:nth-child(even) {
     background-color: #f9f9f9;
   }
@@ -65,7 +67,6 @@ const TablaPersonalizada = styled.table`
     background-color: #f1f1f1;
   }
 
-  /* Estilos para botones y controles dentro de la tabla */
   button {
     padding: 8px 16px;
     border: none;
@@ -81,15 +82,47 @@ const TablaPersonalizada = styled.table`
   }
 
   /* Responsive design: Mejorando la visualización en dispositivos móviles */
-  @media screen and (max-width: 600px) {
-    display: block;
-    width: 100%;
-    overflow-x: auto; /* Permite desplazamiento lateral en dispositivos pequeños */
-
-    th,
-    td {
-      white-space: nowrap; /* Evita que los textos se rompan en dispositivos estrechos */
+  @media ${device.mobile} {
+    display: none;
+    /* table {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 0;
+      padding: 0;
     }
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: flex;
+      flex-direction: column;
+      width: 45%; 
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      background-color: #fff;
+    }
+
+    td {
+      display: block; 
+      text-align: left; 
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    td:before {
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    td:last-child {
+      border-bottom: 0;
+    } */
   }
 `;
 const datos = [
@@ -120,15 +153,24 @@ const datos = [
     CantJuego1: 4,
     CantJuego2: 1,
   },
+  {
+    idVenta: "V004",
+    idVendedor: "Vend165",
+    idCliente: "C423",
+    nombreCliente: "Maerie Castro",
+    fechaDeVenta: "2024-04-22",
+    CantJuego1: 7,
+    CantJuego2: 5,
+  },
 ];
 const headerNames = {
-  idVenta: "ID de Venta",
-  idVendedor: "ID del Vendedor",
-  idCliente: "ID del Cliente",
-  nombreCliente: "Nombre Cliente",
-  fechaDeVenta: "Fecha de Venta",
-  CantJuego1: "Cantidad de Juego 1",
-  CantJuego2: "Cantidad de Juego 2",
+  idVenta: "ID Venta",
+  idVendedor: "ID Ven.",
+  idCliente: "ID Cli.",
+  nombreCliente: "Cliente",
+  fechaDeVenta: "Fecha",
+  CantJuego1: "# 1",
+  CantJuego2: "# 2",
 };
 
 const visibleColumns = {
@@ -139,6 +181,69 @@ const visibleColumns = {
   fechaDeVenta: true,
   CantJuego1: true,
   CantJuego2: true,
+};
+
+const TablaCard = styled.div`
+  @media (min-width: 481px) {
+    display: none;
+  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  .fila {
+    display: flex;
+    flex-direction: column;
+    width: 48%; /* Permite dos tarjetas por fila */
+    margin: 1% 0.5%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 5px 10px;
+    box-sizing: border-box;
+  }
+
+  .celda {
+    padding: 2px;
+    margin: 3px 0;
+    font-size: 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  .celda:last-child {
+    border-bottom: none;
+  }
+
+  .celda:before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 10px;
+  }
+`;
+const CardTable = ({ datos, headerNames, visibleColumns }) => {
+  // Filtrar las cabeceras que están marcadas como visibles
+  const headers = Object.keys(datos[0]).filter(
+    (header) => visibleColumns[header] !== false
+  );
+
+  return (
+    <TablaCard>
+      {datos.map((fila, index) => (
+        <div key={index} className="fila">
+          {headers.map((header) => (
+            <div
+              key={header}
+              className="celda"
+              data-label={headerNames[header] || header}
+            >
+              {fila[header]}
+            </div>
+          ))}
+        </div>
+      ))}
+    </TablaCard>
+  );
 };
 
 const Tablas = ({ datos }) => {
@@ -162,18 +267,25 @@ const Tablas = ({ datos }) => {
             {datos.map((venta, index) => (
               <tr key={index}>
                 {headers.map((header) => (
-                  <td key={`${venta.idVenta}-${header}`}>{venta[header]}</td>
+                  <td
+                    data-label={headerNames[header]}
+                    key={`${venta.idVenta}-${header}`}
+                  >
+                    {venta[header]}
+                  </td>
                 ))}
                 <td>
-                  {/* <button onClick={downloadPdf}>
-                    Descargar <i className="bi bi-download"></i>
-                  </button> */}
-                  <GeneratePdfButton/>
+                  <GeneratePdfButton />
                 </td>
               </tr>
             ))}
           </tbody>
         </TablaPersonalizada>
+        <CardTable
+          datos={datos}
+          headerNames={headerNames}
+          visibleColumns={visibleColumns}
+        />
       </Contenedor1>
     </>
   );
