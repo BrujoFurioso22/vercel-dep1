@@ -1,10 +1,13 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
-const corsMiddleware = require("./middleware/cors")
+
+const corsOptions = require("./middleware/cors");
+// const corsMiddleware = require("./middleware/cors")
 
 require("dotenv").config();
 
-app.use(corsMiddleware());
+app.use(cors(corsOptions));
 // app.disable('x-powered-by');
 
 app.use(express.json());

@@ -5,26 +5,19 @@ const ACCEPTED_ORIGINS = [
   // "http://localhost:3005",
 ];
 
-const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) =>
-  cors({
-    origin: (origin, callback) => {
-      // Permitir solicitudes sin origen (como solicitudes locales/no CORS)
-      if (!origin) {
-        console.log("Solicitud recibida sin origen específico");
-        return callback(null, true);
-      }
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin) {
+      // Permite a las herramientas de desarrollo locales sin CORS
+      return callback(null, true);
+    }
+    if (ACCEPTED_ORIGINS.includes(origin)) {
+      return callback(null, true);
+    } else {
+      // Rechaza el resto de orígenes
+      return callback(new Error('Origen no permitido por la política CORS'), false);
+    }
+  }
+};
 
-      // Permitir solicitudes solo desde los orígenes aceptados
-      if (acceptedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      // Rechazar cualquier otro origen
-      return callback(
-        new Error("Origen no permitido por la política CORS"),
-        false
-      );
-    },
-  });
-
-module.exports = corsMiddleware;
+module.exports = corsOptions;
