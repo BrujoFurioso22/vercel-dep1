@@ -2,7 +2,7 @@ const cors = require("cors");
 
 const ACCEPTED_ORIGINS = [
   "https://vercel-dep1-client.vercel.app",
-  "http://localhost:3005",
+  // "http://localhost:3005",
 ];
 
 const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) =>
