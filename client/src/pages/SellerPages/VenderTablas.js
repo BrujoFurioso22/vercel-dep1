@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
@@ -188,6 +188,26 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
               ))}
             </div>
           </div>
+          <div className="dato">
+            <div className="dato1">
+              <span className="label">Número Transferencia:</span>
+            </div>
+            <span>
+              {datos.numeroTransferencia === ""
+                ? "-----"
+                : datos.numeroTransferencia}
+            </span>
+          </div>
+          <div className="dato">
+            <div className="dato1">
+              <span className="label">Cantidad Transferencia:</span>
+            </div>
+            <span>
+              {datos.cantidadTransferencia === ""
+                ? "-----"
+                : `$ ${datos.cantidadTransferencia}`}
+            </span>
+          </div>
           <div className="contenedorBotones">
             <button className="cancelar" onClick={onClose}>
               Cancelar
@@ -211,11 +231,38 @@ const FormularioVenta = () => {
   const [juegosSeleccionados, setJuegosSeleccionados] = useState([]);
   const [cantidades, setCantidades] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [numeroTransferencia, setNumeroTransferencia] = useState("");
+  const [cantidadTransferencia, setCantidadTransferencia] = useState("");
 
   // Asignación de juegos para simplificar el ejemplo
   const juegos = ["Juego 1", "Juego 2"];
+  const todasLasCantidadesValidas = useCallback(() => {
+    return juegosSeleccionados.every(
+      (juego) => cantidades[juego] && cantidades[juego] > 0
+    );
+  }, [cantidades, juegosSeleccionados]);
+  let validCampos =
+    tipoIdentificacion !== "" &&
+    identificacion !== "" &&
+    nombreComprador !== "" &&
+    juegosSeleccionados.length > 0;
+
+  const Limpiar = () => {
+    setIdentificacion("");
+    setNombreComprador("");
+    setEtapa(1);
+    setJuegosSeleccionados([]);
+    setCantidades({});
+    setNumeroTransferencia("");
+    setCantidadTransferencia("");
+  };
+  // onst todasLasCantidadesValidas = () =>
+  //   juegosSeleccionados.every((juego) => cantidades[juego] > 1);
 
   // useEffect para avanzar a la etapa 2
+  useEffect(() => {
+    Limpiar();
+  }, [tipoIdentificacion]);
   useEffect(() => {
     let valid = false;
     if (tipoIdentificacion === "telefono") {
@@ -246,6 +293,36 @@ const FormularioVenta = () => {
       setEtapa(4); // Avanzar a la etapa de ingresar cantidades
     }
   }, [juegosSeleccionados, etapa]);
+  // useEffect para avanzar a la etapa 5
+  useEffect(() => {
+    console.log("Cantidades:", cantidades);
+    console.log("Juegos seleccionados:", juegosSeleccionados);
+    console.log("Cantidades validas:", todasLasCantidadesValidas());
+    console.log(etapa);
+    if (
+      etapa === 4 &&
+      todasLasCantidadesValidas() &&
+      juegosSeleccionados.length > 0
+    ) {
+      setEtapa(5); // Solo avanzar si las condiciones son correctas
+    } else if (
+      etapa === 5 &&
+      juegosSeleccionados.length >= 0 &&
+      !todasLasCantidadesValidas()
+    ) {
+      setEtapa(4); // Solo regresar a 4 si no estás actualmente en 4
+    }
+  }, [etapa, cantidades, juegosSeleccionados, todasLasCantidadesValidas]); // Actualiza las dependencias
+  useEffect(() => {
+    if (etapa === 5 && numeroTransferencia.length > 5) {
+      setEtapa(6); // Avanzar a la etapa de ingresar cantidades
+    }
+  }, [numeroTransferencia, etapa]);
+  useEffect(() => {
+    if (etapa === 6 && parseInt(cantidadTransferencia) > 0.5) {
+      setEtapa(7); // Avanzar a la etapa de ingresar cantidades
+    }
+  }, [cantidadTransferencia, etapa]);
 
   // Funciones para manejar el estado...
 
@@ -253,7 +330,9 @@ const FormularioVenta = () => {
   const registrarVenta = (e) => {
     e.preventDefault();
     // Lógica para registrar la venta...
-    setModalIsOpen(true);
+    if (etapa >= 5 && todasLasCantidadesValidas() && validCampos) {
+      setModalIsOpen(true);
+    }
   };
 
   const handleJuegoSeleccionado = (juego) => {
@@ -276,9 +355,6 @@ const FormularioVenta = () => {
     setTipoIdentificacion(value);
     setIdentificacion("");
   };
-
-  const todasLasCantidadesValidas = () =>
-    juegosSeleccionados.every((juego) => cantidades[juego] > 1);
 
   const confirmarVenta = () => {
     setModalIsOpen(false);
@@ -384,7 +460,7 @@ const FormularioVenta = () => {
           </div>
         )}
 
-        {etapa === 4 &&
+        {etapa >= 4 &&
           juegosSeleccionados.map((juego) => (
             <div key={juego} className="seccionVenta">
               <label>
@@ -399,7 +475,34 @@ const FormularioVenta = () => {
             </div>
           ))}
 
-        {etapa === 4 && todasLasCantidadesValidas() && (
+        {etapa >= 5 && (
+          <div className="seccionVenta">
+            <label>
+              Número de Transferencia:
+              <InputField
+                type="text"
+                value={numeroTransferencia}
+                onChange={(e) => setNumeroTransferencia(e.target.value)}
+                placeholder="Opcional"
+              />
+            </label>
+          </div>
+        )}
+        {etapa >= 5 && (
+          <div className="seccionVenta">
+            <label>
+              Cantidad de la Transferencia $:
+              <InputField
+                type="number"
+                value={cantidadTransferencia}
+                onChange={(e) => setCantidadTransferencia(e.target.value)}
+                placeholder="Opcional"
+              />
+            </label>
+          </div>
+        )}
+
+        {etapa >= 5 && todasLasCantidadesValidas() && validCampos && (
           <BotonSubmit type="submit">Registrar Venta</BotonSubmit>
         )}
       </FormulariodeVenta>
@@ -413,6 +516,8 @@ const FormularioVenta = () => {
           nombreComprador,
           juegosSeleccionados,
           cantidades,
+          numeroTransferencia,
+          cantidadTransferencia,
         }}
       />
     </ContenedorContenido>
