@@ -6,5 +6,5 @@ dotenv.config();
 
 export const pool = new Pool({
   connectionString:
-    "postgres://default:AIl7cEO3GMXm@ep-red-truth-a2kily8j-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require",
+    "postgres://default:0lcnJvxqICD9@ep-purple-band-a4xckkje.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require",
 });
