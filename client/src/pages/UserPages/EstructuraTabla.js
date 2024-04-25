@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-
+const TablaBingo = styled.div`
+    width: fit-content;
+`
 const ContenedorGrid = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,14 +64,14 @@ const GridCell = styled.div`
 export const EstructuraTabla = ({ dataTables }) => {
   console.log(dataTables);
   return (
-    <div>
+    <TablaBingo>
       {dataTables.map((data, idx) => (
         <ContenedorGrid ContenedorGrid key={idx}>
           <span>Tabla {data.numtabla}</span>
           <GridH data={data} />
         </ContenedorGrid>
       ))}
-    </div>
+    </TablaBingo>
   );
 };
 
