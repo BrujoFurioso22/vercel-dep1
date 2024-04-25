@@ -1,15 +1,30 @@
 import React from "react";
 import styled from "styled-components";
+
 const TablaBingo = styled.div`
-    width: fit-content;
-`
+  width: fit-content;
+  padding: 10px;
+`;
 const ContenedorGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 20px;
+  /* gap: 10px; */
+  /* padding: 20px; */
   & > span {
     border: solid 1px var(--color-negro);
+    border-bottom: none;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px 15px 0 0;
+    background-color: var(--color-4);
+    letter-spacing: 10px;
+    text-align: center;
+    &::after {
+      content: "";
+      margin-left: -10px; /* Ajusta esto al valor de tu letter-spacing */
+    }
   }
 `;
 
@@ -17,8 +32,8 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 0;
-  width: 500px;
-  border-radius: 15px;
+  width: 75mm;
+  border-radius: 0 0 15px 15px;
   overflow: hidden;
   border: solid 1px var(--color-negro);
   background-color: var(--color-4);
@@ -26,7 +41,7 @@ const Grid = styled.div`
 
 const GridCell = styled.div`
   background-color: transparent;
-  height: 100px;
+  height: 15mm;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,10 +62,6 @@ const GridCell = styled.div`
   border-radius: ${({ isCorner, position }) => {
     if (!isCorner) return "0";
     switch (position) {
-      case "top-left":
-        return "15px 0 0 0"; /* Ajustado para coincidir con el borde del Grid */
-      case "top-right":
-        return "0 15px 0 0";
       case "bottom-left":
         return "0 0 0 15px";
       case "bottom-right":
@@ -61,16 +72,16 @@ const GridCell = styled.div`
   }};
 `;
 
-export const EstructuraTabla = ({ dataTables }) => {
-  console.log(dataTables);
+export const EstructuraTabla1 = ({ dataTables }) => {
   return (
     <TablaBingo>
-      {dataTables.map((data, idx) => (
-        <ContenedorGrid ContenedorGrid key={idx}>
-          <span>Tabla {data.numtabla}</span>
-          <GridH data={data} />
+      <div>
+        <span>#{dataTables.numtabla}</span>
+        <ContenedorGrid>
+          <span>BINGO</span>
+          <GridH data={dataTables} />
         </ContenedorGrid>
-      ))}
+      </div>
     </TablaBingo>
   );
 };
@@ -87,17 +98,9 @@ const GridH = ({ data }) => {
       {gridData.map((item, index) => (
         <GridCell
           key={index}
-          isCorner={index === 0 || index === 4 || index === 20 || index === 24}
+          isCorner={index === 20 || index === 24}
           position={
-            index === 0
-              ? "top-left"
-              : index === 4
-              ? "top-right"
-              : index === 20
-              ? "bottom-left"
-              : index === 24
-              ? "bottom-right"
-              : null
+            index === 0 ? "bottom-left" : index === 24 ? "bottom-right" : null
           }
         >
           {item}

@@ -1,5 +1,5 @@
-import { EstructuraTabla2 } from "../../pages/UserPages/EstructuraTabla2";
-import { dataTabla2 } from "../../pages/UserPages/data";
+import { EstructuraTabla1 } from "../../pages/UserPages/EstructuraTabla1";
+import { dataTabla } from "../../pages/UserPages/data";
 import "./1.css";
 function GenerateTableHtml({ datos }) {
   const tableRows = datos.map((item) => (
@@ -26,7 +26,7 @@ const datos = [
   { nombre: "Tabla 2", premio: "licuadora" },
   // Más datos...
 ];
-export const htmlTemplate2 = () => {
+export const htmlTemplate1 = () => {
   //   console.log(tablaHTML);
   return (
     <div class="page">
@@ -57,10 +57,10 @@ export const htmlTemplate2 = () => {
       </div>
       <div class="bingo-container">
         <div class="bingo-container-u">
-          {dataTabla2.map((data, idx) => (
+          {dataTabla.map((data, idx) => (
             <div class="bingo-card" key={idx}>
               <div class="bingo-table">
-                <EstructuraTabla2 dataTables={data}/>
+                <EstructuraTabla1 dataTables={data}/>
               </div>
             </div>
           ))}
