@@ -31,6 +31,7 @@ const ContenedorRevisarTablas = styled.div`
   height: var(--altura-mensaje);
   column-gap: 5vw;
   background-color: var(--color-3);
+  z-index: 20;
   .texto {
     font-size: 1.3rem;
   }

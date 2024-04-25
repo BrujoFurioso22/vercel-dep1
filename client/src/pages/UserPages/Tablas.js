@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
 import { EstructuraTabla } from "./EstructuraTabla";
-import { DataTabla } from "./data";
+import { dataTabla } from "./data";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -24,12 +24,14 @@ const ContenedorPagina = styled.div`
 `;
 
 const Tablas = () => {
+  const datos = dataTabla;
+  console.log(dataTabla);
   return (
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
-        <h1>Tablas</h1>
-        <EstructuraTabla data={DataTabla}/>
+        
+        <EstructuraTabla dataTables={datos}/>
       </ContenedorPagina>
     </ContenedorPadre>
   );

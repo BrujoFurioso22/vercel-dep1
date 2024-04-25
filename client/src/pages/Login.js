@@ -93,6 +93,7 @@ function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     const users = await VerificarUsuario(cedulacelular, password);
+    console.log(users);
     if (users.data) {
       if (users.data.exists === true) {
         const rol = users.data.rol;

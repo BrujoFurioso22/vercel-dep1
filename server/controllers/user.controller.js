@@ -15,6 +15,7 @@ export const userController = {
       const { rows } = await pool.query(
         `SELECT password, rol FROM users WHERE cc = '${cedulacelular}'`
       );
+      // console.log(cedulacelular+" - "+password);
 
       if (rows.length > 0) {
         let validPassword = false;
