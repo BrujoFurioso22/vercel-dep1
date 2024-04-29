@@ -4,115 +4,190 @@ import ReactDOMServer from "react-dom/server";
 import { jsPDF } from "jspdf";
 import { htmlTemplate1 } from "./Juego1Template";
 import { htmlTemplate2 } from "./Juego2Template";
+import { dataTabla } from "../../pages/UserPages/data";
+import { dataTabla2 } from "../../pages/UserPages/data";
+// const chunkData = (data, chunkSize) => {
+//   let results = [];
+//   for (let i = 0; i < data.length; i += chunkSize) {
+//     results.push(data.slice(i, i + chunkSize));
+//   }
+//   return results;
+// };
 
-// export const htmlTemplate1 = `
-// <div class="page">
-//   <div class="header">
-//     <h1>Premio de $10000</h1>
-//     <div>Licuadora Licuadora Licuadora Licuadora Licuadora Licuadora</div>
-//     <div>BINGO CHABELITA</div>
-//   </div>
+// const GeneratePdfButton1 = () => {
 
-//   <div class="bingo-container">
-//     <div class="bingo-card">
-//       <h2>Tabla #202342</h2>
-//       <!-- Contenido de la tabla de bingo -->
+//   const generatePdf = () => {
+//     const dataChunks = chunkData(dataTabla, 4);
+
+//     const pdf = new jsPDF({
+//       orientation: "portrait",
+//       unit: "mm",
+//       format: "a4",
+//       hotfixes: ["px_scaling"],
+//     });
+//     // Convertir el componente React a HTML usando ReactDOMServer
+//     dataChunks.forEach((chunk, index) => {
+//       // Renderiza el HTML para cada chunk de datos
+//       const htmlString = ReactDOMServer.renderToString(
+//         htmlTemplate1({ dataJuego: chunk })
+//       );
+//       const container = document.createElement("div");
+//       container.innerHTML = htmlString;
+//       container.style.width = "210mm";
+//       document.body.appendChild(container);
+
+//       html2canvas(container, { scale: 2, useCORS: true })
+//         .then((canvas) => {
+//           const imgData = canvas.toDataURL("image/png");
+//           if (index > 0) {
+//             pdf.addPage(); // Añadir una nueva página si es necesario
+//           }
+//           const pageWidth = pdf.internal.pageSize.getWidth();
+//           const pageHeight = pdf.internal.pageSize.getHeight();
+//           pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
+
+//           if (index === dataChunks.length - 1) {
+//             // Guardar el PDF después del último chunk
+//             pdf.save("juego1.pdf");
+//             document.body.removeChild(container);
+//           }
+//         })
+//         .catch((err) => {
+//           console.error("Error generating PDF", err);
+//         });
+//     });
+//   };
+
+//   return <button onClick={generatePdf}>Descargar Juego1</button>;
+// };
+
+// const GeneratePdfButton2 = () => {
+
+//   const generatePdf = () => {
+//     const dataChunks = chunkData(dataTabla2, 6);
+
+//     const pdf = new jsPDF({
+//       orientation: "portrait",
+//       unit: "mm",
+//       format: "a4",
+//       hotfixes: ["px_scaling"],
+//     });
+//     // Convertir el componente React a HTML usando ReactDOMServer
+//     dataChunks.forEach((chunk, index) => {
+//       // Renderiza el HTML para cada chunk de datos
+//       const htmlString = ReactDOMServer.renderToString(
+//         htmlTemplate2({ dataJuego: chunk })
+//       );
+//       const container = document.createElement("div");
+//       container.innerHTML = htmlString;
+//       container.style.width = "210mm";
+//       document.body.appendChild(container);
+
+//       html2canvas(container, { scale: 2, useCORS: true })
+//         .then((canvas) => {
+//           const imgData = canvas.toDataURL("image/png");
+//           if (index > 0) {
+//             pdf.addPage(); // Añadir una nueva página si es necesario
+//           }
+//           const pageWidth = pdf.internal.pageSize.getWidth();
+//           const pageHeight = pdf.internal.pageSize.getHeight();
+//           pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
+
+//           if (index === dataChunks.length - 1) {
+//             // Guardar el PDF después del último chunk
+//             pdf.save("rapidin.pdf");
+//             document.body.removeChild(container);
+//           }
+//         })
+//         .catch((err) => {
+//           console.error("Error generating PDF", err);
+//         });
+//     });
+//   };
+
+//   return <button onClick={generatePdf}>Descargar Juego2</button>;
+// };
+
+// const GenerarPDFs = () => {
+//   return (
+//     <div>
+//       <GeneratePdfButton1 />
+//       <GeneratePdfButton2 />
 //     </div>
-//     <!-- ... Repetir para otras tarjetas ... -->
-//   </div>
+//   );
+// };
 
-//   <div class="footer">
-//     CÓDIGO DE HOJA: ***@#**#***
-//   </div>
-// </div>
-// `;
-
-const GeneratePdfButton1 = () => {
-  const generatePdf = () => {
-    // Convertir el componente React a HTML usando ReactDOMServer
-    const htmlString = ReactDOMServer.renderToString(htmlTemplate1());
-
-    // Crear un contenedor para el HTML
-    const container = document.createElement("div");
-    container.innerHTML = htmlString; // Insertar el HTML
-    container.style.width = "210mm";
-    document.body.appendChild(container); // Agregar al DOM
-
-    // Generar el PDF
-    html2canvas(container, { scale: 2, useCORS: true })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: "a4",
-          hotfixes: ["px_scaling"],
-        });
-
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-
-        // Añadir la imagen escalada al PDF
-        pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
-        pdf.save("downloaded.pdf");
-
-        // Limpiar el DOM
-        document.body.removeChild(container);
-      })
-      .catch((err) => {
-        console.error("Error generating PDF", err);
-      });
+const GenerarPDFs = ({ dataTabla, dataTabla2 }) => {
+  const chunkData = (data, chunkSize) => {
+    let results = [];
+    for (let i = 0; i < data.length; i += chunkSize) {
+      results.push(data.slice(i, i + chunkSize));
+    }
+    return results;
   };
 
-  return <button onClick={generatePdf}>Descargar Juego1</button>;
-};
-const GeneratePdfButton2 = () => {
   const generatePdf = () => {
-    // Convertir el componente React a HTML usando ReactDOMServer
-    const htmlString = ReactDOMServer.renderToString(htmlTemplate2());
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+      hotfixes: ["px_scaling"],
+    });
+    const processTable = (data, chunkSize, template) => {
+      if (data.length === 0) return; // Si no hay datos, no procesar esta tabla
+      const dataChunks = chunkData(data, chunkSize);
 
-    // Crear un contenedor para el HTML
-    const container = document.createElement("div");
-    container.innerHTML = htmlString; // Insertar el HTML
-    container.style.width = "210mm";
-    document.body.appendChild(container); // Agregar al DOM
+      dataChunks.forEach((chunk, index) => {
+        const htmlString = ReactDOMServer.renderToString(
+          template({ dataJuego: chunk })
+        );
+        const container = document.createElement("div");
+        container.innerHTML = htmlString;
+        container.style.position = "absolute";
+        container.style.left = "-9999px";
+        container.style.top = "-9999px";
+        container.style.width = "210mm";
+        document.body.appendChild(container);
 
-    // Generar el PDF
-    html2canvas(container, { scale: 2, useCORS: true })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: "a4",
-          hotfixes: ["px_scaling"],
-        });
+        html2canvas(container, { scale: 2, useCORS: true })
+          .then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            document.body.removeChild(container); // Limpiar el contenedor inmediatamente después de usarlo
+            // Añadir la imagen al PDF
+            // Verificar si es necesario añadir una nueva página
+            if (index === 0 && pdf.internal.getNumberOfPages() === 0) {
+              // Si es el primer chunk y no hay páginas, añadir la imagen directamente
+              const pageWidth = pdf.internal.pageSize.getWidth();
+              const pageHeight = pdf.internal.pageSize.getHeight();
+              pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
+            } else {
+              // Para otros chunks o si ya se había añadido la primera imagen, añadir página antes de la imagen
+              pdf.addPage();
+              const pageWidth = pdf.internal.pageSize.getWidth();
+              const pageHeight = pdf.internal.pageSize.getHeight();
+              pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
+            }
 
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-
-        // Añadir la imagen escalada al PDF
-        pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
-        pdf.save("rapidin.pdf");
-
-        // Limpiar el DOM
-        document.body.removeChild(container);
-      })
-      .catch((err) => {
-        console.error("Error generating PDF", err);
+            // Guardar el PDF después del último chunk de la última tabla
+            if (data === dataTabla2 && index === dataChunks.length - 1) {
+              if (pdf.internal.getNumberOfPages() > 1) {
+                pdf.deletePage(1);
+              }
+              pdf.save("combined.pdf");
+            }
+          })
+          .catch((err) => {
+            console.error("Error generating PDF", err);
+          });
       });
+    };
+
+    // Procesar cada tabla
+    processTable(dataTabla, 4, htmlTemplate1);
+    processTable(dataTabla2, 6, htmlTemplate2);
   };
 
-  return <button onClick={generatePdf}>Descargar Juego2</button>;
-};
-
-const GenerarPDFs = () => {
-  return (
-    <div>
-      <GeneratePdfButton1 />
-      <GeneratePdfButton2 />
-    </div>
-  );
+  return <button onClick={generatePdf}>Descargar PDF Combinado</button>;
 };
 
 export default GenerarPDFs;

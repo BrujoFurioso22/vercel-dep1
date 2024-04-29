@@ -88,8 +88,8 @@ export const EstructuraTabla2 = ({ dataTables }) => {
 const GridH = ({ data }) => {
   const datos = data.datos;
   // Creamos un arreglo de 25 elementos, dejando el índice 12 (centro del grid 5x5) vacío
-  const gridData = Array.from({ length: 6 }, (_, i) => {
-    return datos[i + 1]; // Ajustamos el índice para acceder correctamente a los datos
+  const gridData = Array.from({ length: 9 }, (_, i) => {
+    return i === 1 || i === 4 ? "" : datos[i + 1]; // Ajustamos el índice para acceder correctamente a los datos
   });
 
   return (
@@ -97,9 +97,9 @@ const GridH = ({ data }) => {
       {gridData.map((item, index) => (
         <GridCell
           key={index}
-          isCorner={index === 3 || index === 5}
+          isCorner={index === 6 || index === 8}
           position={
-            index === 3 ? "bottom-left" : index === 5 ? "bottom-right" : null
+            index === 6 ? "bottom-left" : index === 8 ? "bottom-right" : null
           }
         >
           {item}

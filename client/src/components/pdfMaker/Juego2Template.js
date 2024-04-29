@@ -1,32 +1,7 @@
 import { EstructuraTabla2 } from "../../pages/UserPages/EstructuraTabla2";
 import { dataTabla2 } from "../../pages/UserPages/data";
 import "./1.css";
-function GenerateTableHtml({ datos }) {
-  const tableRows = datos.map((item) => (
-    <tr key={item.nombre}>
-      <td>{item.nombre}</td>
-      <td>{item.premio}</td>
-    </tr>
-  ));
-
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Premio</th>
-        </tr>
-      </thead>
-      <tbody>{tableRows}</tbody>
-    </table>
-  );
-}
-const datos = [
-  { nombre: "Tabla 1", premio: "licuadora" },
-  { nombre: "Tabla 2", premio: "licuadora" },
-  // Más datos...
-];
-export const htmlTemplate2 = () => {
+export const htmlTemplate2 = ({dataJuego}) => {
   //   console.log(tablaHTML);
   return (
     <div class="page">
@@ -57,7 +32,7 @@ export const htmlTemplate2 = () => {
       </div>
       <div class="bingo-container">
         <div class="bingo-container-u">
-          {dataTabla2.map((data, idx) => (
+          {dataJuego.map((data, idx) => (
             <div class="bingo-card" key={idx}>
               <div class="bingo-table">
                 <EstructuraTabla2 dataTables={data}/>
