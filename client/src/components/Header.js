@@ -210,7 +210,7 @@ const Header = ({ oculta }) => {
                   <i className="bi bi-person-circle" />
                   <div className="cuentaDrop">
                     <div>
-                      <span>{localStorage.getItem("id")}</span>
+                      <span>{localStorage.getItem("nombre")}</span>
                       <button className="botonSalir" onClick={logout}>Salir</button>
                     </div>
                   </div>

@@ -13,7 +13,7 @@ export const userController = {
     try {
       const { cedulacelular, password } = req.body;
       const { rows } = await pool.query(
-        `SELECT password, rol FROM users WHERE cc = '${cedulacelular}'`
+        `SELECT password, rol, name FROM users WHERE cc = '${cedulacelular}'`
       );
       // console.log(cedulacelular+" - "+password);
 
@@ -23,7 +23,9 @@ export const userController = {
           validPassword = true;
         }
         if (validPassword) {
-          return res.status(200).json({ exists: true, rol: rows[0].rol });
+          return res
+            .status(200)
+            .json({ exists: true, rol: rows[0].rol, nombre: rows[0].name });
         }
       }
       return res.status(404).json({ exists: false });
@@ -77,4 +79,3 @@ export const userController = {
   //     }
   // }
 };
-

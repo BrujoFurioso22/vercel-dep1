@@ -97,8 +97,9 @@ function Login() {
     if (users.data) {
       if (users.data.exists === true) {
         const rol = users.data.rol;
+        const nombre = users.data.name;
         console.log("Ingresado Correctamente");
-        login(cedulacelular, rol);
+        login(cedulacelular, rol , nombre);
         navigate("/");
       }
     } else {
