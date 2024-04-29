@@ -2,8 +2,8 @@ import React, { useRef } from "react";
 import html2canvas from "html2canvas";
 import ReactDOMServer from "react-dom/server";
 import { jsPDF } from "jspdf";
-import { htmlTemplate1 } from "./Juego1Template";
-import { htmlTemplate2 } from "./Juego2Template";
+import { HtmlTemplate1 } from "./Juego1Template";
+import { HtmlTemplate2 } from "./Juego2Template";
 import { dataTabla } from "../../pages/UserPages/data";
 import { dataTabla2 } from "../../pages/UserPages/data";
 // const chunkData = (data, chunkSize) => {
@@ -183,8 +183,8 @@ const GenerarPDFs = ({ dataTabla, dataTabla2 }) => {
     };
 
     // Procesar cada tabla
-    processTable(dataTabla, 4, htmlTemplate1);
-    processTable(dataTabla2, 6, htmlTemplate2);
+    processTable(dataTabla, 4, HtmlTemplate1);
+    processTable(dataTabla2, 6, HtmlTemplate2);
   };
 
   return <button onClick={generatePdf}>Descargar PDF Combinado</button>;

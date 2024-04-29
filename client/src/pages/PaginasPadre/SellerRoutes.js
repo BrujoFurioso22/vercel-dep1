@@ -4,6 +4,7 @@ import styled from "styled-components";
 import VenderTablas from "../SellerPages/VenderTablas";
 import TablasVendidas from "../SellerPages/TablasVendidas";
 import ConsultarTablasEnVivo from "../SellerPages/ConsultarTablasEnVivo";
+import Preview from "../../components/pdfMaker/Preview";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -27,6 +28,7 @@ const SellerRoutes = () => {
         <Route path="vender" element={<VenderTablas />} />
         <Route path="tablasVendidas" element={<TablasVendidas />} />
         <Route path="tablasenvivo" element={<ConsultarTablasEnVivo />} />
+        <Route path="preview" element={<Preview />} />
       </Routes>
     </ContenedorPadre>
   );
