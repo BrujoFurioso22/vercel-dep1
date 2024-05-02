@@ -31,6 +31,40 @@ const ContenedorMenor = styled.div`
   padding: 25px;
   box-shadow: var(--sombra-ligera);
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+const ContenedorMenor1 = styled.div`
+  background-color: var(--color-7);
+  width: fit-content;
+  min-width: 400px;
+  height: fit-content;
+  padding: 25px;
+  box-shadow: var(--sombra-ligera);
+  border-radius: 10px;
+  display: flex;
+  gap: 20px;
+`;
+
+const ContenedorGrid = styled.div`
+  display: grid;
+  grid-auto-rows: auto;
+  gap: 20px;
+  .fila {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
+    width: fit-content;
+  }
+
+  .col-derecha {
+    text-align: right;
+  }
+
+  .col-izquierda {
+    text-align: left;
+  }
 `;
 
 const FormulariodeVenta = styled.form`
@@ -156,22 +190,171 @@ const ContenedorContenido = styled.div`
   justify-content: center;
 `;
 
-const CuadroInfo = (data1, data2) => {
-  return <ContenedorMenor></ContenedorMenor>;
+const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
+  const handlePremiosChange1 = (index, value) => {
+    const premiosArray = value.split(",").map((item) => item.trim());
+    handleChange1(index, "premios", premiosArray);
+  };
+  const handlePremiosChange2 = (index, value) => {
+    const premiosArray = value.split(",").map((item) => item.trim());
+    handleChange2(index, "premios", premiosArray);
+  };
+  return (
+    <ContenedorMenor>
+      <ContenedorMenor1>
+        <ContenedorGrid>
+          {data1.map((dato, indx) => (
+            <div key={indx} className="fila">
+              <span className="col-derecha">Premio 1:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={dato.premio1}
+                  onChange={(e) => handleChange1(0, "premio1", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premio 2:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={dato.premio2}
+                  onChange={(e) => handleChange1(0, "premio2", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premio 3:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={dato.premio3}
+                  onChange={(e) => handleChange1(0, "premio3", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premios:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={dato.premios.join(", ")}
+                  onChange={(e) => handlePremiosChange1(0, e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Fecha:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={dato.fecha}
+                  onChange={(e) => handleChange1(0, "fecha", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Hora:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={dato.hora}
+                  onChange={(e) => handleChange1(0, "hora", e.target.value)}
+                />
+              </span>
+            </div>
+          ))}
+        </ContenedorGrid>
+      </ContenedorMenor1>
+      <ContenedorMenor1>
+        <ContenedorGrid>
+          {data2.map((dato, indx) => (
+            <div key={indx} className="fila">
+              <span className="col-derecha">Premio 1:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={dato.premio1}
+                  onChange={(e) => handleChange2(0, "premio1", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premio 2:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={dato.premio2}
+                  onChange={(e) => handleChange2(0, "premio2", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premio 3:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={dato.premio3}
+                  onChange={(e) => handleChange2(0, "premio3", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premios:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={dato.premios.join(", ")}
+                  onChange={(e) => handlePremiosChange2(0, e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Fecha:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={dato.fecha}
+                  onChange={(e) => handleChange2(0, "fecha", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Hora:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={dato.hora}
+                  onChange={(e) => handleChange2(0, "hora", e.target.value)}
+                />
+              </span>
+            </div>
+          ))}
+        </ContenedorGrid>
+      </ContenedorMenor1>
+      <BotonSubmit>Guardar Cambios</BotonSubmit>
+    </ContenedorMenor>
+  );
 };
 const EditarInformacion = () => {
-  const [data1,setData1]=useState({
-    premio1:"$300",
-    premio2:"$180",
-    premio3:"$130",
-    premios:[],
-    fecha:"",
-    hora:"",
-    
-  });
+  const [data1, setData1] = useState([
+    {
+      premio1: "300",
+      premio2: "180",
+      premio3: "130",
+      premios: ['licuadora','tostadora'],
+      fecha: "10 Mayo 2024",
+      hora: "8pm",
+    },
+  ]);
+  const [data2, setData2] = useState([
+    {
+      premio1: "100",
+      premio2: "80",
+      premio3: "50",
+      premios: [],
+      fecha: "10 Mayo 2024",
+      hora: "10pm",
+    },
+  ]);
+  const handleChange1 = (index, attr, value) => {
+    setData1((prevData) =>
+      prevData.map((item, i) =>
+        i === index ? { ...item, [attr]: value } : item
+      )
+    );
+  };
+  const handleChange2 = (index, attr, value) => {
+    setData2((prevData) =>
+      prevData.map((item, i) =>
+        i === index ? { ...item, [attr]: value } : item
+      )
+    );
+  };
+
   return (
     <ContenedorContenido>
-      <ContenedorMenor>dsd</ContenedorMenor>
+      <CuadroInfo
+        data1={data1}
+        data2={data2}
+        handleChange1={handleChange1}
+        handleChange2={handleChange2}
+      />
     </ContenedorContenido>
   );
 };
