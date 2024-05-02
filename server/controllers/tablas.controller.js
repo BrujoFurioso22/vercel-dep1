@@ -16,7 +16,6 @@ export const tablasController = {
   insertarVenta: async (req, res) => {
     //////HACER LO QUE FALTA DE GENERAR EL USUARIO
     try {
-      // console.log(req);
       const {
         idvendedor,
         idcliente,
@@ -25,18 +24,13 @@ export const tablasController = {
         cantidaddinero,
         numerotransaccion,
       } = req.body;
-      // console.log(idvendedor);
       const tempor = await pool.query(
         `INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion) values(${idvendedor}, ${idcliente}, CURRENT_TIMESTAMP, ${cantidadnormal}, ${cantidadrapida}, ${cantidaddinero}, '${numerotransaccion}');`
       );
 
-      console.log("afwdwa   ", tempor);
-
       const { rowsventa } = await pool.query(
-        `SELECT id FROM venta WHERE id_vendedor=${idvendedor}, id_cliente=${idcliente}, cantidad_normal=${cantidadnormal}, cantidad_rapida=${cantidadrapida}, cantidad_dinero=${cantidaddinero}, numero_transaccion='${numerotransaccion}';`
+        `SELECT id FROM venta WHERE id_vendedor=${idvendedor} and id_cliente=${idcliente} and cantidad_normal=${cantidadnormal} and cantidad_rapida=${cantidadrapida} and cantidad_dinero=${cantidaddinero} and numero_transaccion='${numerotransaccion}';`
       );
-
-      console.log("Ya tengo el id al menos")
       if (rowsventa.length > 0) {
         let idventa = rowsventa[0];
         if (cantidadnormal > 0) {
@@ -129,7 +123,7 @@ export const tablasController = {
               do {
                 const codigorapido = 'R' + generarCodigoHexadecimal();
                 const { rowshexanormalr } = await pool.query(
-                  `SELECT * FROM tablarapida WHERE codigo = '${codigonormal}';`
+                  `SELECT * FROM tablarapida WHERE codigo = '${codigorapido}';`
                 );
 
                 if (rowshexanormalr.length === 0) {
