@@ -152,9 +152,9 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
       5,
       4,
       3,
-      4,
-      54,
-      53534534
+      2,
+      10,
+      43432
     );
     console.log(resp);
   }

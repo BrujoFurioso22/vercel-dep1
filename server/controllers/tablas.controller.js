@@ -32,126 +32,126 @@ export const tablasController = {
 
       console.log("afwdwa   ", tempor);
 
-      // const { rowsventa } = await pool.query(
-      //   `SELECT id FROM venta WHERE id_vendedor=${idvendedor}, id_cliente=${idcliente}, cantidad_normal=${cantidadnormal},
-      //   cantidad_rapida=${cantidadrapida}, cantidad_dinero=${cantidaddinero}, numero_transaccion='${numerotransaccion}';`
-      // );
+      const { rowsventa } = await pool.query(
+        `SELECT id FROM venta WHERE id_vendedor=${idvendedor}, id_cliente=${idcliente}, cantidad_normal=${cantidadnormal},
+        cantidad_rapida=${cantidadrapida}, cantidad_dinero=${cantidaddinero}, numero_transaccion='${numerotransaccion}';`
+      );
 
-      // console.log("Ya tengo el id al menos")
-      // if (rowsventa.length > 0) {
-      //   let idventa = rowsventa[0];
-      //   if (cantidadnormal > 0) {
-      //     try {
-      //       // Función para generar números aleatorios sin repetición en un rango específico
-      //       const generarNumerosAleatorios = (min, max, cantidad) => {
-      //         let numeros = new Set();
-      //         while (numeros.size < cantidad) {
-      //           let num = Math.floor(Math.random() * (max - min + 1)) + min;
-      //           numeros.add(num);
-      //         }
-      //         return Array.from(numeros);
-      //       };
+      console.log("Ya tengo el id al menos")
+      if (rowsventa.length > 0) {
+        let idventa = rowsventa[0];
+        if (cantidadnormal > 0) {
+          try {
+            // Función para generar números aleatorios sin repetición en un rango específico
+            const generarNumerosAleatorios = (min, max, cantidad) => {
+              let numeros = new Set();
+              while (numeros.size < cantidad) {
+                let num = Math.floor(Math.random() * (max - min + 1)) + min;
+                numeros.add(num);
+              }
+              return Array.from(numeros);
+            };
 
-      //       for (let i = 0; i < cantidad * 4; i++) {
-      //         // Generar números aleatorios para diferentes rangos
-      //         const numerosRango1_20 = generarNumerosAleatorios(1, 20, 5);
-      //         const numerosRango21_40 = generarNumerosAleatorios(21, 40, 5);
-      //         const numerosRango41_60 = generarNumerosAleatorios(41, 60, 5);
-      //         const numerosRango61_80 = generarNumerosAleatorios(61, 80, 5);
-      //         const numerosRango81_99 = generarNumerosAleatorios(81, 99, 5);
+            for (let i = 0; i < cantidad * 4; i++) {
+              // Generar números aleatorios para diferentes rangos
+              const numerosRango1_20 = generarNumerosAleatorios(1, 20, 5);
+              const numerosRango21_40 = generarNumerosAleatorios(21, 40, 5);
+              const numerosRango41_60 = generarNumerosAleatorios(41, 60, 5);
+              const numerosRango61_80 = generarNumerosAleatorios(61, 80, 5);
+              const numerosRango81_99 = generarNumerosAleatorios(81, 99, 5);
 
-      //         // Combinar todos los números generados
-      //         const todosLosNumeros = [
-      //           ...numerosRango1_20,
-      //           ...numerosRango21_40,
-      //           ...numerosRango41_60,
-      //           ...numerosRango61_80,
-      //           ...numerosRango81_99,
-      //           // Combinar otros rangos aquí...
-      //         ];
+              // Combinar todos los números generados
+              const todosLosNumeros = [
+                ...numerosRango1_20,
+                ...numerosRango21_40,
+                ...numerosRango41_60,
+                ...numerosRango61_80,
+                ...numerosRango81_99,
+                // Combinar otros rangos aquí...
+              ];
 
-      //         // Asignar números a las variables n1, n2, ..., n25
-      //         const numerosAsignados = todosLosNumeros.slice(0, 24);
+              // Asignar números a las variables n1, n2, ..., n25
+              const numerosAsignados = todosLosNumeros.slice(0, 24);
 
-      //         console.log(numerosAsignados);
+              console.log(numerosAsignados);
 
-      //         do {
-      //           const codigonormal = 'N' + generarCodigoHexadecimal();
-      //           const { rowshexanormal } = await pool.query(
-      //             `SELECT * FROM tablanormal WHERE codigo = '${codigonormal}'`
-      //           );
+              do {
+                const codigonormal = 'N' + generarCodigoHexadecimal();
+                const { rowshexanormal } = await pool.query(
+                  `SELECT * FROM tablanormal WHERE codigo = '${codigonormal}'`
+                );
 
-      //           if (rowshexanormal.length === 0) {
-      //             // Insertar datos en la tabla
-      //             const respeustadealginaverga  = await pool.query(
-      //               `INSERT INTO tablanormal(
-      //                   id_venta,codigo,num1,num2,num3,num4,num5,num6,num7,num8,num9,num10,num11,num12,num14,num15,num16,num17,num18,num19,num20,num21,num22,num23,num24,num25)
-      //                   values ('${idventa}', '${codigonormal}', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)`,
-      //               numerosAsignados
-      //             );
-      //             console.log("respuesta",respeustadealginaverga);
-      //           }
-      //         } while (rowshexanormal.length > 0);
-      //       }
-      //       return res.status(200).json({ ok: true });
-      //     } catch (error) {
-      //       res.status(500).json({ error: error.message });
-      //     }
-      //   }
+                if (rowshexanormal.length === 0) {
+                  // Insertar datos en la tabla
+                  const respeustadealginaverga  = await pool.query(
+                    `INSERT INTO tablanormal(
+                        id_venta,codigo,num1,num2,num3,num4,num5,num6,num7,num8,num9,num10,num11,num12,num14,num15,num16,num17,num18,num19,num20,num21,num22,num23,num24,num25)
+                        values ('${idventa}', '${codigonormal}', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)`,
+                    numerosAsignados
+                  );
+                  console.log("respuesta",respeustadealginaverga);
+                }
+              } while (rowshexanormal.length > 0);
+            }
+            return res.status(200).json({ ok: true });
+          } catch (error) {
+            res.status(500).json({ error: error.message });
+          }
+        }
 
-      //   if (cantidadrapida > 0) {
-      //     try {
-      //       // Función para generar números aleatorios sin repetición en un rango específico
-      //       const generarNumerosAleatorios = (min, max, cantidad) => {
-      //         let numeros = new Set();
-      //         while (numeros.size < cantidad) {
-      //           let num = Math.floor(Math.random() * (max - min + 1)) + min;
-      //           numeros.add(num);
-      //         }
-      //         return Array.from(numeros);
-      //       };
+        if (cantidadrapida > 0) {
+          try {
+            // Función para generar números aleatorios sin repetición en un rango específico
+            const generarNumerosAleatorios = (min, max, cantidad) => {
+              let numeros = new Set();
+              while (numeros.size < cantidad) {
+                let num = Math.floor(Math.random() * (max - min + 1)) + min;
+                numeros.add(num);
+              }
+              return Array.from(numeros);
+            };
 
-      //       for (let i = 0; i < cantidad * 6; i++) {
-      //         // Generar números aleatorios para diferentes rangos
-      //         const numerosRango1_49 = generarNumerosAleatorios(1, 49, 3);
-      //         const numerosRango50_60 = generarNumerosAleatorios(50, 60, 1);
-      //         const numerosRango61_99 = generarNumerosAleatorios(61, 99, 3);
+            for (let i = 0; i < cantidad * 6; i++) {
+              // Generar números aleatorios para diferentes rangos
+              const numerosRango1_49 = generarNumerosAleatorios(1, 49, 3);
+              const numerosRango50_60 = generarNumerosAleatorios(50, 60, 1);
+              const numerosRango61_99 = generarNumerosAleatorios(61, 99, 3);
 
-      //         // Combinar todos los números generados
-      //         const todosLosNumeros = [
-      //           ...numerosRango1_49,
-      //           ...numerosRango50_60,
-      //           ...numerosRango61_99,
-      //           // Combinar otros rangos aquí...
-      //         ];
+              // Combinar todos los números generados
+              const todosLosNumeros = [
+                ...numerosRango1_49,
+                ...numerosRango50_60,
+                ...numerosRango61_99,
+                // Combinar otros rangos aquí...
+              ];
 
-      //         // Asignar números a las variables n1, n2, ..., n25
-      //         const numerosAsignados = todosLosNumeros.slice(0, 7);
+              // Asignar números a las variables n1, n2, ..., n25
+              const numerosAsignados = todosLosNumeros.slice(0, 7);
 
-      //         console.log(numerosAsignados);
-      //         do {
-      //           const codigorapido = 'R' + generarCodigoHexadecimal();
-      //           const { rowshexanormalr } = await pool.query(
-      //             `SELECT * FROM tablarapida WHERE codigo = '${codigonormal}'`
-      //           );
+              console.log(numerosAsignados);
+              do {
+                const codigorapido = 'R' + generarCodigoHexadecimal();
+                const { rowshexanormalr } = await pool.query(
+                  `SELECT * FROM tablarapida WHERE codigo = '${codigonormal}'`
+                );
 
-      //           if (rowshexanormalr.length === 0) {
-      //             // Insertar datos en la tabla
-      //             await pool.query(
-      //               `INSERT INTO tablarapida(
-      //               id_venta,codigo,num1,num3,num4,num6,num7,num8,num9)
-      //               values ('${idventa}',${codigorapido},$1, $2, $3, $4, $5, $6, $7)`,
-      //               numerosAsignados
-      //             );
-      //           }
-      //         } while (rowshexanormalr.length > 0);
-      //       }
-      //       return res.status(200).json({ ok: true });
-      //     } catch (error) {
-      //       res.status(500).json({ error: error.message });
-      //     }
-      //   }
-      // }
+                if (rowshexanormalr.length === 0) {
+                  // Insertar datos en la tabla
+                  await pool.query(
+                    `INSERT INTO tablarapida(
+                    id_venta,codigo,num1,num3,num4,num6,num7,num8,num9)
+                    values ('${idventa}',${codigorapido},$1, $2, $3, $4, $5, $6, $7)`,
+                    numerosAsignados
+                  );
+                }
+              } while (rowshexanormalr.length > 0);
+            }
+            return res.status(200).json({ ok: true });
+          } catch (error) {
+            res.status(500).json({ error: error.message });
+          }
+        }
+      }
       return res.status(200).json({ exists: false });
     } catch (error) {
       res.status(500).json({ error: error.message });
