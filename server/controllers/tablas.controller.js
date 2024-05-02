@@ -28,11 +28,12 @@ export const tablasController = {
         `INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion) values(${idvendedor}, ${idcliente}, CURRENT_TIMESTAMP, ${cantidadnormal}, ${cantidadrapida}, ${cantidaddinero}, '${numerotransaccion}');`
       );
 
-      const { rowsventa } = await pool.query(
+      const { rows } = await pool.query(
         `SELECT id FROM venta WHERE id_vendedor=${idvendedor} and id_cliente=${idcliente} and cantidad_normal=${cantidadnormal} and cantidad_rapida=${cantidadrapida} and cantidad_dinero=${cantidaddinero} and numero_transaccion='${numerotransaccion}';`
       );
-      if (rowsventa.length > 0) {
-        let idventa = rowsventa[0];
+      console.log(rows);
+      if (rows.length > 0) {
+        let idventa = rows[0].id;
         if (cantidadnormal > 0) {
           try {
             // Función para generar números aleatorios sin repetición en un rango específico
@@ -45,7 +46,7 @@ export const tablasController = {
               return Array.from(numeros);
             };
 
-            for (let i = 0; i < cantidad * 4; i++) {
+            for (let i = 0; i < cantidadnormal * 4; i++) {
               // Generar números aleatorios para diferentes rangos
               const numerosRango1_20 = generarNumerosAleatorios(1, 20, 5);
               const numerosRango21_40 = generarNumerosAleatorios(21, 40, 5);
@@ -68,25 +69,29 @@ export const tablasController = {
 
               console.log(numerosAsignados);
 
+              let isInserted = false;
               do {
-                const codigonormal = 'N' + generarCodigoHexadecimal();
-                const { rowshexanormal } = await pool.query(
-                  `SELECT * FROM tablanormal WHERE codigo = '${codigonormal}'`
+                const codigonormal = "N" + generarCodigoHexadecimal();
+                const { rows } = await pool.query(
+                  `SELECT * FROM tablanormal WHERE codigo = $1`,
+                  [codigonormal]
                 );
 
-                if (rowshexanormal.length === 0) {
+                if (rows.length === 0) {
                   // Insertar datos en la tabla
-                  const respeustadealginaverga  = await pool.query(
-                    `INSERT INTO tablanormal(id_venta,codigo,num1,num2,num3,num4,num5,num6,num7,num8,num9,num10,num11,num12,num14,num15,num16,num17,num18,num19,num20,num21,num22,num23,num24,num25) values (${idventa}, '${codigonormal}', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24);`,
-                    numerosAsignados
+                    await pool.query(
+                    `INSERT INTO tablanormal(id_venta, codigo, num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12, num14, num15, num16, num17, num18, num19, num20, num21, num22, num23, num24, num25)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)`,
+                    [idventa, codigonormal, ...numerosAsignados]
                   );
-                  console.log("respuesta",respeustadealginaverga);
+                  isInserted = true; // Inserción exitosa, salir del bucle
                 }
-              } while (rowshexanormal.length > 0);
+              } while (!isInserted); // Bucle mientras no se haya insertado correctamente
             }
-            return res.status(200).json({ ok: true });
+            // return res.status(200).json({ ok: true });
           } catch (error) {
-            res.status(500).json({ error: error.message });
+            console.log("Error1");
+            // res.status(500).json({ error: error.message });
           }
         }
 
@@ -102,7 +107,7 @@ export const tablasController = {
               return Array.from(numeros);
             };
 
-            for (let i = 0; i < cantidad * 6; i++) {
+            for (let i = 0; i < cantidadrapida * 6; i++) {
               // Generar números aleatorios para diferentes rangos
               const numerosRango1_49 = generarNumerosAleatorios(1, 49, 3);
               const numerosRango50_60 = generarNumerosAleatorios(50, 60, 1);
@@ -120,24 +125,28 @@ export const tablasController = {
               const numerosAsignados = todosLosNumeros.slice(0, 7);
 
               console.log(numerosAsignados);
+              let isInserted = false;
               do {
-                const codigorapido = 'R' + generarCodigoHexadecimal();
-                const { rowshexanormalr } = await pool.query(
-                  `SELECT * FROM tablarapida WHERE codigo = '${codigorapido}';`
+                const codigorapido = "R" + generarCodigoHexadecimal();
+                const { rows } = await pool.query(
+                  `SELECT * FROM tablarapida WHERE codigo = $1`,
+                  [codigorapido]
                 );
 
-                if (rowshexanormalr.length === 0) {
+                if (rows.length === 0) {
                   // Insertar datos en la tabla
                   await pool.query(
-                    `INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) values (${idventa},'${codigorapido}',$1, $2, $3, $4, $5, $6, $7);`,
-                    numerosAsignados
+                    `INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+                    [idventa, codigorapido, ...numerosAsignados]
                   );
+                  isInserted = true; // Inserción exitosa, salir del bucle
                 }
-              } while (rowshexanormalr.length > 0);
+              } while (!isInserted); // Bucle mientras no se haya insertado correctamente
             }
-            return res.status(200).json({ ok: true });
+            // return res.status(200).json({ ok: true });
           } catch (error) {
-            res.status(500).json({ error: error.message });
+            console.log("Error");
+            // res.status(500).json({ error: error.message });
           }
         }
       }
