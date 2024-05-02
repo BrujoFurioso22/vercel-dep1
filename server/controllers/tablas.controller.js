@@ -33,8 +33,7 @@ export const tablasController = {
       console.log("afwdwa   ", tempor);
 
       const { rowsventa } = await pool.query(
-        `SELECT id FROM venta WHERE id_vendedor=${idvendedor}, id_cliente=${idcliente}, cantidad_normal=${cantidadnormal},
-        cantidad_rapida=${cantidadrapida}, cantidad_dinero=${cantidaddinero}, numero_transaccion='${numerotransaccion}';`
+        `SELECT id FROM venta WHERE id_vendedor=${idvendedor}, id_cliente=${idcliente}, cantidad_normal=${cantidadnormal}, cantidad_rapida=${cantidadrapida}, cantidad_dinero=${cantidaddinero}, numero_transaccion='${numerotransaccion}';`
       );
 
       console.log("Ya tengo el id al menos")
@@ -84,9 +83,7 @@ export const tablasController = {
                 if (rowshexanormal.length === 0) {
                   // Insertar datos en la tabla
                   const respeustadealginaverga  = await pool.query(
-                    `INSERT INTO tablanormal(
-                        id_venta,codigo,num1,num2,num3,num4,num5,num6,num7,num8,num9,num10,num11,num12,num14,num15,num16,num17,num18,num19,num20,num21,num22,num23,num24,num25)
-                        values ('${idventa}', '${codigonormal}', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)`,
+                    `INSERT INTO tablanormal(id_venta,codigo,num1,num2,num3,num4,num5,num6,num7,num8,num9,num10,num11,num12,num14,num15,num16,num17,num18,num19,num20,num21,num22,num23,num24,num25) values (${idventa}, '${codigonormal}', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24);`,
                     numerosAsignados
                   );
                   console.log("respuesta",respeustadealginaverga);
@@ -132,15 +129,13 @@ export const tablasController = {
               do {
                 const codigorapido = 'R' + generarCodigoHexadecimal();
                 const { rowshexanormalr } = await pool.query(
-                  `SELECT * FROM tablarapida WHERE codigo = '${codigonormal}'`
+                  `SELECT * FROM tablarapida WHERE codigo = '${codigonormal}';`
                 );
 
                 if (rowshexanormalr.length === 0) {
                   // Insertar datos en la tabla
                   await pool.query(
-                    `INSERT INTO tablarapida(
-                    id_venta,codigo,num1,num3,num4,num6,num7,num8,num9)
-                    values ('${idventa}',${codigorapido},$1, $2, $3, $4, $5, $6, $7)`,
+                    `INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) values (${idventa},${codigorapido},$1, $2, $3, $4, $5, $6, $7);`,
                     numerosAsignados
                   );
                 }
