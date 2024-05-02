@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { IngresarVenta } from "../../consultasBE/Tablas";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -146,6 +147,18 @@ const ContenedorContenido = styled.div`
 const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
   if (!isOpen) return null;
 
+  const guardar = async ()=>{
+    const resp = await IngresarVenta(
+      5,
+      4,
+      3,
+      4,
+      54,
+      53534534
+    );
+    console.log(resp);
+  }
+
   return (
     <VentanaEmergente>
       <div className="modal">
@@ -212,7 +225,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
             <button className="cancelar" onClick={onClose}>
               Cancelar
             </button>
-            <button className="confirmar" onClick={onConfirm}>
+            <button className="confirmar" onClick={()=>guardar()}>
               Confirmar Venta
             </button>
           </div>
@@ -327,12 +340,22 @@ const FormularioVenta = () => {
   // Funciones para manejar el estado...
 
   // Registro de la venta
-  const registrarVenta = (e) => {
+  const registrarVenta = async (e) => {
     e.preventDefault();
     // Lógica para registrar la venta...
     if (etapa >= 5 && todasLasCantidadesValidas() && validCampos) {
       setModalIsOpen(true);
     }
+
+    // tipoIdentificacion,
+    // identificacion,
+    // nombreComprador,
+    // juegosSeleccionados,
+    // cantidades,
+    // numeroTransferencia,
+    // cantidadTransferencia,
+
+    
   };
 
   const handleJuegoSeleccionado = (juego) => {

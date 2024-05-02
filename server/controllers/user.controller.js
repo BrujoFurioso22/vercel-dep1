@@ -11,6 +11,7 @@ export const userController = {
   },
   getVerificationUser: async (req, res) => {
     try {
+      console.log(req);
       const { cedulacelular, password } = req.body;
       const { rows } = await pool.query(
         `SELECT password, rol, name FROM users WHERE cc = '${cedulacelular}'`
