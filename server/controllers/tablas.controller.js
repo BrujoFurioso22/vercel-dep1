@@ -135,7 +135,7 @@ export const tablasController = {
                 if (rowshexanormalr.length === 0) {
                   // Insertar datos en la tabla
                   await pool.query(
-                    `INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) values (${idventa},${codigorapido},$1, $2, $3, $4, $5, $6, $7);`,
+                    `INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) values (${idventa},'${codigorapido}',$1, $2, $3, $4, $5, $6, $7);`,
                     numerosAsignados
                   );
                 }
