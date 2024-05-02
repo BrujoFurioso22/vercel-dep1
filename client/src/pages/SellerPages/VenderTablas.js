@@ -150,27 +150,25 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
   if (!isOpen) return null;
 
   const vendedorCC = localStorage.getItem("id");
-
-  const idVend = async () => {
+  
+  const guardar = async () => {
     const idv = await ObtenerIDUsuario(vendedorCC);
+    let idv1 = "";
     if (idv.data) {
       if (idv.data.exists === true) {
         console.log(idv);
-        const idv1 = idv[0].data.id;
-        return idv1;
+        console.log(idv1);
+        idv1=idv.data.id;
       }
     }
-  };
-
-  const guardar = async () => {
-    const iDV = idVend();
+    const strSinEspacios = datos.identificacion.replace(/\s+/g, '');
     const resp = await IngresarVenta(
-      iDV,
-      datos.identificacion,
+      parseInt(idv1),
+      strSinEspacios,
       datos.nombreComprador,
-      datos.cantidades["Juego 1"],
-      datos.cantidades["Juego 2"],
-      datos.cantidadTransferencia,
+      parseInt(datos.cantidades["Juego 1"]),
+      parseInt(datos.cantidades["Juego 2"]),
+      parseFloat(datos.cantidadTransferencia),
       datos.numeroTransferencia
     );
     console.log(resp);

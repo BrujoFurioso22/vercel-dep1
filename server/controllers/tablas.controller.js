@@ -13,8 +13,8 @@ function generarCodigoHexadecimal() {
 }
 
 function generarContrasenia() {
-  const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
-  let contrasenia = '';
+  const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+  let contrasenia = "";
   for (let i = 0; i < 6; i++) {
     const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
     contrasenia += caracteres.charAt(indiceAleatorio);
@@ -42,16 +42,16 @@ export const tablasController = {
         const quse = await pool.query(
           `SELECT * FROM users WHERE cc = '${cccliente}';`
         );
-        const rowscliente = quse.rows
+        const rowscliente = quse.rows;
 
         if (rowscliente.length === 0) {
-          idcliente = rowscliente[0].id;
-          isInserted = true;
-        } else {
           const contraseniaGenerada = generarContrasenia();
           const quse = await pool.query(
             `INSERT INTO users(name,cc,password) values('${nombrecliente}','${cccliente}','${contraseniaGenerada}');`
           );
+        } else {
+          idcliente = rowscliente[0].id;
+          isInserted = true;
         }
       } while (!isInserted);
 
