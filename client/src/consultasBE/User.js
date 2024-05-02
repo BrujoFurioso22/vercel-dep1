@@ -9,11 +9,21 @@ export async function ObtenerUsuario() {
     return err;
   }
 }
-export async function VerificarUsuario(cedulacelular,password) {
+export async function VerificarUsuario(cedulacelular, password) {
   try {
-    const res = await axios.post(`${url}/api/users/userverif`,{
+    const res = await axios.post(`${url}/api/users/userverif`, {
       cedulacelular: cedulacelular,
       password: password,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
+export async function ObtenerIDUsuario(cedulacelular) {
+  try {
+    const res = await axios.post(`${url}/api/users/userId`, {
+      cedulacelular: cedulacelular,
     });
     return res;
   } catch (err) {

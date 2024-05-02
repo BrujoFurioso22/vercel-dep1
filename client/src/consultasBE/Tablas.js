@@ -11,7 +11,8 @@ import url from "./config/Url";
 // }
 export async function IngresarVenta(
   idvendedor,
-  idcliente,
+  cccliente,
+  nombrecliente,
   cantidadnormal,
   cantidadrapida,
   cantidaddinero,
@@ -20,7 +21,8 @@ export async function IngresarVenta(
   try {
     const res = await axios.post(`${url}/api/tablas/insertarventa`, {
       idvendedor: idvendedor,
-      idcliente: idcliente,
+      cccliente: cccliente,
+      nombrecliente:nombrecliente,
       cantidadnormal: cantidadnormal,
       cantidadrapida: cantidadrapida,
       cantidaddinero: cantidaddinero,

@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { IngresarVenta } from "../../consultasBE/Tablas";
+import { ObtenerIDUsuario } from "../../consultasBE/User";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -145,22 +146,35 @@ const ContenedorContenido = styled.div`
   justify-content: center;
 `;
 const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
+  const [idV, setIdV] = useState("");
   if (!isOpen) return null;
 
   const vendedorCC = localStorage.getItem("id");
-  
 
-  const guardar = async ()=>{
+  const idVend = async () => {
+    const idv = await ObtenerIDUsuario(vendedorCC);
+    if (idv.data) {
+      if (idv.data.exists === true) {
+        const idv1 = idv[0].data.id;
+        setIdV(idv1);
+      }
+    }
+  };
+
+  const guardar = async () => {
+    idVend();
     const resp = await IngresarVenta(
-      5,
-      4,
+      idV,
+      datos.identificacion,
+      datos.nombreComprador,
       datos.cantidades["Juego 1"],
       datos.cantidades["Juego 2"],
       datos.cantidadTransferencia,
       datos.numeroTransferencia
     );
     console.log(resp);
-  }
+    // console.log(datos);
+  };
 
   return (
     <VentanaEmergente>
@@ -228,7 +242,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
             <button className="cancelar" onClick={onClose}>
               Cancelar
             </button>
-            <button className="confirmar" onClick={()=>guardar()}>
+            <button className="confirmar" onClick={() => guardar()}>
               Confirmar Venta
             </button>
           </div>
@@ -357,8 +371,6 @@ const FormularioVenta = () => {
     // cantidades,
     // numeroTransferencia,
     // cantidadTransferencia,
-
-    
   };
 
   const handleJuegoSeleccionado = (juego) => {
