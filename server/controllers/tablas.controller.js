@@ -12,18 +12,49 @@ function generarCodigoHexadecimal() {
   return codigoHexadecimal;
 }
 
+function generarContrasenia() {
+  const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
+  let contrasenia = '';
+  for (let i = 0; i < 6; i++) {
+    const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
+    contrasenia += caracteres.charAt(indiceAleatorio);
+  }
+  return contrasenia;
+}
+
 export const tablasController = {
   insertarVenta: async (req, res) => {
     //////HACER LO QUE FALTA DE GENERAR EL USUARIO
     try {
       const {
         idvendedor,
-        idcliente,
+        cccliente,
+        nombrecliente,
         cantidadnormal,
         cantidadrapida,
         cantidaddinero,
         numerotransaccion,
       } = req.body;
+
+      let idcliente = 0;
+      let isInserted = false;
+      do {
+        const quse = await pool.query(
+          `SELECT * FROM users WHERE cc = '${cccliente}';`
+        );
+        const rowscliente = quse.rows
+
+        if (rowscliente.length === 0) {
+          idcliente = rowscliente[0].id;
+          isInserted = true;
+        } else {
+          const contraseniaGenerada = generarContrasenia();
+          const quse = await pool.query(
+            `INSERT INTO users(name,cc,password) values('${nombrecliente}','${cccliente}','${contraseniaGenerada}');`
+          );
+        }
+      } while (!isInserted);
+
       const tempor = await pool.query(
         `INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion) values(${idvendedor}, ${idcliente}, CURRENT_TIMESTAMP, ${cantidadnormal}, ${cantidadrapida}, ${cantidaddinero}, '${numerotransaccion}');`
       );
@@ -79,7 +110,7 @@ export const tablasController = {
 
                 if (rows.length === 0) {
                   // Insertar datos en la tabla
-                    await pool.query(
+                  await pool.query(
                     `INSERT INTO tablanormal(id_venta, codigo, num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12, num14, num15, num16, num17, num18, num19, num20, num21, num22, num23, num24, num25)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)`,
                     [idventa, codigonormal, ...numerosAsignados]
@@ -170,28 +201,28 @@ export const tablasController = {
             numtabla: rows[0].codigo,
             datos: {
               1: rows[0].num1,
-              2: rows[0].num2,
-              3: rows[0].num3,
-              4: rows[0].num4,
-              5: rows[0].num5,
-              6: rows[0].num6,
+              2: rows[0].num6,
+              3: rows[0].num11,
+              4: rows[0].num16,
+              5: rows[0].num21,
+              6: rows[0].num2,
               7: rows[0].num7,
-              8: rows[0].num8,
-              9: rows[0].num9,
-              10: rows[0].num10,
-              11: rows[0].num11,
-              12: rows[0].num12,
-              14: rows[0].num14,
-              15: rows[0].num15,
-              16: rows[0].num16,
-              17: rows[0].num17,
-              18: rows[0].num18,
+              8: rows[0].num12,
+              9: rows[0].num17,
+              10: rows[0].num22,
+              11: rows[0].num3,
+              12: rows[0].num8,
+              14: rows[0].num18,
+              15: rows[0].num23,
+              16: rows[0].num4,
+              17: rows[0].num9,
+              18: rows[0].num14,
               19: rows[0].num19,
-              20: rows[0].num20,
-              21: rows[0].num21,
-              22: rows[0].num22,
-              23: rows[0].num23,
-              24: rows[0].num24,
+              20: rows[0].num24,
+              21: rows[0].num5,
+              22: rows[0].num10,
+              23: rows[0].num15,
+              24: rows[0].num20,
               25: rows[0].num25,
             },
           },
@@ -205,11 +236,11 @@ export const tablasController = {
             numtabla: rows1[0].codigo,
             datos: {
               1: rows1[0].num1,
-              3: rows1[0].num3,
-              4: rows1[0].num4,
-              6: rows1[0].num6,
-              7: rows1[0].num7,
-              8: rows1[0].num8,
+              3: rows1[0].num7,
+              4: rows1[0].num3,
+              6: rows1[0].num8,
+              7: rows1[0].num4,
+              8: rows1[0].num6,
               9: rows1[0].num9,
             },
           },

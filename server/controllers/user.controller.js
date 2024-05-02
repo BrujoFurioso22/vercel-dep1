@@ -35,7 +35,26 @@ export const userController = {
       res.status(500).json({ message: "An error occurred" });
     }
   },
+  getIdUser: async (req, res) => {
+    try {
+      console.log(req);
+      const { cedulacelular } = req.body;
+      const { rows } = await pool.query(
+        `SELECT * FROM users WHERE cc = '${cedulacelular}'`
+      );
 
+      if (rows.length > 0) {
+        return res
+          .status(200)
+          .json({ exists: true, id: rows[0].id, nombre: rows[0].name });
+
+      }
+      return res.status(404).json({ exists: false });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
   // create: async(req, res) => {
   //     try {
   //         const { name, price } = req.body
