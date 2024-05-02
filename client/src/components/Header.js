@@ -2,6 +2,7 @@ import React from "react";
 import {
   Link,
   NavLink,
+  useLocation,
   useMatch,
   useNavigate,
   useResolvedPath,
@@ -19,13 +20,16 @@ const ContenedorHeader = styled.div`
   width: 100%;
   height: var(--altura-header);
   /* border-bottom: solid 1px var(--borde-ligero); */
-  background: rgba(255, 255, 255, 0.1);
+  background: #fcfcf7;
   /* border-radius: 16px; */
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(3.5px);
   -webkit-backdrop-filter: blur(3.5px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
   z-index: 100;
+  &.home {
+    background: rgba(255, 255, 255, 0.1);
+  }
 `;
 
 const ContenedorHeader1 = styled.div`
@@ -54,7 +58,7 @@ const ContenedorLogo = styled.div`
 const ContenedorMenu = styled.div`
   display: flex;
   justify-content: center;
-  
+
   & > div {
     display: flex;
     justify-content: center;
@@ -136,7 +140,7 @@ const ContenedorDerecho = styled.div`
         color: black;
         gap: 10px;
         border-radius: 10px;
-        &>.botonSalir{
+        & > .botonSalir {
           border: solid 2px var(--color-1);
           background-color: var(--color-4);
           color: var(--color-1);
@@ -172,6 +176,8 @@ function CustomNavLink({ to, children }) {
 
 const Header = ({ oculta }) => {
   const { logout } = useAuth();
+  const location = useLocation();
+  const classNameBg = location.pathname === "/" && "home";
   // console.log(rol);
   const navigate = useNavigate();
 
@@ -185,14 +191,15 @@ const Header = ({ oculta }) => {
         <CustomNavLink to="/seller/tablasenvivo">
           Consultar Tablas
         </CustomNavLink>
-        <CustomNavLink to="/seller/preview">
-          PR
+        <CustomNavLink to="/seller/editarInfo">
+          Editar PDFs
         </CustomNavLink>
+        <CustomNavLink to="/seller/preview">PR</CustomNavLink>
       </div>
     );
   };
   return (
-    <ContenedorHeader>
+    <ContenedorHeader className={classNameBg}>
       <ContenedorHeader1>
         <ContenedorLogo>
           <img
@@ -214,7 +221,9 @@ const Header = ({ oculta }) => {
                   <div className="cuentaDrop">
                     <div>
                       <span>{localStorage.getItem("nombre")}</span>
-                      <button className="botonSalir" onClick={logout}>Salir</button>
+                      <button className="botonSalir" onClick={logout}>
+                        Salir
+                      </button>
                     </div>
                   </div>
                 </div>

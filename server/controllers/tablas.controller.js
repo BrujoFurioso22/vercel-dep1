@@ -62,7 +62,7 @@ export const tablasController = {
       const { rows } = await pool.query(
         `SELECT id FROM venta WHERE id_vendedor=${idvendedor} and id_cliente=${idcliente} and cantidad_normal=${cantidadnormal} and cantidad_rapida=${cantidadrapida} and cantidad_dinero=${cantidaddinero} and numero_transaccion='${numerotransaccion}';`
       );
-      console.log(rows);
+        // console.log(rows);
       if (rows.length > 0) {
         let idventa = rows[0].id;
         if (cantidadnormal > 0) {
@@ -98,7 +98,7 @@ export const tablasController = {
               // Asignar números a las variables n1, n2, ..., n25
               const numerosAsignados = todosLosNumeros.slice(0, 24);
 
-              console.log(numerosAsignados);
+              // console.log(numerosAsignados);
 
               let isInserted = false;
               do {

@@ -5,6 +5,7 @@ import VenderTablas from "../SellerPages/VenderTablas";
 import TablasVendidas from "../SellerPages/TablasVendidas";
 import ConsultarTablasEnVivo from "../SellerPages/ConsultarTablasEnVivo";
 import Preview from "../../components/pdfMaker/Preview";
+import EditInfoTemplates from "../SellerPages/EditInfoTemplates";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -16,9 +17,9 @@ const ContenedorPadre = styled.div`
   width: 100%;
   /* background-image: url("/back1.webp"), rgba(255, 255, 255, 0.1); */
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.2)),
-    url("/back1.webp");
-  background-size: cover;
-  background-repeat: no-repeat;
+    url("/fondo3.svg");
+  background-size: auto;
+  background-repeat: repeat;
   background-position: center center;
 `;
 const SellerRoutes = () => {
@@ -29,6 +30,7 @@ const SellerRoutes = () => {
         <Route path="tablasVendidas" element={<TablasVendidas />} />
         <Route path="tablasenvivo" element={<ConsultarTablasEnVivo />} />
         <Route path="preview" element={<Preview />} />
+        <Route path="editarInfo" element={<EditInfoTemplates />} />
       </Routes>
     </ContenedorPadre>
   );

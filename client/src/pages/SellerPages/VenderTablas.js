@@ -19,12 +19,12 @@ const ContenedorPagina = styled.div`
   position: relative;
   height: 100%;
   padding: 20px 2vw;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 `;
 
 const FormulariodeVenta = styled.form`
-  background-color: var(--color-4);
+  background-color: var(--color-7);
   width: fit-content;
   min-width: 400px;
   height: fit-content;
@@ -156,8 +156,8 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
     let idv1 = "";
     if (idv.data) {
       if (idv.data.exists === true) {
-        console.log(idv);
-        console.log(idv1);
+        // console.log(idv);
+        // console.log(idv1);
         idv1=idv.data.id;
       }
     }
@@ -171,7 +171,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
       parseFloat(datos.cantidadTransferencia),
       datos.numeroTransferencia
     );
-    console.log(resp);
+    // console.log(resp);
     // console.log(datos);
   };
 
@@ -324,10 +324,10 @@ const FormularioVenta = () => {
   }, [juegosSeleccionados, etapa]);
   // useEffect para avanzar a la etapa 5
   useEffect(() => {
-    console.log("Cantidades:", cantidades);
-    console.log("Juegos seleccionados:", juegosSeleccionados);
-    console.log("Cantidades validas:", todasLasCantidadesValidas());
-    console.log(etapa);
+    // console.log("Cantidades:", cantidades);
+    // console.log("Juegos seleccionados:", juegosSeleccionados);
+    // console.log("Cantidades validas:", todasLasCantidadesValidas());
+    // console.log(etapa);
     if (
       etapa === 4 &&
       todasLasCantidadesValidas() &&

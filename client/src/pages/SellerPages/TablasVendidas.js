@@ -19,12 +19,12 @@ const ContenedorPagina = styled.div`
   position: relative;
   height: 100%;
   padding: 20px 2vw;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 `;
 
 const Contenedor1 = styled.div`
-  background-color: var(--color-4);
+  background-color: var(--color-7);
   width: fit-content;
   min-width: 400px;
   height: fit-content;
