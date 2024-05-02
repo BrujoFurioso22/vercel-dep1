@@ -33,7 +33,7 @@ const ContenedorMenor = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 `;
 const ContenedorMenor1 = styled.div`
   background-color: var(--color-7);
@@ -199,6 +199,10 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
     const premiosArray = value.split(",").map((item) => item.trim());
     handleChange2(index, "premios", premiosArray);
   };
+  const guardarCambios = ()=>{
+    // console.log(data1);
+    // console.log(data2);
+  }
   return (
     <ContenedorMenor>
       <ContenedorMenor1>
@@ -210,6 +214,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                 {"$"}
                 <InputField
                   value={dato.premio1}
+                  type="number"
                   onChange={(e) => handleChange1(0, "premio1", e.target.value)}
                 />
               </span>
@@ -218,6 +223,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                 {"$"}
                 <InputField
                   value={dato.premio2}
+                  type="number"
                   onChange={(e) => handleChange1(0, "premio2", e.target.value)}
                 />
               </span>
@@ -226,6 +232,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                 {"$"}
                 <InputField
                   value={dato.premio3}
+                  type="number"
                   onChange={(e) => handleChange1(0, "premio3", e.target.value)}
                 />
               </span>
@@ -263,6 +270,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                 {"$"}
                 <InputField
                   value={dato.premio1}
+                  type="number"
                   onChange={(e) => handleChange2(0, "premio1", e.target.value)}
                 />
               </span>
@@ -271,6 +279,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                 {"$"}
                 <InputField
                   value={dato.premio2}
+                  type="number"
                   onChange={(e) => handleChange2(0, "premio2", e.target.value)}
                 />
               </span>
@@ -279,6 +288,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                 {"$"}
                 <InputField
                   value={dato.premio3}
+                  type="number"
                   onChange={(e) => handleChange2(0, "premio3", e.target.value)}
                 />
               </span>
@@ -307,7 +317,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
           ))}
         </ContenedorGrid>
       </ContenedorMenor1>
-      <BotonSubmit>Guardar Cambios</BotonSubmit>
+      <BotonSubmit onClick={()=>guardarCambios()}>Guardar Cambios</BotonSubmit>
     </ContenedorMenor>
   );
 };
@@ -317,7 +327,7 @@ const EditarInformacion = () => {
       premio1: "300",
       premio2: "180",
       premio3: "130",
-      premios: ['licuadora','tostadora'],
+      premios: ["licuadora", "tostadora"],
       fecha: "10 Mayo 2024",
       hora: "8pm",
     },
