@@ -34,6 +34,7 @@ export const userController = {
       res.status(500).json({ message: "An error occurred" });
     }
   },
+
   // create: async(req, res) => {
   //     try {
   //         const { name, price } = req.body
