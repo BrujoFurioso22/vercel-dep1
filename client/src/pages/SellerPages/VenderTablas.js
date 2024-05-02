@@ -146,7 +146,7 @@ const ContenedorContenido = styled.div`
   justify-content: center;
 `;
 const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
-  const [idV, setIdV] = useState("");
+  // const [idV, setIdV] = useState("");
   if (!isOpen) return null;
 
   const vendedorCC = localStorage.getItem("id");
@@ -155,16 +155,17 @@ const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
     const idv = await ObtenerIDUsuario(vendedorCC);
     if (idv.data) {
       if (idv.data.exists === true) {
+        console.log(idv);
         const idv1 = idv[0].data.id;
-        setIdV(idv1);
+        return idv1;
       }
     }
   };
 
   const guardar = async () => {
-    idVend();
+    const iDV = idVend();
     const resp = await IngresarVenta(
-      idV,
+      iDV,
       datos.identificacion,
       datos.nombreComprador,
       datos.cantidades["Juego 1"],
