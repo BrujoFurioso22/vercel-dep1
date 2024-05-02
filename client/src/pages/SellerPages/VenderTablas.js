@@ -147,14 +147,17 @@ const ContenedorContenido = styled.div`
 const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
   if (!isOpen) return null;
 
+  const vendedorCC = localStorage.getItem("id");
+  
+
   const guardar = async ()=>{
     const resp = await IngresarVenta(
       5,
       4,
-      3,
-      2,
-      10,
-      43432
+      datos.cantidades["Juego 1"],
+      datos.cantidades["Juego 2"],
+      datos.cantidadTransferencia,
+      datos.numeroTransferencia
     );
     console.log(resp);
   }
