@@ -3,6 +3,8 @@ import express from 'express';
 import { userRouter } from './routes/user.router.js';
 import { tablasRouter } from './routes/tablas.router.js';
 import { corsMiddleware } from './middleware/cors.js';
+import { descripcionesRouter } from './routes/descripciones.router.js';
+import { ventasRouter } from './routes/ventas.router.js';
 
 // Cargar las variables de entorno
 
@@ -17,6 +19,9 @@ app.disable('x-powered-by');
 // Utilizar el enrutador de usuarios
 app.use("/api/users", userRouter);
 app.use("/api/tablas", tablasRouter);
+app.use("/api/descripciones", descripcionesRouter);
+app.use("/api/ventas", ventasRouter);
+
 
 
 // Escuchar en el puerto definido en las variables de entorno
