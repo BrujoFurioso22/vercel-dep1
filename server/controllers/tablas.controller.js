@@ -39,16 +39,15 @@ export const tablasController = {
       let idcliente = 0;
       let isInserted = false;
       do {
-        const quse = await pool.query(
-          'SELECT * FROM users WHERE cc = $1;',
-          [cccliente]
-        );
+        const quse = await pool.query("SELECT * FROM users WHERE cc = $1;", [
+          cccliente,
+        ]);
         const rowscliente = quse.rows;
 
         if (rowscliente.length === 0) {
           const contraseniaGenerada = generarContrasenia();
           const quse = await pool.query(
-            'INSERT INTO users(name, cc, password) VALUES ($1, $2, $3);',
+            "INSERT INTO users(name, cc, password) VALUES ($1, $2, $3);",
             [nombrecliente, cccliente, contraseniaGenerada]
           );
         } else {
@@ -57,19 +56,36 @@ export const tablasController = {
         }
       } while (!isInserted);
 
+      let cantN = cantidadnormal === null ? 0 : cantidadnormal;
+      let cantR = cantidadrapida === null ? 0 : cantidadrapida;
+
       const tempor = await pool.query(
-        'INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion) VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4, $5, $6);',
-        [idvendedor, idcliente, cantidadnormal, cantidadrapida, cantidaddinero, numerotransaccion]
+        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion) VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4, $5, $6);",
+        [
+          idvendedor,
+          idcliente,
+          cantN,
+          cantR,
+          cantidaddinero,
+          numerotransaccion,
+        ]
       );
 
       const { rows } = await pool.query(
-        'SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4 AND cantidad_dinero = $5 AND numero_transaccion = $6;',
-        [idvendedor, idcliente, cantidadnormal, cantidadrapida, cantidaddinero, numerotransaccion]
+        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4 AND cantidad_dinero = $5 AND numero_transaccion = $6;",
+        [
+          idvendedor,
+          idcliente,
+          cantN,
+          cantR,
+          cantidaddinero,
+          numerotransaccion,
+        ]
       );
       // console.log(rows);
       if (rows.length > 0) {
         let idventa = rows[0].id;
-        if (cantidadnormal > 0) {
+        if (cantN > 0) {
           try {
             // Función para generar números aleatorios sin repetición en un rango específico
             const generarNumerosAleatorios = (min, max, cantidad) => {
@@ -81,7 +97,7 @@ export const tablasController = {
               return Array.from(numeros);
             };
 
-            for (let i = 0; i < cantidadnormal * 4; i++) {
+            for (let i = 0; i < cantN * 4; i++) {
               // Generar números aleatorios para diferentes rangos
               const numerosRango1_20 = generarNumerosAleatorios(1, 20, 5);
               const numerosRango21_40 = generarNumerosAleatorios(21, 40, 5);
@@ -130,7 +146,7 @@ export const tablasController = {
           }
         }
 
-        if (cantidadrapida > 0) {
+        if (cantR > 0) {
           try {
             // Función para generar números aleatorios sin repetición en un rango específico
             const generarNumerosAleatorios = (min, max, cantidad) => {
@@ -142,7 +158,7 @@ export const tablasController = {
               return Array.from(numeros);
             };
 
-            for (let i = 0; i < cantidadrapida * 6; i++) {
+            for (let i = 0; i < cantR * 6; i++) {
               // Generar números aleatorios para diferentes rangos
               const numerosRango1_49 = generarNumerosAleatorios(1, 49, 3);
               const numerosRango50_60 = generarNumerosAleatorios(50, 60, 1);
@@ -271,9 +287,10 @@ export const tablasController = {
         `SELECT tablarapida.* FROM public.tablarapida, public.venta, public.users WHERE tablarapida.id_venta=venta.id and venta.id_cliente=users.id and users.cc = '$1'`,
         [cccliente]
       );
-      let var1={}, var2={};
+      let var1 = {},
+        var2 = {};
       if (rowsTablaNormal.length > 0) {
-        var1 = rowsTablaNormal.map(rowsTablaNormal => [
+        var1 = rowsTablaNormal.map((rowsTablaNormal) => [
           {
             numtabla: rowsTablaNormal.codigo,
             datos: {
@@ -306,7 +323,7 @@ export const tablasController = {
         ]);
       }
       if (rowsTablaRapida.length > 0) {
-        var2 = rowsTablaRapida.map(rowsTablaRapida => [
+        var2 = rowsTablaRapida.map((rowsTablaRapida) => [
           {
             numtabla: rowsTablaRapida.codigo,
             datos: {
@@ -340,9 +357,10 @@ export const tablasController = {
         `SELECT * FROM public.tablarapida WHERE tablarapida.id_venta = $1`,
         [idventa]
       );
-      let var1={}, var2={};
+      let var1 = {},
+        var2 = {};
       if (rowsTablaNormal.length > 0) {
-        var1 = rowsTablaNormal.map(rowsTablaNormal => [
+        var1 = rowsTablaNormal.map((rowsTablaNormal) => [
           {
             numtabla: rowsTablaNormal.codigo,
             datos: {
@@ -375,7 +393,7 @@ export const tablasController = {
         ]);
       }
       if (rowsTablaRapida.length > 0) {
-        var2 = rowsTablaRapida.map(rowsTablaRapida => [
+        var2 = rowsTablaRapida.map((rowsTablaRapida) => [
           {
             numtabla: rowsTablaRapida.codigo,
             datos: {

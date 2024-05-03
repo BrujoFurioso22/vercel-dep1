@@ -2,9 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import { parsePhoneNumberFromString } from "libphonenumber-js";
-import { IngresarVenta } from "../../consultasBE/Tablas";
-import { ObtenerIDUsuario } from "../../consultasBE/User";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -265,6 +262,15 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
         <ContenedorGrid>
           {data2.map((dato, indx) => (
             <div key={indx} className="fila">
+              <span className="col-derecha">Contenido:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={dato.premio1}
+                  type="number"
+                  onChange={(e) => handleChange2(0, "premio1", e.target.value)}
+                />
+              </span>
               <span className="col-derecha">Premio 1:</span>
               <span className="col-izquierda">
                 {"$"}
@@ -324,6 +330,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
 const EditarInformacion = () => {
   const [data1, setData1] = useState([
     {
+      contenido: "",
       premio1: "300",
       premio2: "180",
       premio3: "130",
@@ -334,6 +341,7 @@ const EditarInformacion = () => {
   ]);
   const [data2, setData2] = useState([
     {
+      contenido:"",
       premio1: "100",
       premio2: "80",
       premio3: "50",
