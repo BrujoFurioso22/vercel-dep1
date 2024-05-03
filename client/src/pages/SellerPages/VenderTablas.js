@@ -109,6 +109,10 @@ const VentanaEmergente = styled.div`
         border: solid 2px var(--alerta-exito);
         color: var(--alerta-exito);
       }
+      &.aceptar {
+        border: solid 2px var(--color-1);
+        color: var(--color-1);
+      }
     }
   }
 `;
@@ -145,108 +149,161 @@ const ContenedorContenido = styled.div`
   display: flex;
   justify-content: center;
 `;
-const Modal = ({ isOpen, onClose, onConfirm, datos }) => {
-  // const [idV, setIdV] = useState("");
+const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
+  const [ventaCorrecta, setVentaCorrecta] = useState(0);
   if (!isOpen) return null;
 
   const vendedorCC = localStorage.getItem("id");
-  
+
   const guardar = async () => {
+    setVentaCorrecta(3);
+
     const idv = await ObtenerIDUsuario(vendedorCC);
     let idv1 = "";
     if (idv.data) {
       if (idv.data.exists === true) {
         // console.log(idv);
         // console.log(idv1);
-        idv1=idv.data.id;
+        idv1 = idv.data.id;
       }
     }
-    const strSinEspacios = datos.identificacion.replace(/\s+/g, '');
+    // console.log(datos);
+    const strSinEspacios = datos.identificacion.replace(/\s+/g, "");
     const resp = await IngresarVenta(
       parseInt(idv1),
       strSinEspacios,
       datos.nombreComprador,
-      parseInt(datos.cantidades["Juego 1"]),
-      parseInt(datos.cantidades["Juego 2"]),
-      parseFloat(datos.cantidadTransferencia),
+      datos.cantidades["Juego 1"] === undefined
+        ? 0
+        : parseInt(datos.cantidades["Juego 1"]),
+      datos.cantidades["Juego 2"] === undefined
+        ? 0
+        : parseInt(datos.cantidades["Juego 2"]),
+      datos.cantidadTransferencia === ""
+        ? null
+        : parseFloat(datos.cantidadTransferencia),
       datos.numeroTransferencia
     );
-    // console.log(resp);
-    // console.log(datos);
+    console.log(resp);
+    if (resp.ok) {
+      setVentaCorrecta(1);
+    } else {
+      setVentaCorrecta(2);
+    }
+  };
+
+  const handleCerrarDespuesdeGuardar = () => {
+    limpiar();
+    onClose();
   };
 
   return (
     <VentanaEmergente>
       <div className="modal">
-        <span className="titulo">Confirmar Venta</span>
-        <hr />
-        <div className="gridDatos">
-          <div className="dato">
-            <div className="dato1">
-              <span className="label">Identificación:</span>
-            </div>
-
-            <span>{datos.identificacion}</span>
-          </div>
-          <div className="dato">
-            <div className="dato1">
-              <span className="label">Nombre del comprador:</span>
-            </div>
-            <span>{datos.nombreComprador}</span>
-          </div>
-          <div className="dato">
-            <div className="dato1">
-              <span className="label">Juegos seleccionados:</span>
-            </div>
-            <div
-              className="gridDatos"
-              style={{
-                padding: "0",
-                gridTemplateColumns: "auto auto",
-                width: "fit-content",
-              }}
-            >
-              {datos.juegosSeleccionados.map((juego) => (
-                <div className="dato" key={juego}>
-                  <div className="dato1">
-                    {juego}
-                    {" -"}
-                  </div>
-                  <span>{datos.cantidades[juego]}</span>
+        {ventaCorrecta === 0 ? (
+          <>
+            <span className="titulo">Confirmar Venta</span>
+            <hr />
+            <div className="gridDatos">
+              <div className="dato">
+                <div className="dato1">
+                  <span className="label">Identificación:</span>
                 </div>
-              ))}
+
+                <span>{datos.identificacion}</span>
+              </div>
+              <div className="dato">
+                <div className="dato1">
+                  <span className="label">Nombre del comprador:</span>
+                </div>
+                <span>{datos.nombreComprador}</span>
+              </div>
+              <div className="dato">
+                <div className="dato1">
+                  <span className="label">Juegos seleccionados:</span>
+                </div>
+                <div
+                  className="gridDatos"
+                  style={{
+                    padding: "0",
+                    gridTemplateColumns: "auto auto",
+                    width: "fit-content",
+                  }}
+                >
+                  {datos.juegosSeleccionados.map((juego) => (
+                    <div className="dato" key={juego}>
+                      <div className="dato1">
+                        {juego}
+                        {" -"}
+                      </div>
+                      <span>{datos.cantidades[juego]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="dato">
+                <div className="dato1">
+                  <span className="label">Número Transferencia:</span>
+                </div>
+                <span>
+                  {datos.numeroTransferencia === ""
+                    ? "-----"
+                    : datos.numeroTransferencia}
+                </span>
+              </div>
+              <div className="dato">
+                <div className="dato1">
+                  <span className="label">Cantidad Transferencia:</span>
+                </div>
+                <span>
+                  {datos.cantidadTransferencia === ""
+                    ? "-----"
+                    : `$ ${datos.cantidadTransferencia}`}
+                </span>
+              </div>
+              <div className="contenedorBotones">
+                <button className="cancelar" onClick={onClose}>
+                  Cancelar
+                </button>
+                <button className="confirmar" onClick={() => guardar()}>
+                  Confirmar Venta
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="dato">
-            <div className="dato1">
-              <span className="label">Número Transferencia:</span>
+          </>
+        ) : ventaCorrecta === 1 ? (
+          <>
+            <span className="titulo">Venta Registrada Correctamente</span>
+            <i className="bi bi-check2-circle"></i>
+            <div className="contenedorBotones">
+              <button
+                className="aceptar"
+                onClick={handleCerrarDespuesdeGuardar}
+              >
+                Aceptar
+              </button>
             </div>
-            <span>
-              {datos.numeroTransferencia === ""
-                ? "-----"
-                : datos.numeroTransferencia}
-            </span>
-          </div>
-          <div className="dato">
-            <div className="dato1">
-              <span className="label">Cantidad Transferencia:</span>
+          </>
+        ) : ventaCorrecta === 2 ? (
+          <>
+            <span className="titulo">Hubo un error al registrar</span>
+            <span>Intente de nuevo</span>
+            <i className="bi bi-x-square"></i>
+            <div className="contenedorBotones">
+              <button
+                className="aceptar"
+                onClick={handleCerrarDespuesdeGuardar}
+              >
+                Aceptar
+              </button>
             </div>
-            <span>
-              {datos.cantidadTransferencia === ""
-                ? "-----"
-                : `$ ${datos.cantidadTransferencia}`}
-            </span>
-          </div>
-          <div className="contenedorBotones">
-            <button className="cancelar" onClick={onClose}>
-              Cancelar
-            </button>
-            <button className="confirmar" onClick={() => guardar()}>
-              Confirmar Venta
-            </button>
-          </div>
-        </div>
-        {/* Grid de datos */}
+          </>
+        ) : (
+          <>
+            <span className="titulo">Generando tablas...</span>
+            <span>Por favor, espere.</span>
+          </>
+        )}
       </div>
     </VentanaEmergente>
   );
@@ -556,6 +613,7 @@ const FormularioVenta = () => {
           numeroTransferencia,
           cantidadTransferencia,
         }}
+        limpiar={Limpiar}
       />
     </ContenedorContenido>
   );
