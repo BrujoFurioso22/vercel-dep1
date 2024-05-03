@@ -83,6 +83,7 @@ export const tablasController = {
         ]
       );
       // console.log(rows);
+      let verif1 =false, verif2=false;
       if (rows.length > 0) {
         let idventa = rows[0].id;
         if (cantN > 0) {
@@ -140,8 +141,10 @@ export const tablasController = {
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
             }
             // return res.status(200).json({ ok: true });
+            verif1==true;
           } catch (error) {
             console.log("Error1");
+            verif1=false;
             // res.status(500).json({ error: error.message });
           }
         }
@@ -194,14 +197,20 @@ export const tablasController = {
                 }
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
             }
-            return res.status(200).json({ ok: true });
+            // return res.status(200).json({ ok: true });
+            verif2=true;
           } catch (error) {
             console.log("Error");
-            res.status(500).json({ error: error.message });
+            verif2=false;
+            // res.status(500).json({ error: error.message });
           }
         }
       }
-      return res.status(400).json({ exists: false });
+      if(verif1 === true && verif2 === true){
+        return res.status(200).json({ ok: true });
+
+      }
+      return res.status(400).json({ ok: false });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
