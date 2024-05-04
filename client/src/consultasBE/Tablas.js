@@ -22,11 +22,32 @@ export async function IngresarVenta(
     const res = await axios.post(`${url}/api/tablas/insertarventa`, {
       idvendedor: idvendedor,
       cccliente: cccliente,
-      nombrecliente:nombrecliente,
+      nombrecliente: nombrecliente,
       cantidadnormal: cantidadnormal,
       cantidadrapida: cantidadrapida,
       cantidaddinero: cantidaddinero,
       numerotransaccion: numerotransaccion,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
+
+export async function ConsultarVentas(idvendedor) {
+  try {
+    const res = await axios.post(`${url}/api/ventas/obtenerventasvendedor`, {
+      idvendedor: idvendedor,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
+export async function ConsultarTablasSegunIDVenta(idventa) {
+  try {
+    const res = await axios.post(`${url}/api/tablas/obtenertablasventa`, {
+      idventa: idventa,
     });
     return res;
   } catch (err) {

@@ -91,7 +91,7 @@ const Body = styled.div`
   }
 `;
 
-export const HtmlTemplate2 = ({ dataJuego, dataInfo}) => {
+export const HtmlTemplate2 = ({ dataJuego}) => {
   return (
     <Page>
       <Header>
@@ -113,7 +113,7 @@ export const HtmlTemplate2 = ({ dataJuego, dataInfo}) => {
         </div>
         <div class="c3-header">
           <h3>Premio de $300</h3>
-          <div>{dataInfo.fecha}</div>
+          <div>10/05/2024</div>
 
         </div>
       </Header>

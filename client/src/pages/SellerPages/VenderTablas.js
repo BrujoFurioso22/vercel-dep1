@@ -56,6 +56,7 @@ const VentanaEmergente = styled.div`
     & > * {
       width: 100%;
     }
+
     background-color: var(--color-negro-bajo);
     margin-top: 30px;
     padding: 20px 30px;
@@ -64,6 +65,17 @@ const VentanaEmergente = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    &>.cont1{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-direction:column;
+      &>i{
+        font-size: 30px;
+      }
+    }
     & > .titulo {
       font-size: 1.4rem;
       font-weight: 700;
@@ -184,8 +196,8 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
         : parseFloat(datos.cantidadTransferencia),
       datos.numeroTransferencia
     );
-    console.log(resp);
-    if (resp.ok) {
+    // console.log(resp);
+    if (resp.data.ok) {
       setVentaCorrecta(1);
     } else {
       setVentaCorrecta(2);
@@ -272,7 +284,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
             </div>
           </>
         ) : ventaCorrecta === 1 ? (
-          <>
+          <div className="cont1">
             <span className="titulo">Venta Registrada Correctamente</span>
             <i className="bi bi-check2-circle"></i>
             <div className="contenedorBotones">
@@ -283,9 +295,9 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
                 Aceptar
               </button>
             </div>
-          </>
+          </div>
         ) : ventaCorrecta === 2 ? (
-          <>
+          <div className="cont1">
             <span className="titulo">Hubo un error al registrar</span>
             <span>Intente de nuevo</span>
             <i className="bi bi-x-square"></i>
@@ -297,12 +309,12 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
                 Aceptar
               </button>
             </div>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="cont1">
             <span className="titulo">Generando tablas...</span>
             <span>Por favor, espere.</span>
-          </>
+          </div>
         )}
       </div>
     </VentanaEmergente>

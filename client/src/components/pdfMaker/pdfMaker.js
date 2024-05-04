@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import ReactDOMServer from "react-dom/server";
 import { jsPDF } from "jspdf";
@@ -6,6 +6,7 @@ import { HtmlTemplate1 } from "./Juego1Template";
 import { HtmlTemplate2 } from "./Juego2Template";
 import { dataTabla } from "../../pages/UserPages/data";
 import { dataTabla2 } from "../../pages/UserPages/data";
+import { ConsultarTablasSegunIDVenta } from "../../consultasBE/Tablas";
 // const chunkData = (data, chunkSize) => {
 //   let results = [];
 //   for (let i = 0; i < data.length; i += chunkSize) {
@@ -117,7 +118,21 @@ import { dataTabla2 } from "../../pages/UserPages/data";
 //   );
 // };
 
-const GenerarPDFs = ({ dataTabla, dataTabla2 }) => {
+const GenerarPDFs = ({ idventa }) => {
+  const ConsultarDatos = async () => {
+    const res = await ConsultarTablasSegunIDVenta(idventa);
+    let dataTabla = [],
+      dataTabla2 = [];
+    if (res) {
+      console.log(res.data);
+      dataTabla = res.data.data1;
+      dataTabla2 = res.data.data2;
+      generatePdf(dataTabla, dataTabla2);
+    } else {
+      return;
+    }
+  };
+
   const chunkData = (data, chunkSize) => {
     let results = [];
     for (let i = 0; i < data.length; i += chunkSize) {
@@ -126,7 +141,7 @@ const GenerarPDFs = ({ dataTabla, dataTabla2 }) => {
     return results;
   };
 
-  const generatePdf = () => {
+  const generatePdf = (dataTabla, dataTabla2) => {
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "mm",
@@ -134,6 +149,7 @@ const GenerarPDFs = ({ dataTabla, dataTabla2 }) => {
       hotfixes: ["px_scaling"],
     });
     const processTable = (data, chunkSize, template) => {
+      console.log(data);
       if (data.length === 0) return; // Si no hay datos, no procesar esta tabla
       const dataChunks = chunkData(data, chunkSize);
 
@@ -187,7 +203,7 @@ const GenerarPDFs = ({ dataTabla, dataTabla2 }) => {
     processTable(dataTabla2, 6, HtmlTemplate2);
   };
 
-  return <button onClick={generatePdf}>Descargar PDF Combinado</button>;
+  return <button onClick={ConsultarDatos}>Descargar PDF Combinado</button>;
 };
 
 export default GenerarPDFs;

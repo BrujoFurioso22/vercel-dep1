@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
@@ -6,6 +6,8 @@ import GeneratePdfButton, {
   downloadPdf,
 } from "../../components/pdfMaker/pdfMaker";
 import { device } from "../../components/styled-componets/MediaQ";
+import { ConsultarVentas } from "../../consultasBE/Tablas";
+import { ObtenerIDUsuario } from "../../consultasBE/User";
 // const ContenedorPadre = styled.div`
 //   display: flex;
 //   flex-direction: column;
@@ -19,6 +21,7 @@ const ContenedorPagina = styled.div`
   position: relative;
   height: 100%;
   padding: 20px 2vw;
+  overflow: auto;
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
 `;
@@ -27,10 +30,11 @@ const Contenedor1 = styled.div`
   background-color: var(--color-7);
   width: fit-content;
   min-width: 400px;
-  height: fit-content;
+  height: auto;
   padding: 25px;
   box-shadow: var(--sombra-ligera);
   border-radius: 10px;
+  overflow: auto;
   & > .buscarCodigo {
     display: flex;
     gap: 10px;
@@ -125,62 +129,24 @@ const TablaPersonalizada = styled.table`
     } */
   }
 `;
-const datos = [
-  {
-    idVenta: "V001",
-    idVendedor: "Vend123",
-    idCliente: "C456",
-    nombreCliente: "Jose Manuel Estrada",
-    fechaDeVenta: "2024-04-20",
-    CantJuego1: 2,
-    CantJuego2: 3,
-  },
-  {
-    idVenta: "V002",
-    idVendedor: "Vend124",
-    idCliente: "C457",
-    nombreCliente: "María Estela Gómez",
-    fechaDeVenta: "2024-04-21",
-    CantJuego1: 1,
-    CantJuego2: 2,
-  },
-  {
-    idVenta: "V003",
-    idVendedor: "Vend125",
-    idCliente: "C458",
-    nombreCliente: "Jorge Castro",
-    fechaDeVenta: "2024-04-22",
-    CantJuego1: 4,
-    CantJuego2: 1,
-  },
-  {
-    idVenta: "V004",
-    idVendedor: "Vend165",
-    idCliente: "C423",
-    nombreCliente: "Maerie Castro",
-    fechaDeVenta: "2024-04-22",
-    CantJuego1: 7,
-    CantJuego2: 5,
-  },
-];
 const headerNames = {
-  idVenta: "ID Venta",
-  idVendedor: "ID Ven.",
-  idCliente: "ID Cli.",
-  nombreCliente: "Cliente",
-  fechaDeVenta: "Fecha",
-  CantJuego1: "# 1",
-  CantJuego2: "# 2",
+  id: "ID Venta",
+  idcliente: "ID Cli.",
+  nombre: "Cliente",
+  fecha: "Fecha",
+  cantidadnormal: "# 1",
+  cantidadrapida: "# 2",
+  numerotransaccion: "Num Tr",
+  cantidadinero: "$ Tr.",
 };
 
 const visibleColumns = {
-  idVenta: false,
-  idVendedor: true,
-  idCliente: true,
-  nombreCliente: true,
-  fechaDeVenta: true,
-  CantJuego1: true,
-  CantJuego2: true,
+  id: false,
+  idcliente: true,
+  nombre: true,
+  fecha: true,
+  numerotransaccion: true,
+  cantidadinero: true,
 };
 
 const TablaCard = styled.div`
@@ -221,15 +187,25 @@ const TablaCard = styled.div`
     margin-right: 10px;
   }
 `;
+function formatDate(dateString) {
+  const date = new Date(dateString); // Parsear la fecha
+  const day = String(date.getDate()).padStart(2, "0"); // Día en formato 2 dígitos
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Mes en formato 2 dígitos
+  const year = date.getFullYear(); // Año
+
+  return `${day}/${month}/${year}`; // Devolver en formato dd/mm/yyyy
+}
 const CardTable = ({ datos, headerNames, visibleColumns }) => {
   // Filtrar las cabeceras que están marcadas como visibles
-  const headers = Object.keys(datos[0]).filter(
+  const flatDatos = datos.flat();
+
+  const headers = Object.keys(flatDatos[0]).filter(
     (header) => visibleColumns[header] !== false
   );
 
   return (
     <TablaCard>
-      {datos.map((fila, index) => (
+      {flatDatos.map((fila, index) => (
         <div key={index} className="fila">
           {headers.map((header) => (
             <div
@@ -237,7 +213,7 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
               className="celda"
               data-label={headerNames[header] || header}
             >
-              {fila[header]}
+              {header === "fecha" ? formatDate(fila[header]) : fila[header]}
             </div>
           ))}
         </div>
@@ -247,7 +223,9 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
 };
 
 const Tablas = ({ datos }) => {
-  const headers = Object.keys(datos[0]).filter(
+  console.log(datos);
+  const flatDatos = datos.flat();
+  const headers = Object.keys(flatDatos[0]).filter(
     (header) => visibleColumns[header] !== false
   );
 
@@ -264,25 +242,27 @@ const Tablas = ({ datos }) => {
             </tr>
           </thead>
           <tbody>
-            {datos.map((venta, index) => (
+            {flatDatos.map((venta, index) => (
               <tr key={index}>
                 {headers.map((header) => (
                   <td
                     data-label={headerNames[header]}
                     key={`${venta.idVenta}-${header}`}
                   >
-                    {venta[header]}
+                    {header === "fecha"
+                      ? formatDate(venta[header])
+                      : venta[header]}
                   </td>
                 ))}
                 <td>
-                  <GeneratePdfButton />
+                  <GeneratePdfButton idventa={parseInt(venta.id)}/>
                 </td>
               </tr>
             ))}
           </tbody>
         </TablaPersonalizada>
         <CardTable
-          datos={datos}
+          datos={flatDatos}
           headerNames={headerNames}
           visibleColumns={visibleColumns}
         />
@@ -292,13 +272,32 @@ const Tablas = ({ datos }) => {
 };
 
 const TablasVendidas = () => {
-  const [datosTabla, setDatosTabla] = useState(datos);
+  const idv = localStorage.getItem("id");
+  const [datosTabla, setDatosTabla] = useState(null);
+  const ConsultarTablasVendedor = async () => {
+    const idVendedor = await ObtenerIDUsuario(idv);
+    if (idVendedor.data.id) {
+      const res = await ConsultarVentas(idVendedor.data.id);
+      console.log(res.data.data);
+
+      if (res.data) {
+        setDatosTabla(res.data.data);
+      }
+    }
+  };
+  useEffect(() => {
+    ConsultarTablasVendedor();
+  }, []);
   return (
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
         <h1>Tus tablas vendidas</h1>
-        <Tablas datos={datosTabla} />
+        {datosTabla === null ? (
+          <div>Cargando Datos...</div>
+        ) : (
+          <Tablas datos={datosTabla} />
+        )}
       </ContenedorPagina>
     </ContenedorPadre>
   );

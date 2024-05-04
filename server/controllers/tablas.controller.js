@@ -69,19 +69,12 @@ export const tablasController = {
       );
 
       const { rows } = await pool.query(
-        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4 AND cantidad_dinero = $5 AND numero_transaccion = $6;",
-        [
-          idvendedor,
-          idcliente,
-          cantidadnormal,
-          cantidadrapida,
-          cantidaddinero,
-          numerotransaccion,
-        ]
+        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4;",
+        [idvendedor, idcliente, cantidadnormal, cantidadrapida]
       );
-      // console.log(rows);
-      let verif1 = false,
-        verif2 = false;
+      console.log(rows);
+      let verif1 = true,
+        verif2 = true;
       if (rows.length > 0) {
         let idventa = rows[0].id;
         if (cantidadnormal > 0) {
@@ -139,7 +132,6 @@ export const tablasController = {
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
             }
             // return res.status(200).json({ ok: true });
-            verif1 = true;
           } catch (error) {
             console.log("Error1");
             verif1 = false;
@@ -196,7 +188,6 @@ export const tablasController = {
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
             }
             // return res.status(200).json({ ok: true });
-            verif2 = true;
           } catch (error) {
             console.log("Error");
             verif2 = false;
@@ -204,10 +195,13 @@ export const tablasController = {
           }
         }
       }
+      // console.log(verif1);
+      // console.log(verif2);
       if (verif1 === true && verif2 === true) {
         return res.status(200).json({ ok: true });
+      } else {
+        return res.status(400).json({ ok: false });
       }
-      return res.status(400).json({ ok: false });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -293,56 +287,52 @@ export const tablasController = {
         `SELECT tablarapida.* FROM public.tablarapida, public.venta, public.users WHERE tablarapida.id_venta=venta.id and venta.id_cliente=users.id and users.cc = '$1'`,
         [cccliente]
       );
-      let var1 = {},
-        var2 = {};
+      let var1 = [],
+        var2 = [];
       if (rowsTablaNormal.length > 0) {
-        var1 = rowsTablaNormal.map((rowsTablaNormal) => [
-          {
-            numtabla: rowsTablaNormal.codigo,
-            datos: {
-              1: rowsTablaNormal.num1,
-              2: rowsTablaNormal.num6,
-              3: rowsTablaNormal.num11,
-              4: rowsTablaNormal.num16,
-              5: rowsTablaNormal.num21,
-              6: rowsTablaNormal.num2,
-              7: rowsTablaNormal.num7,
-              8: rowsTablaNormal.num12,
-              9: rowsTablaNormal.num17,
-              10: rowsTablaNormal.num22,
-              11: rowsTablaNormal.num3,
-              12: rowsTablaNormal.num8,
-              14: rowsTablaNormal.num18,
-              15: rowsTablaNormal.num23,
-              16: rowsTablaNormal.num4,
-              17: rowsTablaNormal.num9,
-              18: rowsTablaNormal.num14,
-              19: rowsTablaNormal.num19,
-              20: rowsTablaNormal.num24,
-              21: rowsTablaNormal.num5,
-              22: rowsTablaNormal.num10,
-              23: rowsTablaNormal.num15,
-              24: rowsTablaNormal.num20,
-              25: rowsTablaNormal.num25,
-            },
+        var1 = rowsTablaNormal.map((rowsTablaNormal) => ({
+          numtabla: rowsTablaNormal.codigo,
+          datos: {
+            1: rowsTablaNormal.num1,
+            2: rowsTablaNormal.num6,
+            3: rowsTablaNormal.num11,
+            4: rowsTablaNormal.num16,
+            5: rowsTablaNormal.num21,
+            6: rowsTablaNormal.num2,
+            7: rowsTablaNormal.num7,
+            8: rowsTablaNormal.num12,
+            9: rowsTablaNormal.num17,
+            10: rowsTablaNormal.num22,
+            11: rowsTablaNormal.num3,
+            12: rowsTablaNormal.num8,
+            14: rowsTablaNormal.num18,
+            15: rowsTablaNormal.num23,
+            16: rowsTablaNormal.num4,
+            17: rowsTablaNormal.num9,
+            18: rowsTablaNormal.num14,
+            19: rowsTablaNormal.num19,
+            20: rowsTablaNormal.num24,
+            21: rowsTablaNormal.num5,
+            22: rowsTablaNormal.num10,
+            23: rowsTablaNormal.num15,
+            24: rowsTablaNormal.num20,
+            25: rowsTablaNormal.num25,
           },
-        ]);
+        }));
       }
       if (rowsTablaRapida.length > 0) {
-        var2 = rowsTablaRapida.map((rowsTablaRapida) => [
-          {
-            numtabla: rowsTablaRapida.codigo,
-            datos: {
-              1: rowsTablaRapida.num1,
-              3: rowsTablaRapida.num7,
-              4: rowsTablaRapida.num3,
-              6: rowsTablaRapida.num8,
-              7: rowsTablaRapida.num4,
-              8: rowsTablaRapida.num6,
-              9: rowsTablaRapida.num9,
-            },
+        var2 = rowsTablaRapida.map((rowsTablaRapida) => ({
+          numtabla: rowsTablaRapida.codigo,
+          datos: {
+            1: rowsTablaRapida.num1,
+            3: rowsTablaRapida.num7,
+            4: rowsTablaRapida.num3,
+            6: rowsTablaRapida.num8,
+            7: rowsTablaRapida.num4,
+            8: rowsTablaRapida.num6,
+            9: rowsTablaRapida.num9,
           },
-        ]);
+        }));
       }
       return res.status(200).json({
         data1: var1,
@@ -356,50 +346,49 @@ export const tablasController = {
     try {
       const { idventa } = req.body;
       const { rows: rowsTablaNormal } = await pool.query(
-        `SELECT * FROM public.tablanormal WHERE tablanormal.id_venta = $1`,
-        [idventa]
+        `SELECT * FROM tablanormal WHERE tablanormal.id_venta = ${idventa};`
       );
       const { rows: rowsTablaRapida } = await pool.query(
-        `SELECT * FROM public.tablarapida WHERE tablarapida.id_venta = $1`,
+        `SELECT * FROM tablarapida WHERE tablarapida.id_venta = $1;`,
         [idventa]
       );
-      let var1 = {},
-        var2 = {};
+      let var1 = [],
+        var2 =[];
       if (rowsTablaNormal.length > 0) {
-        var1 = rowsTablaNormal.map((rowsTablaNormal) => [
+        var1 = rowsTablaNormal.map((row) => (
           {
-            numtabla: rowsTablaNormal.codigo,
+            numtabla: row.codigo,
             datos: {
-              1: rowsTablaNormal.num1,
-              2: rowsTablaNormal.num6,
-              3: rowsTablaNormal.num11,
-              4: rowsTablaNormal.num16,
-              5: rowsTablaNormal.num21,
-              6: rowsTablaNormal.num2,
-              7: rowsTablaNormal.num7,
-              8: rowsTablaNormal.num12,
-              9: rowsTablaNormal.num17,
-              10: rowsTablaNormal.num22,
-              11: rowsTablaNormal.num3,
-              12: rowsTablaNormal.num8,
-              14: rowsTablaNormal.num18,
-              15: rowsTablaNormal.num23,
-              16: rowsTablaNormal.num4,
-              17: rowsTablaNormal.num9,
-              18: rowsTablaNormal.num14,
-              19: rowsTablaNormal.num19,
-              20: rowsTablaNormal.num24,
-              21: rowsTablaNormal.num5,
-              22: rowsTablaNormal.num10,
-              23: rowsTablaNormal.num15,
-              24: rowsTablaNormal.num20,
-              25: rowsTablaNormal.num25,
+              1: row.num1,
+              2: row.num6,
+              3: row.num11,
+              4: row.num16,
+              5: row.num21,
+              6: row.num2,
+              7: row.num7,
+              8: row.num12,
+              9: row.num17,
+              10: row.num22,
+              11: row.num3,
+              12: row.num8,
+              14: row.num18,
+              15: row.num23,
+              16: row.num4,
+              17: row.num9,
+              18: row.num14,
+              19: row.num19,
+              20: row.num24,
+              21: row.num5,
+              22: row.num10,
+              23: row.num15,
+              24: row.num20,
+              25: row.num25,
             },
-          },
-        ]);
+          }
+        ));
       }
       if (rowsTablaRapida.length > 0) {
-        var2 = rowsTablaRapida.map((rowsTablaRapida) => [
+        var2 = rowsTablaRapida.map((rowsTablaRapida) => (
           {
             numtabla: rowsTablaRapida.codigo,
             datos: {
@@ -411,8 +400,8 @@ export const tablasController = {
               8: rowsTablaRapida.num6,
               9: rowsTablaRapida.num9,
             },
-          },
-        ]);
+          }
+        ));
       }
       return res.status(200).json({
         data1: var1,
