@@ -188,142 +188,197 @@ const ContenedorContenido = styled.div`
 `;
 
 const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
-  const handlePremiosChange1 = (index, value) => {
-    const premiosArray = value.split(",").map((item) => item.trim());
-    handleChange1(index, "premios", premiosArray);
+  const handleArrayChange1 = (index, col, value, maxLetras) => {
+    if (col === "letras") {
+      // Filtrar caracteres no deseados
+      let sanitizedValue = value.replace(/[^A-Z]/gi, "").toUpperCase();
+      // Convertir la cadena en un arreglo de caracteres únicos
+      let uniqueChars = Array.from(new Set(sanitizedValue.split("")));
+
+      // Limitar el número de caracteres permitidos
+      let limitedChars = uniqueChars.slice(0, maxLetras);
+
+      handleChange1(index, col, limitedChars); // Actualiza el estado
+    } else {
+      const arreglo = value.split(",").map((item) => item.trim());
+      handleChange1(index, col, arreglo);
+    }
+  };
+  const handleChangeNumLetras = (index, col, value) => {
+    if (value >= 4 && value <= 7) {
+      handleChange1(index, "letras", []);
+      handleChange1(index, col, value);
+    }
   };
   const handlePremiosChange2 = (index, value) => {
     const premiosArray = value.split(",").map((item) => item.trim());
     handleChange2(index, "premios", premiosArray);
   };
-  const guardarCambios = ()=>{
+  const guardarCambios = () => {
     // console.log(data1);
     // console.log(data2);
-  }
+  };
   return (
     <ContenedorMenor>
-      <ContenedorMenor1>
-        <ContenedorGrid>
-          {data1.map((dato, indx) => (
-            <div key={indx} className="fila">
-              <span className="col-derecha">Premio 1:</span>
-              <span className="col-izquierda">
-                {"$"}
-                <InputField
-                  value={dato.premio1}
-                  type="number"
-                  onChange={(e) => handleChange1(0, "premio1", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Premio 2:</span>
-              <span className="col-izquierda">
-                {"$"}
-                <InputField
-                  value={dato.premio2}
-                  type="number"
-                  onChange={(e) => handleChange1(0, "premio2", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Premio 3:</span>
-              <span className="col-izquierda">
-                {"$"}
-                <InputField
-                  value={dato.premio3}
-                  type="number"
-                  onChange={(e) => handleChange1(0, "premio3", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Premios:</span>
-              <span className="col-izquierda">
-                <InputField
-                  value={dato.premios.join(", ")}
-                  onChange={(e) => handlePremiosChange1(0, e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Fecha:</span>
-              <span className="col-izquierda">
-                <InputField
-                  value={dato.fecha}
-                  onChange={(e) => handleChange1(0, "fecha", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Hora:</span>
-              <span className="col-izquierda">
-                <InputField
-                  value={dato.hora}
-                  onChange={(e) => handleChange1(0, "hora", e.target.value)}
-                />
-              </span>
-            </div>
-          ))}
-        </ContenedorGrid>
-      </ContenedorMenor1>
-      <ContenedorMenor1>
-        <ContenedorGrid>
-          {data2.map((dato, indx) => (
-            <div key={indx} className="fila">
-              <span className="col-derecha">Contenido:</span>
-              <span className="col-izquierda">
-                {"$"}
-                <InputField
-                  value={dato.premio1}
-                  type="number"
-                  onChange={(e) => handleChange2(0, "premio1", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Premio 1:</span>
-              <span className="col-izquierda">
-                {"$"}
-                <InputField
-                  value={dato.premio1}
-                  type="number"
-                  onChange={(e) => handleChange2(0, "premio1", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Premio 2:</span>
-              <span className="col-izquierda">
-                {"$"}
-                <InputField
-                  value={dato.premio2}
-                  type="number"
-                  onChange={(e) => handleChange2(0, "premio2", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Premio 3:</span>
-              <span className="col-izquierda">
-                {"$"}
-                <InputField
-                  value={dato.premio3}
-                  type="number"
-                  onChange={(e) => handleChange2(0, "premio3", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Premios:</span>
-              <span className="col-izquierda">
-                <InputField
-                  value={dato.premios.join(", ")}
-                  onChange={(e) => handlePremiosChange2(0, e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Fecha:</span>
-              <span className="col-izquierda">
-                <InputField
-                  value={dato.fecha}
-                  onChange={(e) => handleChange2(0, "fecha", e.target.value)}
-                />
-              </span>
-              <span className="col-derecha">Hora:</span>
-              <span className="col-izquierda">
-                <InputField
-                  value={dato.hora}
-                  onChange={(e) => handleChange2(0, "hora", e.target.value)}
-                />
-              </span>
-            </div>
-          ))}
-        </ContenedorGrid>
-      </ContenedorMenor1>
-      <BotonSubmit onClick={()=>guardarCambios()}>Guardar Cambios</BotonSubmit>
+      <div
+        style={{
+          display: "flex",
+          gap: "15px",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        <ContenedorMenor1>
+          <ContenedorGrid>
+            <h3 style={{ margin: "0" }}>Tablón Normal</h3>
+            {data1.map((dato, indx) => (
+              <div key={indx} className="fila">
+                <span className="col-derecha">Contenido:</span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.contenido}
+                    type="text"
+                    onChange={(e) =>
+                      handleChange1(0, "contenido", e.target.value)
+                    }
+                  />
+                </span>
+                <span className="col-derecha">Premio 1:</span>
+                <span className="col-izquierda">
+                  {"$"}
+                  <InputField
+                    value={dato.premio1}
+                    type="number"
+                    onChange={(e) =>
+                      handleChange1(0, "premio1", e.target.value)
+                    }
+                  />
+                </span>
+                <span className="col-derecha">Premio 2:</span>
+                <span className="col-izquierda">
+                  {"$"}
+                  <InputField
+                    value={dato.premio2}
+                    type="number"
+                    onChange={(e) =>
+                      handleChange1(0, "premio2", e.target.value)
+                    }
+                  />
+                </span>
+                <span className="col-derecha">Premio 3:</span>
+                <span className="col-izquierda">
+                  {"$"}
+                  <InputField
+                    value={dato.premio3}
+                    type="number"
+                    onChange={(e) =>
+                      handleChange1(0, "premio3", e.target.value)
+                    }
+                  />
+                </span>
+
+                <span className="col-derecha">
+                  Letras:
+                  <InputField
+                    style={{ maxWidth: "40px" }}
+                    type="number"
+                    min={3}
+                    max={7}
+                    value={dato.numletras}
+                    onChange={(e) =>
+                      handleChangeNumLetras(0, "numletras", e.target.value)
+                    }
+                  />
+                </span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.letras.join("-")}
+                    onChange={(e) =>
+                      handleArrayChange1(
+                        0,
+                        "letras",
+                        e.target.value,
+                        dato.numletras
+                      )
+                    }
+                  />
+                </span>
+                <span className="col-derecha">Premios:</span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.premios.join(", ")}
+                    onChange={(e) =>
+                      handleArrayChange1(0, "premios", e.target.value)
+                    }
+                  />
+                </span>
+                <span className="col-derecha">Fecha:</span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.fecha}
+                    onChange={(e) => handleChange1(0, "fecha", e.target.value)}
+                  />
+                </span>
+                <span className="col-derecha">Hora:</span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.hora}
+                    onChange={(e) => handleChange1(0, "hora", e.target.value)}
+                  />
+                </span>
+              </div>
+            ))}
+          </ContenedorGrid>
+        </ContenedorMenor1>
+        <ContenedorMenor1>
+          <ContenedorGrid>
+            <h3 style={{ margin: "0" }}>Tablón 2</h3>
+
+            {data2.map((dato, indx) => (
+              <div key={indx} className="fila">
+                <span className="col-derecha">Contenido:</span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.contenido}
+                    type="text"
+                    onChange={(e) =>
+                      handleChange1(0, "contenido", e.target.value)
+                    }
+                  />
+                </span>
+                <span className="col-derecha">Premio 1:</span>
+                <span className="col-izquierda">
+                  {"$"}
+                  <InputField
+                    value={dato.premio1}
+                    type="number"
+                    onChange={(e) =>
+                      handleChange2(0, "premio1", e.target.value)
+                    }
+                  />
+                </span>
+                <span className="col-derecha">Fecha:</span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.fecha}
+                    onChange={(e) => handleChange2(0, "fecha", e.target.value)}
+                  />
+                </span>
+                <span className="col-derecha">Hora:</span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.hora}
+                    onChange={(e) => handleChange2(0, "hora", e.target.value)}
+                  />
+                </span>
+              </div>
+            ))}
+          </ContenedorGrid>
+        </ContenedorMenor1>
+      </div>
+      <BotonSubmit onClick={() => guardarCambios()}>
+        Guardar Cambios
+      </BotonSubmit>
     </ContenedorMenor>
   );
 };
@@ -335,17 +390,16 @@ const EditarInformacion = () => {
       premio2: "180",
       premio3: "130",
       premios: ["licuadora", "tostadora"],
+      numletras: 4,
+      letras: [],
       fecha: "10 Mayo 2024",
       hora: "8pm",
     },
   ]);
   const [data2, setData2] = useState([
     {
-      contenido:"",
+      contenido: "",
       premio1: "100",
-      premio2: "80",
-      premio3: "50",
-      premios: [],
       fecha: "10 Mayo 2024",
       hora: "10pm",
     },

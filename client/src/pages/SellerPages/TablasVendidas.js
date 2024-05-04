@@ -71,20 +71,6 @@ const TablaPersonalizada = styled.table`
     background-color: #f1f1f1;
   }
 
-  button {
-    padding: 8px 16px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  button:hover {
-    background-color: #0056b3;
-  }
-
   /* Responsive design: Mejorando la visualización en dispositivos móviles */
   @media (max-width: 700px) {
     display: none;
@@ -213,7 +199,11 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
               className="celda"
               data-label={headerNames[header] || header}
             >
-              {header === "fecha" ? formatDate(fila[header]) : fila[header]}
+              {header === "fecha"
+                ? formatDate(fila[header])
+                : header === "cantidadinero"
+                ? `$ ${fila[header]}`
+                : fila[header]}
             </div>
           ))}
         </div>
@@ -223,7 +213,7 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
 };
 
 const Tablas = ({ datos }) => {
-  console.log(datos);
+  // console.log(datos);
   const flatDatos = datos.flat();
   const headers = Object.keys(flatDatos[0]).filter(
     (header) => visibleColumns[header] !== false
@@ -251,11 +241,15 @@ const Tablas = ({ datos }) => {
                   >
                     {header === "fecha"
                       ? formatDate(venta[header])
+                      : header === "cantidadinero"
+                      ? venta[header] !== null ? `$ ${venta[header]}`: "-"
+                      : header === "numerotransaccion"
+                      ? venta[header] !== "" ? venta[header]: "-"
                       : venta[header]}
                   </td>
                 ))}
                 <td>
-                  <GeneratePdfButton idventa={parseInt(venta.id)}/>
+                  <GeneratePdfButton idventa={parseInt(venta.id)} />
                 </td>
               </tr>
             ))}
@@ -278,7 +272,7 @@ const TablasVendidas = () => {
     const idVendedor = await ObtenerIDUsuario(idv);
     if (idVendedor.data.id) {
       const res = await ConsultarVentas(idVendedor.data.id);
-      console.log(res.data.data);
+      // console.log(res.data.data);
 
       if (res.data) {
         setDatosTabla(res.data.data);

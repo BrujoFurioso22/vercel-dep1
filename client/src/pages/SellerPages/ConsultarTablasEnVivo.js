@@ -7,6 +7,9 @@ import BingoPdfTemplate from "../../components/pdfMaker/Juego2Template";
 import GenerarPDFs from "../../components/pdfMaker/pdfMaker";
 import { dataTabla } from "../UserPages/data";
 import { dataTabla2 } from "../UserPages/data";
+import { ConsultarTablasSegunIDTabla } from "../../consultasBE/Tablas";
+import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
+import { EstructuraTabla2 } from "../UserPages/EstructuraTabla2";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -58,20 +61,78 @@ const ButtonVerif = styled.button`
 `;
 
 const VerificarCodigo = ({ codigo, setCodigo }) => {
+  const [verif, setVerif] = useState(false);
+  const [seConsulto, setSeConsulto] = useState(false);
+  const [data, setData] = useState([]);
+  const [letraTabla, setLetraTabla] = useState("");
+  const BuscarTabla = async () => {
+    setVerif(true);
+    const resp = await ConsultarTablasSegunIDTabla(codigo);
+    setSeConsulto(true);
+
+    if (resp.data) {
+      let dat = resp.data.data;
+      if (dat.length > 0) {
+        setData(dat);
+        setLetraTabla(dat[0].numtabla.charAt(0));
+        console.log(dat);
+      }
+    }
+
+    setVerif(false);
+  };
+
+  const handleCodigoChange = (value) => {
+    let cod = value.toUpperCase();
+    setCodigo(cod);
+    limpiar();
+  };
+
+  const limpiar = () => {
+    setVerif(false);
+    setSeConsulto(false);
+    setLetraTabla("");
+    setData([]);
+  };
+
   return (
-    <>
+    <div style={{display:"flex",flexDirection:"column",gap:"15px"}}>
       <Contenedor1>
         <div className="buscarCodigo">
           Código:
           <InputField
             type="text"
             value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
+            onChange={(e) => handleCodigoChange(e.target.value)}
           />
-          <ButtonVerif>Verificar</ButtonVerif>
+          {codigo.length > 7 && (
+            <ButtonVerif onClick={BuscarTabla}>
+              {verif ? "Buscando..." : "Verificar"}
+            </ButtonVerif>
+          )}
         </div>
       </Contenedor1>
-    </>
+      {seConsulto ? (
+        data.length > 0 ? (
+          <Contenedor1>
+            Tabla Encontrada
+            <div>
+              {letraTabla === "N" ? (
+                <EstructuraTabla1 dataTables={data[0]} />
+              ) : (
+                <EstructuraTabla2 dataTables={data[0]} />
+              )}
+            </div>
+          </Contenedor1>
+        ) : (
+          <Contenedor1>
+            No se encontro una tabla con el codigo: {codigo}
+          </Contenedor1>
+        )
+      ) : (
+        <></>
+      )}
+    </div>
   );
 };
 

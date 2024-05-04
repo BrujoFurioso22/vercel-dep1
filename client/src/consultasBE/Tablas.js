@@ -54,3 +54,13 @@ export async function ConsultarTablasSegunIDVenta(idventa) {
     return err;
   }
 }
+export async function ConsultarTablasSegunIDTabla(codigotabla) {
+  try {
+    const res = await axios.post(`${url}/api/tablas/buscartabla`, {
+      codigotabla: codigotabla,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
