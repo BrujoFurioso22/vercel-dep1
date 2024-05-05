@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Link,
   NavLink,
@@ -82,6 +82,39 @@ const ContenedorMenu = styled.div`
     &.active-link {
       background-color: var(--color-1); /* Color verde */
       color: white; /* Color de texto blanco */
+    }
+  }
+  @media (max-width: 768px) {
+    position: fixed;
+    top: var(--altura-header);
+    right: -250px; /* Comienza oculto */
+    height: 100%;
+    width: 250px;
+    background-color: #fcfcf7;
+    transition: right 0.3s ease;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+    z-index: 200;
+    &.abierto {
+      right: 0; /* Muestra el menú al abrirlo */
+    }
+    .boton-menu-hamburguesa {
+      display: block;
+      font-size: 30px;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .ContenedorHeader1 {
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ContenedorLogin,
+    .ContenedorMenu {
+      display: none; /* Oculta la parte de login en el móvil */
     }
   }
 `;
@@ -176,10 +209,15 @@ function CustomNavLink({ to, children }) {
 
 const Header = ({ oculta }) => {
   const { logout } = useAuth();
+  const [menuAbierto, setMenuAbierto] = useState(false);
   const location = useLocation();
   const classNameBg = location.pathname === "/" && "home";
   // console.log(rol);
   const navigate = useNavigate();
+
+  const toggleMenu = () => {
+    setMenuAbierto(!menuAbierto);
+  };
 
   const Menu = () => {
     return (
@@ -191,9 +229,7 @@ const Header = ({ oculta }) => {
         <CustomNavLink to="/seller/tablasenvivo">
           Consultar Tablas
         </CustomNavLink>
-        <CustomNavLink to="/seller/editarInfo">
-          Editar PDFs
-        </CustomNavLink>
+        <CustomNavLink to="/seller/editarInfo">Editar PDFs</CustomNavLink>
         <CustomNavLink to="/seller/preview">PR</CustomNavLink>
       </div>
     );
@@ -209,10 +245,14 @@ const Header = ({ oculta }) => {
           />
           {/* <span onClick={() => navigate("/")}>HOME</span>{" "} */}
         </ContenedorLogo>
-        <ContenedorMenu>
+        <ContenedorMenu className={`ContenedorMenu ${menuAbierto ? "abierto" : ""}`}>
           {localStorage.getItem("rol") === "23" && <Menu />}
         </ContenedorMenu>
-        <ContenedorLogin>
+        <button className="boton-menu-hamburguesa" onClick={toggleMenu}>
+          &#9776;
+        </button>
+
+        <ContenedorLogin className="ContenedorLogin" >
           {!oculta &&
             (localStorage.getItem("id") ? (
               <ContenedorDerecho>
