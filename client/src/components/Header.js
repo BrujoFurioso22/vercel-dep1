@@ -17,6 +17,7 @@ const ContenedorHeader = styled.div`
   display: flex;
   position: sticky;
   top: 0;
+  left: 0;
   width: 100%;
   height: var(--altura-header);
   /* border-bottom: solid 1px var(--borde-ligero); */
@@ -218,30 +219,38 @@ const BotonMenu = styled.button`
   color: black;
   background-color: transparent;
   border: none;
-`
+`;
 
 const ContenedorMenuLateral = styled.div`
   display: none;
+  position: fixed;
 
   @media ${device.mobile1} {
-    display: flex;
+    display: none;
     flex-direction: column;
-    position: absolute;
+    opacity: 0;
+    position: fixed;
     top: 0;
     right: 0;
-    width: 52dvw !important;
+    width: 60% !important;
     height: 100dvh;
     background-color: var(--color-6);
     padding: 15px 20px;
     gap: 10px;
-    transform: translateX(52dvw);
-    transition: transform 0.4s ease;
+    transform: translateX(100%);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+
 
     .botonCerrar {
       color: white;
     }
+    &.display {
+      display: flex;
+    }
+
     &.abierto {
-      transform: translateX(0dvw);
+      transform: translateX(0);
+      opacity: 1;
     }
   }
 `;
@@ -287,8 +296,19 @@ const Header = ({ oculta }) => {
   // console.log(rol);
   const navigate = useNavigate();
 
-  const toggleMenu = () => {
-    setMenuAbierto(!menuAbierto);
+  const [displayMenu, setDisplayMenu] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const toggleMenu = (setDisplay, setVisible, visible) => {
+    if (visible) {
+      setVisible(false); // Inicia la transición de cierre
+      setTimeout(() => {
+        setDisplay(false); // Cambia `display` después de la transición
+      }, 400); // Duración de la transición en milisegundos
+    } else {
+      setDisplay(true); // Cambia `display` antes de la transición
+      setTimeout(() => setVisible(true), 10); // Inicia la transición de apertura
+    }
   };
 
   const Menu = () => {
@@ -343,12 +363,25 @@ const Header = ({ oculta }) => {
               </Link>
             ))}
         </ContenedorLogin>
-        <BotonMenu className="boton-menu-hamburguesa" onClick={toggleMenu}>
+        <BotonMenu
+          className="boton-menu-hamburguesa"
+          onClick={() =>
+            toggleMenu(setDisplayMenu, setMenuVisible, menuVisible)
+          }
+        >
           <i className="bi bi-list"></i>
         </BotonMenu>
-        <ContenedorMenuLateral className={menuAbierto ? "abierto" : ""}>
+        <ContenedorMenuLateral
+          className={`${displayMenu ? "display" : ""} ${
+            menuVisible ? "abierto" : ""
+          }`}
+        >
           <div className="botonCerrar">
-            <span onClick={toggleMenu}>
+            <span
+              onClick={() =>
+                toggleMenu(setDisplayMenu, setMenuVisible, menuVisible)
+              }
+            >
               <i className="bi bi-x-lg"></i>
             </span>
           </div>
