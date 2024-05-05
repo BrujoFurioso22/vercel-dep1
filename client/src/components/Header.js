@@ -35,6 +35,7 @@ const ContenedorHeader = styled.div`
 const ContenedorHeader1 = styled.div`
   display: flex;
   flex-direction: row;
+  position: relative;
   width: 100%;
   gap: 10px;
   align-items: center;
@@ -42,6 +43,21 @@ const ContenedorHeader1 = styled.div`
   justify-content: space-between;
   & > div {
     width: 100%;
+  }
+  .ContendorPc {
+    display: flex;
+    flex-direction: row;
+  }
+  .ContenedorMovil {
+    display: none;
+  }
+  @media ${device.mobile} {
+    .ContendorPc {
+      display: none;
+    }
+    .ContenedorMovil {
+      display: flex;
+    }
   }
 `;
 
@@ -84,10 +100,14 @@ const ContenedorMenu = styled.div`
       color: white; /* Color de texto blanco */
     }
   }
-  @media (max-width: 768px) {
-    position: fixed;
+  .boton-menu-hamburguesa {
+    display: none;
+  }
+  @media ${device.mobile1} {
+    display: none;
+    /* position: fixed;
     top: var(--altura-header);
-    right: -250px; /* Comienza oculto */
+    right: -250px; 
     height: 100%;
     width: 250px;
     background-color: #fcfcf7;
@@ -97,7 +117,7 @@ const ContenedorMenu = styled.div`
     padding: 15px;
     z-index: 200;
     &.abierto {
-      right: 0; /* Muestra el menú al abrirlo */
+      right: 0; 
     }
     .boton-menu-hamburguesa {
       display: block;
@@ -114,8 +134,8 @@ const ContenedorMenu = styled.div`
 
     .ContenedorLogin,
     .ContenedorMenu {
-      display: none; /* Oculta la parte de login en el móvil */
-    }
+      display: none; 
+    } */
   }
 `;
 
@@ -193,6 +213,58 @@ const ContenedorDerecho = styled.div`
     }
   }
 `;
+const BotonMenu = styled.button`
+  font-size: 20px;
+  color: black;
+  background-color: transparent;
+  border: none;
+`
+
+const ContenedorMenuLateral = styled.div`
+  display: none;
+
+  @media ${device.mobile1} {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 52dvw !important;
+    height: 100dvh;
+    background-color: var(--color-6);
+    padding: 15px 20px;
+    gap: 10px;
+    transform: translateX(52dvw);
+    transition: transform 0.4s ease;
+
+    .botonCerrar {
+      color: white;
+    }
+    &.abierto {
+      transform: translateX(0dvw);
+    }
+  }
+`;
+const MenuD = styled.div`
+  /* display: none; */
+  @media ${device.mobile1} {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    flex-direction: column;
+    & > a {
+      text-decoration: none;
+      color: white;
+      background-color: var(--color-2);
+      width: 100%;
+      padding: 8px;
+      padding-left: 10%;
+      border-radius: 8px;
+    }
+  }
+`;
 
 function CustomNavLink({ to, children }) {
   // Resuelve la ruta de manera que se considere la ubicación base si la hubiera
@@ -221,7 +293,7 @@ const Header = ({ oculta }) => {
 
   const Menu = () => {
     return (
-      <div>
+      <MenuD>
         <CustomNavLink to="/seller/vender">Vender</CustomNavLink>
         <CustomNavLink to="/seller/tablasVendidas">
           Tablas Vendidas
@@ -231,7 +303,7 @@ const Header = ({ oculta }) => {
         </CustomNavLink>
         <CustomNavLink to="/seller/editarInfo">Editar PDFs</CustomNavLink>
         <CustomNavLink to="/seller/preview">PR</CustomNavLink>
-      </div>
+      </MenuD>
     );
   };
   return (
@@ -245,14 +317,11 @@ const Header = ({ oculta }) => {
           />
           {/* <span onClick={() => navigate("/")}>HOME</span>{" "} */}
         </ContenedorLogo>
-        <ContenedorMenu className={`ContenedorMenu ${menuAbierto ? "abierto" : ""}`}>
+        <ContenedorMenu>
           {localStorage.getItem("rol") === "23" && <Menu />}
         </ContenedorMenu>
-        <button className="boton-menu-hamburguesa" onClick={toggleMenu}>
-          &#9776;
-        </button>
 
-        <ContenedorLogin className="ContenedorLogin" >
+        <ContenedorLogin className="ContenedorLogin">
           {!oculta &&
             (localStorage.getItem("id") ? (
               <ContenedorDerecho>
@@ -274,6 +343,20 @@ const Header = ({ oculta }) => {
               </Link>
             ))}
         </ContenedorLogin>
+        <BotonMenu className="boton-menu-hamburguesa" onClick={toggleMenu}>
+          <i className="bi bi-list"></i>
+        </BotonMenu>
+        <ContenedorMenuLateral className={menuAbierto ? "abierto" : ""}>
+          <div className="botonCerrar">
+            <span onClick={toggleMenu}>
+              <i className="bi bi-x-lg"></i>
+            </span>
+          </div>
+          <div className="ContenedorMenuL">
+            {localStorage.getItem("rol") === "23" && <Menu />}
+          </div>
+          <div className="ContenedorLogL"></div>
+        </ContenedorMenuLateral>
       </ContenedorHeader1>
     </ContenedorHeader>
   );

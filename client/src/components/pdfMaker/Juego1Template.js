@@ -32,7 +32,7 @@ const Header = styled.div`
   flex-direction: column;
   width: 100%;
   gap: 2mm;
-  & h4{
+  & h4 {
     margin: 0;
     width: 100%;
     padding-bottom: 1mm;
@@ -140,7 +140,7 @@ export const HtmlTemplate1 = ({ dataJuego }) => {
         </div>
       </Header>
       <Body>
-        <LetrasGrid letras={["A", "D", "G", "R"]} />
+        <LetrasGrid letras={["P", "E", "D", "R", "O","F"]} />
         <div class="bingo-container-u">
           {dataJuego.map((data, idx) => (
             <div class="bingo-card" key={idx}>
