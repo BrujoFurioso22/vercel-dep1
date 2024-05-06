@@ -6,6 +6,7 @@ export const userRouter = Router();
 userRouter.get("/", userController.getAll);
 userRouter.post("/userId", userController.getIdUser);
 userRouter.post("/userverif", userController.getVerificationUser);
+userRouter.post("/getcliente", userController.getCliente);
 
 // router.get("/:id", bookController.getById)
 // router.post("/", bookController.create)
