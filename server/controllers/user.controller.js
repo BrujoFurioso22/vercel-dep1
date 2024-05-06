@@ -60,7 +60,7 @@ export const userController = {
       // console.log(req);
       const { cedulacelular } = req.body;
       const { rows } = await pool.query(
-        "SELECT name,cc,password FROM users WHERE cc = '$1' and rol=0;",
+        "SELECT name,cc,password FROM users WHERE cc = $1 and rol=0;",
         [cedulacelular]
       );
       if (rows.length > 0) {
