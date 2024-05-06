@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
 import { ConsultarTablasSegunIDTabla } from "../../consultasBE/Tablas";
@@ -63,72 +63,119 @@ const TablaDatos = styled.div`
     gap: 10px;
   }
 `;
+
+const flipAnimation = keyframes`
+  0% {
+    transform: rotateY(0deg);
+  }
+  25% {
+    transform: rotateY(90deg);
+  }
+  50% {
+    transform: rotateY(180deg);
+  }
+  75% {
+    transform: rotateY(270deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+`;
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-gap: 10px;
+`;
+
+const Circle = styled.span`
+  width: 50px;
+  height: 50px;
+  background-color: ${(props) => (props.marked ? "#2ecc71" : "#3498db")};
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  box-shadow:2px 2px 2px rgba(0,0,0,0.4);
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  user-select: none;
+  ${props => props.clicked && css`animation: ${flipAnimation} 1s ease;`};
+`;
+
 const def = {
   nombre: "",
   cc: "",
   ps: "",
 };
 
-const VerificarCodigo = ({ cedulacelular, setCodigo }) => {
-  const [verif, setVerif] = useState(false);
-  const [seConsulto, setSeConsulto] = useState(false);
-  const [data, setData] = useState(def);
+const ContenedorJugadas = ({ data, setData }) => {
+  const posiciones = data[0].data.posiciones;
+// Función para manejar el clic en un círculo
+const handleClick = (posicion) => {
+  // Copiar el estado actual de posiciones
+  const newPositions = { ...posiciones };
+  // Cambiar el estado del círculo clicado
+  newPositions[posicion] = !newPositions[posicion];
+  // Actualizar el estado de data
+  setData([{ ...data[0], data: { posiciones: newPositions } }]);
+};
 
-  const BuscarTabla = async () => {
-    setVerif(true);
-    const resp = await ObtenerUsuarioPorCC(cedulacelular);
-    setSeConsulto(true);
-    // console.log(resp);
-    if (resp) {
-      if (resp.data) {
-        let nombre = resp.data.nombre;
-        let cc = resp.data.cc;
-        let ps = resp.data.password;
-        setData((prevData) => ({
-          ...prevData,
-          nombre: nombre, // Actualizar el campo correspondiente
-          cc: cc, // Actualizar el campo correspondiente
-          ps: ps, // Actualizar el campo correspondiente
-        }));
-        // console.log(resp.data);
-      }
-    }
-    setVerif(false);
-  };
-
-  const handleCodigoChange = (value) => {
-    let cod = value.toUpperCase().trim();
-
-    setCodigo(cod);
-    limpiar();
-  };
-
-  const limpiar = () => {
-    setVerif(false);
-    setSeConsulto(false);
-    setData(def);
-  };
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+return (
+  <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+    {data[0].estado === "iniciado" ? (
       <Contenedor1>
-        
+        <GridContainer>
+          {Object.entries(posiciones).map(([posicion, marcada]) => (
+            <Circle
+              key={posicion}
+              marked={marcada}
+              onClick={() => handleClick(posicion)} // Manejar el clic
+              clicked={marcada} 
+            >
+              {posicion}
+            </Circle>
+          ))}
+        </GridContainer>
       </Contenedor1>
-    </div>
-  );
+    ) : (
+      <Contenedor1>
+        <button>
+          Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
+        </button>
+      </Contenedor1>
+    )}
+  </div>
+);
 };
 
 const Jugadas = () => {
-  const [codigoConsulta, setCodigoConsulta] = useState("");
+  const initialPositions = {};
+  for (let i = 1; i <= 75; i++) {
+    if (i === 20) {
+      initialPositions[i] = true;
+    } else {
+      initialPositions[i] = false;
+    }
+  }
+  const [data, setData] = useState([
+    {
+      id: 98,
+      fecha: "10/11/2023",
+      data: {
+        posiciones: initialPositions,
+      },
+
+      estado: "iniciado",
+    },
+  ]);
+
   return (
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
         <h1>Juegos Actuales</h1>
-        <VerificarCodigo
-          cedulacelular={codigoConsulta}
-          setCodigo={setCodigoConsulta}
-        ></VerificarCodigo>
+        <ContenedorJugadas data={data} setData={setData}></ContenedorJugadas>
       </ContenedorPagina>
     </ContenedorPadre>
   );
