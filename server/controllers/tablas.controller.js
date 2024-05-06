@@ -22,6 +22,14 @@ function generarContrasenia() {
   return contrasenia;
 }
 
+// Función para cifrar datos
+function encrypt(text, secretKey) {
+  const cipher = crypto.createCipher('aes-256-cbc', secretKey);
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return encrypted;
+}
+
 export const tablasController = {
   insertarVenta: async (req, res) => {
     //////HACER LO QUE FALTA DE GENERAR EL USUARIO
@@ -46,9 +54,11 @@ export const tablasController = {
 
         if (rowscliente.length === 0) {
           const contraseniaGenerada = generarContrasenia();
+          const secretKey = "8295e41cb835810f7022b56dbbf78b59";
+          const encryptedText = encrypt(contraseniaGenerada, secretKey);
           const quse = await pool.query(
             "INSERT INTO users(name, cc, password) VALUES ($1, $2, $3);",
-            [nombrecliente, cccliente, contraseniaGenerada]
+            [nombrecliente, cccliente, encryptedText]
           );
         } else {
           idcliente = rowscliente[0].id;
