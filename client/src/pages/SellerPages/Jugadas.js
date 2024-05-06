@@ -23,6 +23,9 @@ const Contenedor1 = styled.div`
   padding: 25px;
   box-shadow: var(--sombra-ligera);
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   & > .buscarCodigo {
     display: flex;
     gap: 10px;
@@ -94,14 +97,30 @@ const Circle = styled.span`
   color: #fff;
   border-radius: 50%;
   display: flex;
-  box-shadow:2px 2px 2px rgba(0,0,0,0.4);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
   align-items: center;
   justify-content: center;
   font-size: 20px;
   cursor: pointer;
   user-select: none;
-  ${props => props.clicked && css`animation: ${flipAnimation} 1s ease;`};
+  ${(props) =>
+    props.clicked &&
+    css`
+      animation: ${flipAnimation} 1s ease;
+    `};
 `;
+
+const BotonFinalizarJuego=styled.button`
+  padding: 7px 20px;
+  outline: none;
+  border-radius: 10px;
+  width: fit-content;
+  border: none;
+  background-color: var(--color-2);
+  color: white;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+
+`
 
 const def = {
   nombre: "",
@@ -111,52 +130,57 @@ const def = {
 
 const ContenedorJugadas = ({ data, setData }) => {
   const posiciones = data[0].data.posiciones;
-// Función para manejar el clic en un círculo
-const handleClick = (posicion) => {
-  // Copiar el estado actual de posiciones
-  const newPositions = { ...posiciones };
-  // Cambiar el estado del círculo clicado
-  newPositions[posicion] = !newPositions[posicion];
-  // Actualizar el estado de data
-  setData([{ ...data[0], data: { posiciones: newPositions } }]);
-};
+  // Función para manejar el clic en un círculo
+  const handleClick = (posicion) => {
+    // Copiar el estado actual de posiciones
+    const newPositions = { ...posiciones };
+    // Cambiar el estado del círculo clicado
+    newPositions[posicion] = !newPositions[posicion];
+    // Actualizar el estado de data
+    setData([{ ...data[0], data: { posiciones: newPositions } }]);
+  };
 
-return (
-  <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-    {data[0].estado === "iniciado" ? (
-      <Contenedor1>
-        <GridContainer>
-          {Object.entries(posiciones).map(([posicion, marcada]) => (
-            <Circle
-              key={posicion}
-              marked={marcada}
-              onClick={() => handleClick(posicion)} // Manejar el clic
-              clicked={marcada} 
-            >
-              {posicion}
-            </Circle>
-          ))}
-        </GridContainer>
-      </Contenedor1>
-    ) : (
-      <Contenedor1>
-        <button>
-          Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
-        </button>
-      </Contenedor1>
-    )}
-  </div>
-);
+  const CrearJuego = () => {
+    let initialPositions = {};
+    for (let i = 1; i <= 75; i++) {
+      initialPositions[i] = false;
+    }
+
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+      {data[0].estado === "iniciado" ? (
+        <Contenedor1>
+          <GridContainer>
+            {Object.entries(posiciones).map(([posicion, marcada]) => (
+              <Circle
+                key={posicion}
+                marked={marcada}
+                onClick={() => handleClick(posicion)} // Manejar el clic
+                clicked={marcada}
+              >
+                {posicion}
+              </Circle>
+            ))}
+          </GridContainer>
+          <BotonFinalizarJuego>Finalizar Juego</BotonFinalizarJuego>
+        </Contenedor1>
+      ) : (
+        <Contenedor1>
+          <BotonFinalizarJuego>
+            Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
+          </BotonFinalizarJuego>
+        </Contenedor1>
+      )}
+    </div>
+  );
 };
 
 const Jugadas = () => {
   const initialPositions = {};
   for (let i = 1; i <= 75; i++) {
-    if (i === 20) {
-      initialPositions[i] = true;
-    } else {
-      initialPositions[i] = false;
-    }
+    initialPositions[i] = false;
   }
   const [data, setData] = useState([
     {
