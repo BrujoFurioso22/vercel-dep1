@@ -85,7 +85,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     <div style={{display:"flex",flexDirection:"column",gap:"15px"}}>
       <Contenedor1>
         <div className="buscarCodigo">
-          Código:
+          Cedula o Número Cliente:
           <InputField
             type="text"
             value={codigo}
@@ -93,7 +93,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
           />
           {codigo.length > 7 && (
             <ButtonVerif onClick={BuscarTabla}>
-              {verif ? "Buscando..." : "Verificar"}
+              {verif ? "Buscando..." : "Buscar"}
             </ButtonVerif>
           )}
         </div>
