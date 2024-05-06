@@ -6,15 +6,6 @@ import { ConsultarTablasSegunIDTabla } from "../../consultasBE/Tablas";
 import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
 import { EstructuraTabla2 } from "../UserPages/EstructuraTabla2";
 
-// const ContenedorPadre = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: flex-start;
-//   align-items: center;
-//   position: relative;
-//   width: 100%;
-// `;
-
 const ContenedorPagina = styled.div`
   position: relative;
   height: 100%;
@@ -131,13 +122,13 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   );
 };
 
-const ConsultarTablasEnVivo = () => {
+const ConsultarDatosCliente = () => {
   const [codigoConsulta, setCodigoConsulta] = useState("");
   return (
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
-        <h1>Verifica el código aquí</h1>
+        <h1>Información Cliente</h1>
         <VerificarCodigo
           codigo={codigoConsulta}
           setCodigo={setCodigoConsulta}
@@ -147,4 +138,4 @@ const ConsultarTablasEnVivo = () => {
   );
 };
 
-export default ConsultarTablasEnVivo;
+export default ConsultarDatosCliente;
