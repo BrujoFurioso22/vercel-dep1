@@ -1,5 +1,6 @@
 import { pool } from "../database.js";
 import crypto from "crypto";
+const secretKey = process.env.secretKey
 
 // const crypto = require('crypto');
 
@@ -27,7 +28,8 @@ function generarContrasenia() {
 
 // Función para cifrar datos
 function encrypt(text, secretKey) {
-  const cipher = crypto.createCipher('aes-256-cbc', secretKey);
+  const iv = crypto.randomBytes(16); // IV (Initialization Vector) de 16 bytes
+  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(secretKey), iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');
   encrypted += cipher.final('hex');
   return encrypted;
@@ -57,7 +59,6 @@ export const tablasController = {
 
         if (rowscliente.length === 0) {
           const contraseniaGenerada = generarContrasenia();
-          const secretKey = "8295e41cb835810f7022b56dbbf78b59";
           const encryptedText = encrypt(contraseniaGenerada, secretKey);
           const quse = await pool.query(
             "INSERT INTO users(name, cc, password) VALUES ($1, $2, $3);",
@@ -70,7 +71,7 @@ export const tablasController = {
       } while (!isInserted);
 
       const tempor = await pool.query(
-        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion) VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4, $5, $6);",
+        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6);",
         [
           idvendedor,
           idcliente,

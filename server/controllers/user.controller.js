@@ -1,16 +1,16 @@
 // const crypto = require('crypto');
 import crypto from "crypto";
 import { pool } from "../database.js";
-
+const secretKey = process.env.secretKey
 
 // Función para descifrar datos
-function decrypt(encryptedText, secretKey) {
-  const decipher = crypto.createDecipher('aes-256-cbc', secretKey);
-  let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+function decrypt(encryptedData, secretKey) {
+  const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(secretKey), Buffer.from(encryptedData.iv, 'hex'));
+  let decrypted = decipher.update(encryptedData.encryptedData, 'hex', 'utf8');
   decrypted += decipher.final('utf8');
   return decrypted;
 }
-const secretKey = "8295e41cb835810f7022b56dbbf78b59";
+
 export const userController = {
   getAll: async (req, res) => {
     try {
