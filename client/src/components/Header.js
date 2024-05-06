@@ -374,7 +374,7 @@ const Header = ({ oculta }) => {
                     <div>
                       <span>{localStorage.getItem("nombre")}</span>
                       <button className="botonSalir" onClick={logout}>
-                        Salir
+                        Cerrar Sesión
                       </button>
                     </div>
                   </div>

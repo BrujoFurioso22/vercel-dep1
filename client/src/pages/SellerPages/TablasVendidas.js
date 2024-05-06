@@ -31,7 +31,7 @@ const Contenedor1 = styled.div`
   width: fit-content;
   min-width: 400px;
   height: auto;
-  padding: 25px;
+  padding: 5px;
   box-shadow: var(--sombra-ligera);
   border-radius: 10px;
   overflow: auto;
@@ -71,48 +71,8 @@ const TablaPersonalizada = styled.table`
     background-color: #f1f1f1;
   }
 
-  /* Responsive design: Mejorando la visualización en dispositivos móviles */
   @media (max-width: 700px) {
     display: none;
-    /* table {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      margin: 0;
-      padding: 0;
-    }
-
-    thead {
-      display: none;
-    }
-
-    tr {
-      display: flex;
-      flex-direction: column;
-      width: 45%; 
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
-      overflow: hidden;
-      background-color: #fff;
-    }
-
-    td {
-      display: block; 
-      text-align: left; 
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
-
-    td:before {
-      content: attr(data-label);
-      float: left;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    td:last-child {
-      border-bottom: 0;
-    } */
   }
 `;
 const headerNames = {
@@ -134,6 +94,19 @@ const visibleColumns = {
   numerotransaccion: true,
   cantidadinero: true,
 };
+const ContenedorBuscar = styled.div`
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  & > .buscarInput {
+    border: solid 1px var(--color-5);
+    border-radius: 5px;
+    outline: none;
+    padding: 5px;
+  }
+`;
 
 const TablaCard = styled.div`
   @media (min-width: 701px) {
@@ -202,10 +175,17 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
               {header === "fecha"
                 ? formatDate(fila[header])
                 : header === "cantidadinero"
-                ? `$ ${fila[header]}`
+                ? fila[header] !== null
+                  ? `$ ${fila[header]}`
+                  : "-"
+                : header === "numerotransaccion"
+                ? fila[header] !== ""
+                  ? fila[header]
+                  : "-"
                 : fila[header]}
             </div>
           ))}
+          <GeneratePdfButton idventa={parseInt(fila.id)} />
         </div>
       ))}
     </TablaCard>
@@ -242,9 +222,13 @@ const Tablas = ({ datos }) => {
                     {header === "fecha"
                       ? formatDate(venta[header])
                       : header === "cantidadinero"
-                      ? venta[header] !== null ? `$ ${venta[header]}`: "-"
+                      ? venta[header] !== null
+                        ? `$ ${venta[header]}`
+                        : "-"
                       : header === "numerotransaccion"
-                      ? venta[header] !== "" ? venta[header]: "-"
+                      ? venta[header] !== ""
+                        ? venta[header]
+                        : "-"
                       : venta[header]}
                   </td>
                 ))}
@@ -268,6 +252,10 @@ const Tablas = ({ datos }) => {
 const TablasVendidas = () => {
   const idv = localStorage.getItem("id");
   const [datosTabla, setDatosTabla] = useState(null);
+  const [datosAplanados, setDatosAplanados] = useState(null);
+  const [datosFiltrados, setDatosFiltrados] = useState(null);
+  const [busqueda, setBusqueda] = useState("");
+
   const ConsultarTablasVendedor = async () => {
     const idVendedor = await ObtenerIDUsuario(idv);
     if (idVendedor.data.id) {
@@ -282,15 +270,45 @@ const TablasVendidas = () => {
   useEffect(() => {
     ConsultarTablasVendedor();
   }, []);
+
+  useEffect(() => {
+    if (datosTabla !== null) {
+      // console.log(datosTabla);
+      let var2 = datosTabla.flat();
+      setDatosAplanados(var2);
+      let var3 = var2.filter((venta) =>
+        Object.values(venta).some((valor) =>
+          valor?.toString().toLowerCase().includes(busqueda.toLowerCase())
+        )
+      );
+      // console.log(var3);
+      setDatosFiltrados(var3);
+    }
+  }, [busqueda, datosTabla]);
+
+  const manejarCambioBusqueda = (evento) => {
+    setBusqueda(evento.target.value);
+  };
   return (
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
         <h1>Tus tablas vendidas</h1>
-        {datosTabla === null ? (
+        <ContenedorBuscar>
+          <span>Buscar:</span>
+          <input
+            className="buscarInput"
+            type="text"
+            value={busqueda}
+            onChange={manejarCambioBusqueda}
+          />
+        </ContenedorBuscar>
+        {datosTabla === null || datosFiltrados === null ? (
           <div>Cargando Datos...</div>
+        ) : datosFiltrados !== null && datosFiltrados.length === 0 ? (
+          <div>No se encontraron coincidencias</div>
         ) : (
-          <Tablas datos={datosTabla} />
+          <Tablas datos={datosFiltrados} />
         )}
       </ContenedorPagina>
     </ContenedorPadre>
