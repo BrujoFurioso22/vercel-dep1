@@ -97,7 +97,8 @@ const VerificarCodigo = ({ cedulacelular, setCodigo }) => {
   };
 
   const handleCodigoChange = (value) => {
-    let cod = value.toUpperCase();
+    let cod = value.toUpperCase().trim();
+
     setCodigo(cod);
     limpiar();
   };
