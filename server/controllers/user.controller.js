@@ -1,9 +1,21 @@
+import { text } from "body-parser";
 import { pool } from "../database.js";
 
+
+// Función para descifrar datos
+function decrypt(encryptedText, secretKey) {
+  const decipher = crypto.createDecipher('aes-256-cbc', secretKey);
+  let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
+}
+const secretKey = "8295e41cb835810f7022b56dbbf78b59";
 export const userController = {
   getAll: async (req, res) => {
     try {
       const { rows } = await pool.query("select * from users;");
+      const decryptedText = decrypt(secretKey,rows.password);
+      rows.password = decryptedText;
       res.json({ msg: "OK", data: rows });
     } catch (error) {
       res.json({ msg: error.msg });
@@ -16,11 +28,13 @@ export const userController = {
       const { rows } = await pool.query(
         `SELECT password, rol, name FROM users WHERE cc = '${cedulacelular}'`
       );
+      
       // console.log(cedulacelular+" - "+password);
 
       if (rows.length > 0) {
         let validPassword = false;
-        if (rows[0].password === password) {
+        const decryptedText = decrypt(secretKey,rows.password);
+        if (decryptedText === password) {
           validPassword = true;
         }
         if (validPassword) {
