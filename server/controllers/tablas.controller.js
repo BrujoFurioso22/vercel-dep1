@@ -1,5 +1,7 @@
 import { pool } from "../database.js";
-const crypto = require('crypto');
+import crypto from "crypto";
+
+// const crypto = require('crypto');
 
 function generarCodigoHexadecimal() {
   const caracteresHexadecimales = "0123456789ABCDEF";

@@ -341,6 +341,9 @@ const Header = ({ oculta }) => {
         <CustomNavLink to="/seller/tablasVendidas">
           Tablas Vendidas
         </CustomNavLink>
+        <CustomNavLink to="/seller/jugadas">
+          Jugadas
+        </CustomNavLink>
         <CustomNavLink to="/seller/tablasenvivo">
           Consultar Tablas
         </CustomNavLink>

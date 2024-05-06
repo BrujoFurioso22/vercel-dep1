@@ -1,4 +1,5 @@
-const crypto = require('crypto');
+// const crypto = require('crypto');
+import crypto from "crypto";
 import { pool } from "../database.js";
 
 

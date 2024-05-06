@@ -7,6 +7,7 @@ import ConsultarTablasEnVivo from "../SellerPages/ConsultarTablasEnVivo";
 import Preview from "../../components/pdfMaker/Preview";
 import EditInfoTemplates from "../SellerPages/EditInfoTemplates";
 import ConsultarDatosCliente from "../SellerPages/ConsultarClientes";
+import Jugadas from "../SellerPages/Jugadas";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -29,6 +30,7 @@ const SellerRoutes = () => {
       <Routes>
         <Route path="vender" element={<VenderTablas />} />
         <Route path="tablasVendidas" element={<TablasVendidas />} />
+        <Route path="jugadas" element={<Jugadas />} />
         <Route path="tablasenvivo" element={<ConsultarTablasEnVivo />} />
         <Route path="infoClientes" element={<ConsultarDatosCliente />} />
         <Route path="preview" element={<Preview />} />
