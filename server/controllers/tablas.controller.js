@@ -1,8 +1,9 @@
 import { pool } from "../database.js";
 import crypto from "crypto";
-const secretKey = process.env.secretKey
 
-// const crypto = require('crypto');
+const key = crypto.randomBytes(32); // Clave de 32 bytes para AES-256
+const iv = crypto.randomBytes(16); 
+
 
 function generarCodigoHexadecimal() {
   const caracteresHexadecimales = "0123456789ABCDEF";
@@ -27,15 +28,33 @@ function generarContrasenia() {
 }
 
 // Función para cifrar datos
-function encrypt(text, secretKey) {
-  const iv = crypto.randomBytes(16); // IV (Initialization Vector) de 16 bytes
-  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(secretKey), iv);
+function encrypt(text, key, iv) {
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');
   encrypted += cipher.final('hex');
-  return encrypted;
+  return {
+      iv: iv.toString('hex'),
+      encryptedData: encrypted
+  };
+}
+
+// Función para desencriptar datos utilizando AES en modo CBC
+function decrypt(encryptedData, key) {
+  const decipher = crypto.createDecipheriv('aes-256-cbc', key, Buffer.from(encryptedData.iv, 'hex'));
+  let decrypted = decipher.update(encryptedData.encryptedData, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
 }
 
 export const tablasController = {
+  ProbarEncriptado: async (req, res) => {
+    const mipalabra = "AX6VTY";
+    console.log(mipalabra);
+    const encriptado = encrypt(mipalabra,key,iv);
+    console.log(encriptado);
+    const decript = decrypt(encriptado,key);
+    console.log(decript); 
+  },
   insertarVenta: async (req, res) => {
     //////HACER LO QUE FALTA DE GENERAR EL USUARIO
     try {
@@ -59,10 +78,10 @@ export const tablasController = {
 
         if (rowscliente.length === 0) {
           const contraseniaGenerada = generarContrasenia();
-          const encryptedText = encrypt(contraseniaGenerada, secretKey);
+          //const encryptedText = encrypt(contraseniaGenerada, secretKey);
           const quse = await pool.query(
             "INSERT INTO users(name, cc, password) VALUES ($1, $2, $3);",
-            [nombrecliente, cccliente, encryptedText]
+            [nombrecliente, cccliente, contraseniaGenerada]
           );
         } else {
           idcliente = rowscliente[0].id;

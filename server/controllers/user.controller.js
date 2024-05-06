@@ -1,22 +1,11 @@
 // const crypto = require('crypto');
-import crypto from "crypto";
+//import crypto from "crypto";
 import { pool } from "../database.js";
-const secretKey = process.env.secretKey
-
-// Función para descifrar datos
-function decrypt(encryptedData, secretKey) {
-  const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(secretKey), Buffer.from(encryptedData.iv, 'hex'));
-  let decrypted = decipher.update(encryptedData.encryptedData, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
-}
 
 export const userController = {
   getAll: async (req, res) => {
     try {
       const { rows } = await pool.query("select * from users;");
-      const decryptedText = decrypt(rows.password,secretKey);
-      rows.password = decryptedText;
       res.json({ msg: "OK", data: rows });
     } catch (error) {
       res.json({ msg: error.msg });
@@ -34,8 +23,7 @@ export const userController = {
 
       if (rows.length > 0) {
         let validPassword = false;
-        const decryptedText = decrypt(rows.password,secretKey);
-        if (decryptedText === password) {
+        if (rows.password === password) {
           validPassword = true;
         }
         if (validPassword) {
@@ -79,12 +67,11 @@ export const userController = {
       );
       
       if (rows.length > 0) {
-        const decryptedText = decrypt(rows.password,secretKey);
         return res.status(200).json({
           exists: true,
           nombre: rows[0].name,
           cc: rows[0].cc,
-          password: decryptedText
+          password: rows[0].password
         });
       }
       return res.status(404).json({ exists: false });
