@@ -55,6 +55,25 @@ export const userController = {
       res.status(500).json({ message: "An error occurred" });
     }
   },
+  getCliente: async (req, res) => {
+    try {
+      // console.log(req);
+      const { cedulacelular } = req.body;
+      const { rows } = await pool.query(
+        "SELECT name,cc,password FROM users WHERE cc = '$1' and rol=0;",
+        [cedulacelular]
+      );
+      if (rows.length > 0) {
+        return res
+          .status(200)
+          .json({ exists: true, nombre: rows[0].name, cc: rows[0].cc, password: rows[0].password });
+      }
+      return res.status(404).json({ exists: false });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
   // create: async(req, res) => {
   //     try {
   //         const { name, price } = req.body
