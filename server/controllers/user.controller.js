@@ -1,4 +1,4 @@
-import { text } from "body-parser";
+const crypto = require('crypto');
 import { pool } from "../database.js";
 
 
@@ -14,7 +14,7 @@ export const userController = {
   getAll: async (req, res) => {
     try {
       const { rows } = await pool.query("select * from users;");
-      const decryptedText = decrypt(secretKey,rows.password);
+      const decryptedText = decrypt(rows.password,secretKey);
       rows.password = decryptedText;
       res.json({ msg: "OK", data: rows });
     } catch (error) {
@@ -33,7 +33,7 @@ export const userController = {
 
       if (rows.length > 0) {
         let validPassword = false;
-        const decryptedText = decrypt(secretKey,rows.password);
+        const decryptedText = decrypt(rows.password,secretKey);
         if (decryptedText === password) {
           validPassword = true;
         }
@@ -78,11 +78,12 @@ export const userController = {
       );
       
       if (rows.length > 0) {
+        const decryptedText = decrypt(rows.password,secretKey);
         return res.status(200).json({
           exists: true,
           nombre: rows[0].name,
           cc: rows[0].cc,
-          password: rows[0].password
+          password: decryptedText
         });
       }
       return res.status(404).json({ exists: false });
