@@ -45,12 +45,19 @@ const ButtonVerif = styled.button`
   border-radius: 5px;
   cursor: pointer;
 `;
+const TablaDatos = styled.div`
+  padding: 4px 5px;
+  border: solid 1px var(--color-5);
+  border-radius: 5px;
+  &>.fila{
+    
+  }
+`;
 
 const VerificarCodigo = ({ codigo, setCodigo }) => {
   const [verif, setVerif] = useState(false);
   const [seConsulto, setSeConsulto] = useState(false);
   const [data, setData] = useState([]);
-  const [letraTabla, setLetraTabla] = useState("");
   const BuscarTabla = async () => {
     setVerif(true);
     const resp = await ConsultarTablasSegunIDTabla(codigo);
@@ -60,7 +67,6 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
       let dat = resp.data.data;
       if (dat.length > 0) {
         setData(dat);
-        setLetraTabla(dat[0].numtabla.charAt(0));
         console.log(dat);
       }
     }
@@ -77,7 +83,6 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   const limpiar = () => {
     setVerif(false);
     setSeConsulto(false);
-    setLetraTabla("");
     setData([]);
   };
 
@@ -103,16 +108,12 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
           <Contenedor1>
             Tabla Encontrada
             <div>
-              {letraTabla === "N" ? (
-                <EstructuraTabla1 dataTables={data[0]} />
-              ) : (
-                <EstructuraTabla2 dataTables={data[0]} />
-              )}
+              <div></div>
             </div>
           </Contenedor1>
         ) : (
           <Contenedor1>
-            No se encontro una tabla con el codigo: {codigo}
+            No se encontro el cliente con código: {codigo}
           </Contenedor1>
         )
       ) : (
