@@ -61,7 +61,6 @@ export const userController = {
         return res
           .status(200)
           .json({ exists: true, id: rows[0].id, nombre: rows[0].name });
-
       }
       return res.status(404).json({ exists: false });
     } catch (error) {
@@ -74,14 +73,17 @@ export const userController = {
       // console.log(req);
       const { cedulacelular } = req.body;
       const { rows } = await pool.query(
-        "SELECT name,cc,password FROM users WHERE cc = '$1' and rol=0;",
+        "SELECT name,cc,password FROM users WHERE cc = $1 and rol=0;",
         [cedulacelular]
       );
+      
       if (rows.length > 0) {
-        const decryptedText = decrypt(secretKey,rows.password);
-        return res
-          .status(200)
-          .json({ exists: true, nombre: rows[0].name, cc: rows[0].cc, password: decryptedText });
+        return res.status(200).json({
+          exists: true,
+          nombre: rows[0].name,
+          cc: rows[0].cc,
+          password: rows[0].password
+        });
       }
       return res.status(404).json({ exists: false });
     } catch (error) {
