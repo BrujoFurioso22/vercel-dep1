@@ -105,8 +105,14 @@ const GenerarPDFs = ({ idventa }) => {
                 if (pdf.internal.getNumberOfPages() > 1) {
                   pdf.deletePage(1);
                 }
-                pdf.save("combined.pdf");
-                resolve();
+                const blob = pdf.output("blob");
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "combined.pdf";
+                a.click();
+                URL.revokeObjectURL(url);
+                resolve()
               }
             })
             .catch((err) => {

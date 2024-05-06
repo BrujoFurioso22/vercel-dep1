@@ -240,7 +240,7 @@ const ContenedorMenuLateral = styled.div`
     }
 
     &.abierto {
-      width: 50% !important;
+      width: 60% !important;
 
       opacity: 1;
     }

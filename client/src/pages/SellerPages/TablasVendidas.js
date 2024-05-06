@@ -8,6 +8,7 @@ import GeneratePdfButton, {
 import { device } from "../../components/styled-componets/MediaQ";
 import { ConsultarVentas } from "../../consultasBE/Tablas";
 import { ObtenerIDUsuario } from "../../consultasBE/User";
+import GenerarPDFs1 from "../../components/pdfMaker/pdfMaker1";
 // const ContenedorPadre = styled.div`
 //   display: flex;
 //   flex-direction: column;
@@ -186,6 +187,7 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
             </div>
           ))}
           <GeneratePdfButton idventa={parseInt(fila.id)} />
+          <GenerarPDFs1 idventa={parseInt(fila.id)}/>
         </div>
       ))}
     </TablaCard>
@@ -234,6 +236,7 @@ const Tablas = ({ datos }) => {
                 ))}
                 <td>
                   <GeneratePdfButton idventa={parseInt(venta.id)} />
+                  <GenerarPDFs1 idventa={parseInt(venta.id)}/>
                 </td>
               </tr>
             ))}
