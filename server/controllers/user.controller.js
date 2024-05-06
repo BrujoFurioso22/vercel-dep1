@@ -62,7 +62,7 @@ export const userController = {
         "SELECT name,cc,password FROM users WHERE cc = $1 and rol=0;",
         [cedulacelular]
       );
-      console.log(rows);
+      
       if (rows.length > 0) {
         return res.status(200).json({
           exists: true,
