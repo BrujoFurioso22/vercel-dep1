@@ -47,7 +47,6 @@ export const userController = {
         return res
           .status(200)
           .json({ exists: true, id: rows[0].id, nombre: rows[0].name });
-
       }
       return res.status(404).json({ exists: false });
     } catch (error) {
@@ -63,10 +62,14 @@ export const userController = {
         "SELECT name,cc,password FROM users WHERE cc = $1 and rol=0;",
         [cedulacelular]
       );
+      console.log(rows);
       if (rows.length > 0) {
-        return res
-          .status(200)
-          .json({ exists: true, nombre: rows[0].name, cc: rows[0].cc, password: rows[0].password });
+        return res.status(200).json({
+          exists: true,
+          nombre: rows[0].name,
+          cc: rows[0].cc,
+          password: rows[0].password
+        });
       }
       return res.status(404).json({ exists: false });
     } catch (error) {
