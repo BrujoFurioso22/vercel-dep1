@@ -91,19 +91,19 @@ export const tablasController = {
 
             for (let i = 0; i < cantidadnormal * 4; i++) {
               // Generar números aleatorios para diferentes rangos
-              const numerosRango1_20 = generarNumerosAleatorios(1, 20, 5);
-              const numerosRango21_40 = generarNumerosAleatorios(21, 40, 5);
-              const numerosRango41_60 = generarNumerosAleatorios(41, 60, 5);
-              const numerosRango61_80 = generarNumerosAleatorios(61, 80, 5);
-              const numerosRango81_99 = generarNumerosAleatorios(81, 99, 5);
+              const numerosRango1 = generarNumerosAleatorios(1, 15, 5);
+              const numerosRango2 = generarNumerosAleatorios(16, 30, 5);
+              const numerosRango3 = generarNumerosAleatorios(31, 45, 5);
+              const numerosRango4 = generarNumerosAleatorios(46, 60, 5);
+              const numerosRango5 = generarNumerosAleatorios(61, 75, 5);
 
               // Combinar todos los números generados
               const todosLosNumeros = [
-                ...numerosRango1_20,
-                ...numerosRango21_40,
-                ...numerosRango41_60,
-                ...numerosRango61_80,
-                ...numerosRango81_99,
+                ...numerosRango1,
+                ...numerosRango2,
+                ...numerosRango3,
+                ...numerosRango4,
+                ...numerosRango5,
                 // Combinar otros rangos aquí...
               ];
 
@@ -153,15 +153,15 @@ export const tablasController = {
 
             for (let i = 0; i < cantidadrapida * 6; i++) {
               // Generar números aleatorios para diferentes rangos
-              const numerosRango1_49 = generarNumerosAleatorios(1, 49, 3);
-              const numerosRango50_60 = generarNumerosAleatorios(50, 60, 1);
-              const numerosRango61_99 = generarNumerosAleatorios(61, 99, 3);
+              const numerosRango1 = generarNumerosAleatorios(1, 25, 3);
+              const numerosRango2 = generarNumerosAleatorios(26, 50, 1);
+              const numerosRango3 = generarNumerosAleatorios(51, 75, 3);
 
               // Combinar todos los números generados
               const todosLosNumeros = [
-                ...numerosRango1_49,
-                ...numerosRango50_60,
-                ...numerosRango61_99,
+                ...numerosRango1,
+                ...numerosRango2,
+                ...numerosRango3,
                 // Combinar otros rangos aquí...
               ];
 
@@ -216,7 +216,7 @@ export const tablasController = {
       );
 
       const { rows: rows2 } = await pool.query(
-        `SELECT * FROM tablarapida WHERE codigo = $1;`,
+        "SELECT * FROM tablarapida WHERE codigo = $1;",
         [codigotabla]
       );
       // console.log(rows2);
