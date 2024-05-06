@@ -49,6 +49,9 @@ const TablaDatos = styled.div`
   padding: 4px 5px;
   border: solid 1px var(--color-5);
   border-radius: 5px;
+  display: flex;
+  gap: 15px;
+  
   &>.fila{
     
   }
@@ -62,7 +65,6 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     setVerif(true);
     const resp = await ConsultarTablasSegunIDTabla(codigo);
     setSeConsulto(true);
-
     if (resp.data) {
       let dat = resp.data.data;
       if (dat.length > 0) {
@@ -70,7 +72,6 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
         console.log(dat);
       }
     }
-
     setVerif(false);
   };
 
@@ -107,9 +108,9 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
         data.length > 0 ? (
           <Contenedor1>
             Tabla Encontrada
-            <div>
+            <TablaDatos>
               <div></div>
-            </div>
+            </TablaDatos>
           </Contenedor1>
         ) : (
           <Contenedor1>
