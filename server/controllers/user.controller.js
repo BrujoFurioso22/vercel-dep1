@@ -1,28 +1,30 @@
-// const crypto = require('crypto');
-//import crypto from "crypto";
+import CryptoJS from 'crypto-js';
 import { pool } from "../database.js";
 
+// Función para descifrar un texto cifrado
+function decryptText(cipherText, secretKey) {
+  const bytes = CryptoJS.AES.decrypt(cipherText, secretKey);
+  return bytes.toString(CryptoJS.enc.Utf8);
+}
+
 export const userController = {
-  getAll: async (req, res) => {
-    try {
-      const { rows } = await pool.query("select * from users;");
-      res.json({ msg: "OK", data: rows });
-    } catch (error) {
-      res.json({ msg: error.msg });
-    }
-  },
   getVerificationUser: async (req, res) => {
     try {
       // console.log(req);
       const { cedulacelular, password } = req.body;
       const { rows } = await pool.query(
-        `SELECT password, rol, name FROM users WHERE cc = '${cedulacelular}'`
+        "SELECT password, rol, name FROM users WHERE cc = '$1'",
+        [cedulacelular]
       );
-      
-      // console.log(cedulacelular+" - "+password);
 
       if (rows.length > 0) {
         let validPassword = false;
+        const info = rows[0].password;
+        const partes = info.split('=');
+        const encriptado = `${partes[0]}=`;
+        const secretKey = `${partes[1]}`;
+        const contra = decryptText(encriptado, secretKey);
+        rows[0].password = contra;
         if (rows.password === password) {
           validPassword = true;
         }
@@ -43,7 +45,8 @@ export const userController = {
       // console.log(req);
       const { cedulacelular } = req.body;
       const { rows } = await pool.query(
-        `SELECT * FROM users WHERE cc = '${cedulacelular}'`
+        "SELECT * FROM users WHERE cc = '$1'",
+        [cedulacelular]
       );
 
       if (rows.length > 0) {
@@ -65,8 +68,14 @@ export const userController = {
         "SELECT name,cc,password FROM users WHERE cc = $1 and rol=0;",
         [cedulacelular]
       );
-      
+
       if (rows.length > 0) {
+        const info = rows[0].password;
+        const partes = info.split('=');
+        const encriptado = `${partes[0]}=`;
+        const secretKey = `${partes[1]}`;
+        const contra = decryptText(encriptado, secretKey);
+        rows[0].password = contra;
         return res.status(200).json({
           exists: true,
           nombre: rows[0].name,

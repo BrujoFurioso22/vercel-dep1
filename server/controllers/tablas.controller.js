@@ -1,9 +1,9 @@
+import { log } from "console";
 import { pool } from "../database.js";
-import crypto from "crypto";
+import CryptoJS from 'crypto-js';
+import crypto from 'crypto';
 
-const key = crypto.randomBytes(32); // Clave de 32 bytes para AES-256
-const iv = crypto.randomBytes(16); 
-
+const secretKey = crypto.randomBytes(32).toString('hex');
 
 function generarCodigoHexadecimal() {
   const caracteresHexadecimales = "0123456789ABCDEF";
@@ -27,36 +27,17 @@ function generarContrasenia() {
   return contrasenia;
 }
 
-// Función para cifrar datos
-function encrypt(text, key, iv) {
-  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-  let encrypted = cipher.update(text, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  return {
-      iv: iv.toString('hex'),
-      encryptedData: encrypted
-  };
-}
-
-// Función para desencriptar datos utilizando AES en modo CBC
-function decrypt(encryptedData, key) {
-  const decipher = crypto.createDecipheriv('aes-256-cbc', key, Buffer.from(encryptedData.iv, 'hex'));
-  let decrypted = decipher.update(encryptedData.encryptedData, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
+// Función para cifrar un texto
+function encryptText(text, secretKey) {
+    return CryptoJS.AES.encrypt(text, secretKey).toString();
 }
 
 export const tablasController = {
-  ProbarEncriptado: async (req, res) => {
-    const mipalabra = "AX6VTY";
-    console.log(mipalabra);
-    const encriptado = encrypt(mipalabra,key,iv);
-    console.log(encriptado);
-    const decript = decrypt(encriptado,key);
-    console.log(decript); 
+  ProbarEncriptado:() => {
+    const encriptado = encryptText(mipalabra, secretKey);
+    const final = `${encriptado}${secretKey}`;
   },
   insertarVenta: async (req, res) => {
-    //////HACER LO QUE FALTA DE GENERAR EL USUARIO
     try {
       const {
         idvendedor,
@@ -78,10 +59,12 @@ export const tablasController = {
 
         if (rowscliente.length === 0) {
           const contraseniaGenerada = generarContrasenia();
-          //const encryptedText = encrypt(contraseniaGenerada, secretKey);
+          const encriptado = encryptText(contraseniaGenerada, secretKey);
+          const final = `${encriptado}${secretKey}`;
+
           const quse = await pool.query(
             "INSERT INTO users(name, cc, password) VALUES ($1, $2, $3);",
-            [nombrecliente, cccliente, contraseniaGenerada]
+            [nombrecliente, cccliente, final]
           );
         } else {
           idcliente = rowscliente[0].id;

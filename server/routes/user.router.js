@@ -3,7 +3,6 @@ import { userController } from "../controllers/user.controller.js";
 
 export const userRouter = Router();
 
-userRouter.get("/", userController.getAll);
 userRouter.post("/userId", userController.getIdUser);
 userRouter.post("/userverif", userController.getVerificationUser);
 userRouter.post("/getcliente", userController.getCliente);
