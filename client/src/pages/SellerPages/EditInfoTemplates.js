@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
+import { ObtenerDesNormal, UpdateTablaNormalDes } from "../../consultasBE/Tablas";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -214,9 +215,23 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
     const premiosArray = value.split(",").map((item) => item.trim());
     handleChange2(index, "premios", premiosArray);
   };
-  const guardarCambios = () => {
-    // console.log(data1);
-    // console.log(data2);
+  const guardarCambios = async () => {
+    console.log(data1);
+    let premios1=data1[0].premios;
+    console.log(premios1);
+    let letras1=data1[0].letras;
+    const res = await UpdateTablaNormalDes({
+      contenido: data1[0].contenido,
+      premio1: data1[0].premio1,
+      premio2: data1[0].premio2,
+      premio3: data1[0].premio3,
+      premios: premios1.join(','),
+      fecha_hora:data1[0].fechayhora,
+      cantidad_letras:parseInt(data1[0].numletras),
+      letras:letras1.join(','),
+    });
+    console.log(res);
+    console.log(data2);
   };
   return (
     <ContenedorMenor>
@@ -325,7 +340,9 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                   <InputField
                     value={dato.fechayhora}
                     type="datetime-local"
-                    onChange={(e) => handleChange1(0, "fechayhora", e.target.value)}
+                    onChange={(e) =>
+                      handleChange1(0, "fechayhora", e.target.value)
+                    }
                   />
                 </span>
               </div>
@@ -344,7 +361,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                     value={dato.contenido}
                     type="text"
                     onChange={(e) =>
-                      handleChange1(0, "contenido", e.target.value)
+                      handleChange2(0, "contenido", e.target.value)
                     }
                   />
                 </span>
@@ -378,7 +395,9 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                   <InputField
                     value={dato.fechayhora}
                     type="datetime-local"
-                    onChange={(e) => handleChange2(0, "fechayhora", e.target.value)}
+                    onChange={(e) =>
+                      handleChange2(0, "fechayhora", e.target.value)
+                    }
                   />
                 </span>
               </div>
@@ -426,6 +445,14 @@ const EditarInformacion = () => {
       )
     );
   };
+
+  const ConsultarDatos =async ()=>{
+    const res = await ObtenerDesNormal();
+    console.log(res);
+  }
+  useEffect(()=>{
+    ConsultarDatos();
+  },[])
 
   return (
     <ContenedorContenido>

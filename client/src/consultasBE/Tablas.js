@@ -64,3 +64,37 @@ export async function ConsultarTablasSegunIDTabla(codigotabla) {
     return err;
   }
 }
+export async function UpdateTablaNormalDes({
+  contenido,
+  premio1,
+  premio2,
+  premio3,
+  premios,
+  fecha_hora,
+  cantidad_letras,
+  letras,
+}) {
+  try {
+    const res = await axios.post(`${url}/api/descripciones/actualizardescripcionnormal`, {
+      contenido,
+      premio1,
+      premio2,
+      premio3,
+      premios,
+      fecha_hora,
+      cantidad_letras,
+      letras,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
+export async function ObtenerDesNormal() {
+  try {
+    const res = await axios.get(`${url}/api/descripciones/obtenerdescripcionnormal`);
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
