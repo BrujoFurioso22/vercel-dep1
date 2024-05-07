@@ -138,6 +138,7 @@ const ContenedorJugadas = ({ data, setData }) => {
     newPositions[posicion] = !newPositions[posicion];
     // Actualizar el estado de data
     setData([{ ...data[0], data: { posiciones: newPositions } }]);
+    console.log(posiciones);
   };
 
   const CrearJuego = () => {
@@ -145,12 +146,13 @@ const ContenedorJugadas = ({ data, setData }) => {
     for (let i = 1; i <= 75; i++) {
       initialPositions[i] = false;
     }
+    console.log(initialPositions);
 
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-      {data[0].estado === "iniciado" ? (
+      {data[0].estado === "I" ? (
         <Contenedor1>
           <GridContainer>
             {Object.entries(posiciones).map(([posicion, marcada]) => (
@@ -168,7 +170,7 @@ const ContenedorJugadas = ({ data, setData }) => {
         </Contenedor1>
       ) : (
         <Contenedor1>
-          <BotonFinalizarJuego>
+          <BotonFinalizarJuego onClick={CrearJuego} >
             Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
           </BotonFinalizarJuego>
         </Contenedor1>
@@ -190,7 +192,7 @@ const Jugadas = () => {
         posiciones: initialPositions,
       },
 
-      estado: "iniciado",
+      estado: "I",
     },
   ]);
 

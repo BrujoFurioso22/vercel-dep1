@@ -312,18 +312,20 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                     }
                   />
                 </span>
-                <span className="col-derecha">Fecha:</span>
+                {/* <span className="col-derecha">Fecha y Hora:</span>
                 <span className="col-izquierda">
                   <InputField
                     value={dato.fecha}
+                    type="date"
                     onChange={(e) => handleChange1(0, "fecha", e.target.value)}
                   />
-                </span>
-                <span className="col-derecha">Hora:</span>
+                </span> */}
+                <span className="col-derecha">Fecha y Hora:</span>
                 <span className="col-izquierda">
                   <InputField
-                    value={dato.hora}
-                    onChange={(e) => handleChange1(0, "hora", e.target.value)}
+                    value={dato.fechayhora}
+                    type="datetime-local"
+                    onChange={(e) => handleChange1(0, "fechayhora", e.target.value)}
                   />
                 </span>
               </div>
@@ -357,7 +359,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                     }
                   />
                 </span>
-                <span className="col-derecha">Fecha:</span>
+                {/* <span className="col-derecha">Fecha:</span>
                 <span className="col-izquierda">
                   <InputField
                     value={dato.fecha}
@@ -369,6 +371,14 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                   <InputField
                     value={dato.hora}
                     onChange={(e) => handleChange2(0, "hora", e.target.value)}
+                  />
+                </span> */}
+                <span className="col-derecha">Fecha y Hora:</span>
+                <span className="col-izquierda">
+                  <InputField
+                    value={dato.fechayhora}
+                    type="datetime-local"
+                    onChange={(e) => handleChange2(0, "fechayhora", e.target.value)}
                   />
                 </span>
               </div>
@@ -392,16 +402,14 @@ const EditarInformacion = () => {
       premios: ["licuadora", "tostadora"],
       numletras: 4,
       letras: [],
-      fecha: "10 Mayo 2024",
-      hora: "8pm",
+      fechayhora: "",
     },
   ]);
   const [data2, setData2] = useState([
     {
       contenido: "",
       premio1: "100",
-      fecha: "10 Mayo 2024",
-      hora: "10pm",
+      fechayhora: "",
     },
   ]);
   const handleChange1 = (index, attr, value) => {
