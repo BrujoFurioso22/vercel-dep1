@@ -13,7 +13,7 @@ export const userController = {
       // console.log(req);
       const { cedulacelular, password } = req.body;
       const { rows } = await pool.query(
-        "SELECT password, rol, name FROM users WHERE cc = '$1'",
+        "SELECT password, rol, name FROM users WHERE cc = $1",
         [cedulacelular]
       );
 
@@ -25,7 +25,7 @@ export const userController = {
         const secretKey = `${partes[1]}`;
         const contra = decryptText(encriptado, secretKey);
         rows[0].password = contra;
-        if (rows.password === password) {
+        if (rows[0].password === password) {
           validPassword = true;
         }
         if (validPassword) {
@@ -45,7 +45,7 @@ export const userController = {
       // console.log(req);
       const { cedulacelular } = req.body;
       const { rows } = await pool.query(
-        "SELECT * FROM users WHERE cc = '$1'",
+        "SELECT * FROM users WHERE cc = $1",
         [cedulacelular]
       );
 

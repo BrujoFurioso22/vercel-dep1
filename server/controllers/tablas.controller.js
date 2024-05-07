@@ -33,9 +33,10 @@ function encryptText(text, secretKey) {
 }
 
 export const tablasController = {
-  ProbarEncriptado:() => {
-    const encriptado = encryptText(mipalabra, secretKey);
+  probarEncriptado:() => {
+    const encriptado = encryptText("vend0105835276", secretKey);
     const final = `${encriptado}${secretKey}`;
+    console.log(final);
   },
   insertarVenta: async (req, res) => {
     try {
