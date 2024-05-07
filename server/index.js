@@ -5,6 +5,7 @@ import { tablasRouter } from './routes/tablas.router.js';
 import { corsMiddleware } from './middleware/cors.js';
 import { descripcionesRouter } from './routes/descripciones.router.js';
 import { ventasRouter } from './routes/ventas.router.js';
+import { juegoRouter } from './routes/juego.router.js';
 
 // Cargar las variables de entorno
 
@@ -21,6 +22,7 @@ app.use("/api/users", userRouter);
 app.use("/api/tablas", tablasRouter);
 app.use("/api/descripciones", descripcionesRouter);
 app.use("/api/ventas", ventasRouter);
+app.use("/api/juegos", juegoRouter);
 
 
 
