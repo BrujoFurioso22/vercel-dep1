@@ -251,50 +251,53 @@ const Tablas = ({ datos }) => {
 
 const TablasVendidas = () => {
   const idv = localStorage.getItem("id");
-  const [datosTabla, setDatosTabla] = useState(null);
-  const [datosAplanados, setDatosAplanados] = useState(null);
-  const [datosFiltrados, setDatosFiltrados] = useState(null);
+  const [datosTabla, setDatosTabla] = useState([]);
+  const [datosAplanados, setDatosAplanados] = useState([]);
+  const [datosFiltrados, setDatosFiltrados] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);  // Nuevo estado para manejar la carga
 
   const [busqueda, setBusqueda] = useState("");
 
   const ConsultarTablasVendedor = async () => {
-    const idVendedor = await ObtenerIDUsuario(idv);
-    if (idVendedor.data.id) {
-      const res = await ConsultarVentas(idVendedor.data.id);
-      // console.log(res.data.data);
-      console.log(res);
-
-      if (res.data) {
-        setDatosTabla(res.data.data);
-      } else {
-        setDatosTabla([]);
+    setIsLoading(true);  // Inicia la carga
+    try {
+      const idVendedor = await ObtenerIDUsuario(idv);
+      if (idVendedor.data.id) {
+        const res = await ConsultarVentas(idVendedor.data.id);
+        console.log(res);
+        setDatosTabla(res.data.data || []);
       }
+    } catch (error) {
+      console.error('Error al consultar las ventas:', error);
+      setDatosTabla([]);
     }
+    setIsLoading(false);  // Termina la carga
   };
+
   useEffect(() => {
     ConsultarTablasVendedor();
   }, []);
 
   useEffect(() => {
-    if (datosTabla !== null) {
-      if (datosTabla.length !== 0) {
-        // console.log(datosTabla);
-        let var2 = datosTabla.flat();
-        setDatosAplanados(var2);
-        let var3 = var2.filter((venta) =>
-          Object.values(venta).some((valor) =>
-            valor?.toString().toLowerCase().includes(busqueda.toLowerCase())
-          )
-        );
-        // console.log(var3);
-        setDatosFiltrados(var3);
-      }
+    if (datosTabla.length > 0) {
+      const var2 = datosTabla.flat();
+      setDatosAplanados(var2);
+      const var3 = var2.filter((venta) =>
+        Object.values(venta).some((valor) =>
+          valor?.toString().toLowerCase().includes(busqueda.toLowerCase())
+        )
+      );
+      setDatosFiltrados(var3);
+    } else {
+      setDatosAplanados([]);
+      setDatosFiltrados([]);
     }
   }, [busqueda, datosTabla]);
 
   const manejarCambioBusqueda = (evento) => {
     setBusqueda(evento.target.value);
   };
+
   return (
     <ContenedorPadre>
       <Header />
@@ -309,12 +312,12 @@ const TablasVendidas = () => {
             onChange={manejarCambioBusqueda}
           />
         </ContenedorBuscar>
-        {datosTabla === null || datosFiltrados === null ? (
-          <div>Cargando Datos...</div>
+        {isLoading ? (
+          <div>Cargando...</div>
         ) : datosTabla.length === 0 ? (
-          <div>No existen ventas</div>
-        ) : datosFiltrados !== null && datosFiltrados.length === 0 ? (
-          <div>No se encontraron coincidencias</div>
+          <div>No hay data disponible</div>
+        ) : datosFiltrados.length === 0 ? (
+          <div>No existen datos según filtro</div>
         ) : (
           <Tablas datos={datosFiltrados} />
         )}
