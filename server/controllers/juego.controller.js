@@ -7,9 +7,9 @@ export const juegoController = {
         "SELECT * FROM public.juegos WHERE estado='I';"
       );
       if (rowsID.length > 0) {
-        return res
-          .status(200)
-          .json({ exists: true, rowsID });
+        return res.status(200).json({ exists: true, data: rowsID });
+      } else {
+        return res.status(200).json({ exists: false });
       }
       return res.status(404).json({ exists: false });
     } catch (error) {
@@ -29,9 +29,7 @@ export const juegoController = {
       );
       if (rowsID.length > 0) {
         id = rowsID[0].id;
-        return res
-          .status(200)
-          .json({ exists: true, id: rowsID[0].id });
+        return res.status(200).json({ exists: true, id: rowsID[0].id });
       }
       return res.status(404).json({ exists: false });
     } catch (error) {
@@ -48,9 +46,7 @@ export const juegoController = {
         [data, id]
       );
       if (rows) {
-        return res
-          .status(200)
-          .json({ ok: true});
+        return res.status(200).json({ ok: true });
       }
       return res.status(404).json({ exists: false });
     } catch (error) {
@@ -61,15 +57,13 @@ export const juegoController = {
   finalizarJuego: async (req, res) => {
     try {
       // console.log(req);
-      const { id} = req.body;
+      const { id } = req.body;
       const { rows } = await pool.query(
         "UPDATE public.juegos SET estado='F' WHERE id = $1 and estado='I';",
         [id]
       );
       if (rows) {
-        return res
-          .status(200)
-          .json({ ok: true});
+        return res.status(200).json({ ok: true });
       }
       return res.status(404).json({ exists: false });
     } catch (error) {

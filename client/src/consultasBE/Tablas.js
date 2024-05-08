@@ -125,8 +125,11 @@ export async function ObtenerDesRapida() {
 export async function ObtenerJugadas() {
   try {
     const res = await axios.get(`${url}/api/juegos/consultarjuegos`);
-    console.log(res);
-    return res;
+    if(res.data.exists){
+      return res.data.data;
+    }else{
+      return res.data.exists;
+    }
   } catch (err) {
     return err;
   }

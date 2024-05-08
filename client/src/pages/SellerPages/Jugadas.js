@@ -131,53 +131,56 @@ const def = {
 };
 
 const ContenedorJugadas = ({ data, setData }) => {
-  const posiciones = data[0].data.posiciones;
-  // Función para manejar el clic en un círculo
-  const handleClick = (posicion) => {
-    // Copiar el estado actual de posiciones
-    const newPositions = { ...posiciones };
-    // Cambiar el estado del círculo clicado
-    newPositions[posicion] = !newPositions[posicion];
-    // Actualizar el estado de data
-    setData([{ ...data[0], data: { posiciones: newPositions } }]);
-    console.log(posiciones);
-  };
+  console.log(data);
+  if (data !== null) {
+    const posiciones = data.data.posiciones;
+    // Función para manejar el clic en un círculo
+    const handleClick = (posicion) => {
+      // Copiar el estado actual de posiciones
+      const newPositions = { ...posiciones };
+      // Cambiar el estado del círculo clicado
+      newPositions[posicion] = !newPositions[posicion];
+      // Actualizar el estado de data
+      setData([{ ...data, data: { posiciones: newPositions } }]);
+      console.log(posiciones);
+    };
 
-  const CrearJuego = () => {
-    let initialPositions = {};
-    for (let i = 1; i <= 75; i++) {
-      initialPositions[i] = false;
-    }
-    console.log(initialPositions);
-  };
+    const CrearJuego = () => {
+      let initialPositions = {};
+      for (let i = 1; i <= 75; i++) {
+        initialPositions[i] = false;
+      }
+      console.log(initialPositions);
+    };
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-      {data[0].estado === "I" ? (
-        <Contenedor1>
-          <GridContainer>
-            {Object.entries(posiciones).map(([posicion, marcada]) => (
-              <Circle
-                key={posicion}
-                marked={marcada}
-                onClick={() => handleClick(posicion)} // Manejar el clic
-                clicked={marcada}
-              >
-                {posicion}
-              </Circle>
-            ))}
-          </GridContainer>
-          <BotonFinalizarJuego>Finalizar Juego</BotonFinalizarJuego>
-        </Contenedor1>
-      ) : (
-        <Contenedor1>
-          <BotonFinalizarJuego onClick={CrearJuego}>
-            Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
-          </BotonFinalizarJuego>
-        </Contenedor1>
-      )}
-    </div>
-  );
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+        {data.estado === "I" ? (
+          <Contenedor1>
+            <GridContainer>
+              {Object.entries(posiciones).map(([posicion, marcada]) => (
+                <Circle
+                  key={posicion}
+                  marked={marcada}
+                  onClick={() => handleClick(posicion)} // Manejar el clic
+                  clicked={marcada}
+                >
+                  {posicion}
+                </Circle>
+              ))}
+            </GridContainer>
+            <BotonFinalizarJuego>Finalizar Juego</BotonFinalizarJuego>
+          </Contenedor1>
+        ) : (
+          <Contenedor1>
+            <BotonFinalizarJuego onClick={CrearJuego}>
+              Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
+            </BotonFinalizarJuego>
+          </Contenedor1>
+        )}
+      </div>
+    );
+  }
 };
 
 const Jugadas = () => {
@@ -185,20 +188,16 @@ const Jugadas = () => {
   for (let i = 1; i <= 75; i++) {
     initialPositions[i] = false;
   }
-  const [data, setData] = useState([
-    {
-      id: 98,
-      fecha: "10/11/2023",
-      data: {
-        posiciones: initialPositions,
-      },
-
-      estado: "I",
-    },
-  ]);
+  const [data, setData] = useState(null);
 
   const ConsultarJugadas = async () => {
     const res = await ObtenerJugadas();
+    if (!res) {
+      setData(null);
+    } else {
+      setData(res.data);
+    }
+    console.log(res);
   };
   useEffect(() => {
     ConsultarJugadas();
