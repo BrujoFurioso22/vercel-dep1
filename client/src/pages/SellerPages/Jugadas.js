@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import { ConsultarTablasSegunIDTabla } from "../../consultasBE/Tablas";
+import {
+  ConsultarTablasSegunIDTabla,
+  ObtenerJugadas,
+} from "../../consultasBE/Tablas";
 import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
 import { EstructuraTabla2 } from "../UserPages/EstructuraTabla2";
 import { ObtenerUsuarioPorCC } from "../../consultasBE/User";
@@ -110,7 +113,7 @@ const Circle = styled.span`
     `};
 `;
 
-const BotonFinalizarJuego=styled.button`
+const BotonFinalizarJuego = styled.button`
   padding: 7px 20px;
   outline: none;
   border-radius: 10px;
@@ -119,8 +122,7 @@ const BotonFinalizarJuego=styled.button`
   background-color: var(--color-2);
   color: white;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
-
-`
+`;
 
 const def = {
   nombre: "",
@@ -147,7 +149,6 @@ const ContenedorJugadas = ({ data, setData }) => {
       initialPositions[i] = false;
     }
     console.log(initialPositions);
-
   };
 
   return (
@@ -170,7 +171,7 @@ const ContenedorJugadas = ({ data, setData }) => {
         </Contenedor1>
       ) : (
         <Contenedor1>
-          <BotonFinalizarJuego onClick={CrearJuego} >
+          <BotonFinalizarJuego onClick={CrearJuego}>
             Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
           </BotonFinalizarJuego>
         </Contenedor1>
@@ -195,6 +196,13 @@ const Jugadas = () => {
       estado: "I",
     },
   ]);
+
+  const ConsultarJugadas = async () => {
+    const res = await ObtenerJugadas();
+  };
+  useEffect(() => {
+    ConsultarJugadas();
+  }, []);
 
   return (
     <ContenedorPadre>

@@ -252,7 +252,6 @@ const Tablas = ({ datos }) => {
 const TablasVendidas = () => {
   const idv = localStorage.getItem("id");
   const [datosTabla, setDatosTabla] = useState([]);
-  const [datosAplanados, setDatosAplanados] = useState([]);
   const [datosFiltrados, setDatosFiltrados] = useState([]);
   const [isLoading, setIsLoading] = useState(true);  // Nuevo estado para manejar la carga
 
@@ -281,7 +280,6 @@ const TablasVendidas = () => {
   useEffect(() => {
     if (datosTabla.length > 0) {
       const var2 = datosTabla.flat();
-      setDatosAplanados(var2);
       const var3 = var2.filter((venta) =>
         Object.values(venta).some((valor) =>
           valor?.toString().toLowerCase().includes(busqueda.toLowerCase())
@@ -289,7 +287,6 @@ const TablasVendidas = () => {
       );
       setDatosFiltrados(var3);
     } else {
-      setDatosAplanados([]);
       setDatosFiltrados([]);
     }
   }, [busqueda, datosTabla]);

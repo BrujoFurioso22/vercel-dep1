@@ -122,3 +122,12 @@ export async function ObtenerDesRapida() {
     return err;
   }
 }
+export async function ObtenerJugadas() {
+  try {
+    const res = await axios.get(`${url}/api/juegos/consultarjuegos`);
+    console.log(res);
+    return res;
+  } catch (err) {
+    return err;
+  }
+}

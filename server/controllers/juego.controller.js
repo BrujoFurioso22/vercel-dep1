@@ -1,6 +1,22 @@
 import { pool } from "../database.js";
 
 export const juegoController = {
+  buscarStatusJuegos: async (req, res) => {
+    try {
+      const { rows: rowsID } = await pool.query(
+        "SELECT * FROM public.juegos WHERE estado='I';"
+      );
+      if (rowsID.length > 0) {
+        return res
+          .status(200)
+          .json({ exists: true, rowsID });
+      }
+      return res.status(404).json({ exists: false });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
   nuevoJuego: async (req, res) => {
     try {
       const { data } = req.body;

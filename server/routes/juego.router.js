@@ -6,6 +6,7 @@ export const juegoRouter = Router();
 juegoRouter.post("/nuevojuego", juegoController.nuevoJuego);
 juegoRouter.post("/actualizardata", juegoController.actualizarData);
 juegoRouter.post("/finalizarjuego", juegoController.finalizarJuego);
+juegoRouter.get("/consultarjuegos", juegoController.buscarStatusJuegos);
 
 // router.get("/:id", bookController.getById)
 // router.post("/", bookController.create)
