@@ -75,32 +75,34 @@ export async function UpdateTablaNormalDes({
   letras,
 }) {
   try {
-    const res = await axios.post(`${url}/api/descripciones/actualizardescripcionnormal`, {
-      contenido,
-      premio1,
-      premio2,
-      premio3,
-      premios,
-      fecha_hora,
-      cantidad_letras,
-      letras,
-    });
+    const res = await axios.post(
+      `${url}/api/descripciones/actualizardescripcionnormal`,
+      {
+        contenido,
+        premio1,
+        premio2,
+        premio3,
+        premios,
+        fecha_hora,
+        cantidad_letras,
+        letras,
+      }
+    );
     return res;
   } catch (err) {
     return err;
   }
 }
-export async function UpdateTablaRapidaDes({
-  contenido,
-  premio1,
-  fecha_hora,
-}) {
+export async function UpdateTablaRapidaDes({ contenido, premio1, fecha_hora }) {
   try {
-    const res = await axios.post(`${url}/api/descripciones/actualizardescripcionrapida`, {
-      contenido,
-      premio1,
-      fecha_hora,
-    });
+    const res = await axios.post(
+      `${url}/api/descripciones/actualizardescripcionrapida`,
+      {
+        contenido,
+        premio1,
+        fecha_hora,
+      }
+    );
     return res;
   } catch (err) {
     return err;
@@ -108,7 +110,9 @@ export async function UpdateTablaRapidaDes({
 }
 export async function ObtenerDesNormal() {
   try {
-    const res = await axios.get(`${url}/api/descripciones/obtenerdescripcionnormal`);
+    const res = await axios.get(
+      `${url}/api/descripciones/obtenerdescripcionnormal`
+    );
     return res;
   } catch (err) {
     return err;
@@ -116,7 +120,9 @@ export async function ObtenerDesNormal() {
 }
 export async function ObtenerDesRapida() {
   try {
-    const res = await axios.get(`${url}/api/descripciones/obtenerdescripcionrapida`);
+    const res = await axios.get(
+      `${url}/api/descripciones/obtenerdescripcionrapida`
+    );
     return res;
   } catch (err) {
     return err;
@@ -125,11 +131,20 @@ export async function ObtenerDesRapida() {
 export async function ObtenerJugadas() {
   try {
     const res = await axios.get(`${url}/api/juegos/consultarjuegos`);
-    if(res.data.exists){
+    if (res.data.exists) {
       return res.data.data;
-    }else{
+    } else {
       return res.data.exists;
     }
+  } catch (err) {
+    return err;
+  }
+}
+export async function CrearNuevaJugada({ data }) {
+  try {
+    const res = await axios.post(`${url}/api/juegos/nuevojuego`, { data });
+    console.log(res);
+    return res;
   } catch (err) {
     return err;
   }

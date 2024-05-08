@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
 import {
   ConsultarTablasSegunIDTabla,
+  CrearNuevaJugada,
   ObtenerJugadas,
 } from "../../consultasBE/Tablas";
 import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
@@ -122,6 +123,7 @@ const BotonFinalizarJuego = styled.button`
   background-color: var(--color-2);
   color: white;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
 `;
 
 const def = {
@@ -132,55 +134,61 @@ const def = {
 
 const ContenedorJugadas = ({ data, setData }) => {
   console.log(data);
-  if (data !== null) {
-    const posiciones = data.data.posiciones;
-    // Función para manejar el clic en un círculo
-    const handleClick = (posicion) => {
-      // Copiar el estado actual de posiciones
-      const newPositions = { ...posiciones };
-      // Cambiar el estado del círculo clicado
-      newPositions[posicion] = !newPositions[posicion];
-      // Actualizar el estado de data
-      setData([{ ...data, data: { posiciones: newPositions } }]);
-      console.log(posiciones);
-    };
-
-    const CrearJuego = () => {
-      let initialPositions = {};
-      for (let i = 1; i <= 75; i++) {
-        initialPositions[i] = false;
-      }
-      console.log(initialPositions);
-    };
-
-    return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-        {data.estado === "I" ? (
-          <Contenedor1>
-            <GridContainer>
-              {Object.entries(posiciones).map(([posicion, marcada]) => (
-                <Circle
-                  key={posicion}
-                  marked={marcada}
-                  onClick={() => handleClick(posicion)} // Manejar el clic
-                  clicked={marcada}
-                >
-                  {posicion}
-                </Circle>
-              ))}
-            </GridContainer>
-            <BotonFinalizarJuego>Finalizar Juego</BotonFinalizarJuego>
-          </Contenedor1>
-        ) : (
-          <Contenedor1>
-            <BotonFinalizarJuego onClick={CrearJuego}>
-              Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
-            </BotonFinalizarJuego>
-          </Contenedor1>
-        )}
-      </div>
-    );
+  let posiciones = []
+  if(data !== null){
+    console.log(data);
+    posiciones = data.data;
   }
+  // Función para manejar el clic en un círculo
+  const handleClick = (posicion) => {
+    // Copiar el estado actual de posiciones
+    const newPositions = { ...posiciones };
+    // Cambiar el estado del círculo clicado
+    newPositions[posicion] = !newPositions[posicion];
+    // Actualizar el estado de data
+    setData({ ...data, data: { posiciones: newPositions } });
+    console.log(posiciones);
+  };
+
+  const CrearJuego = async () => {
+    let data = [];
+    for (let i = 1; i <= 75; i++) {
+      data[i] = false;
+    }
+    console.log(data);
+
+    // const res = await CrearNuevaJugada({data})
+    // console.log(res);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+      
+      {data !== null ? (
+        <Contenedor1>
+          <GridContainer>
+            {Object.entries(posiciones).map(([posicion, marcada]) => (
+              <Circle
+                key={posicion}
+                marked={marcada}
+                onClick={() => handleClick(posicion)} // Manejar el clic
+                clicked={marcada}
+              >
+                {posicion}
+              </Circle>
+            ))}
+          </GridContainer>
+          <BotonFinalizarJuego>Finalizar Juego</BotonFinalizarJuego>
+        </Contenedor1>
+      ) : (
+        <Contenedor1>
+          <BotonFinalizarJuego onClick={CrearJuego}>
+            Nuevo Juego <i className="bi bi-plus-circle-dotted" />{" "}
+          </BotonFinalizarJuego>
+        </Contenedor1>
+      )}
+    </div>
+  );
 };
 
 const Jugadas = () => {
@@ -195,7 +203,7 @@ const Jugadas = () => {
     if (!res) {
       setData(null);
     } else {
-      setData(res.data);
+      setData(res[0]);
     }
     console.log(res);
   };
