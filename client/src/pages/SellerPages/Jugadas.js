@@ -134,36 +134,40 @@ const def = {
 
 const ContenedorJugadas = ({ data, setData }) => {
   console.log(data);
-  let posiciones = []
-  if(data !== null){
+  let posiciones = [];
+
+  if (data !== null) {
     console.log(data);
     posiciones = data.data;
+    console.log(posiciones);
+    posiciones = JSON.parse(posiciones);
   }
   // Función para manejar el clic en un círculo
   const handleClick = (posicion) => {
-    // Copiar el estado actual de posiciones
-    const newPositions = { ...posiciones };
-    // Cambiar el estado del círculo clicado
-    newPositions[posicion] = !newPositions[posicion];
-    // Actualizar el estado de data
-    setData({ ...data, data: { posiciones: newPositions } });
-    console.log(posiciones);
+    if (data && data.data) {
+      // Copiar el arreglo actual de posiciones
+      const newPositions = [...data.data];
+      // Cambiar el estado del círculo clicado
+      newPositions[posicion] = !newPositions[posicion];
+      // Actualizar el estado de 'data' con el nuevo arreglo de posiciones
+      setData({ ...data, data: newPositions });
+    }
   };
 
   const CrearJuego = async () => {
-    let data = [];
-    for (let i = 1; i <= 75; i++) {
-      data[i] = false;
+    let dataA = [];
+    for (let i = 0; i <= 74; i++) {
+      dataA[i] = false;
     }
+    let data = JSON.stringify(dataA);
     console.log(data);
 
-    // const res = await CrearNuevaJugada({data})
-    // console.log(res);
+    const res = await CrearNuevaJugada({ data });
+    console.log(res);
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-      
       {data !== null ? (
         <Contenedor1>
           <GridContainer>
@@ -174,7 +178,7 @@ const ContenedorJugadas = ({ data, setData }) => {
                 onClick={() => handleClick(posicion)} // Manejar el clic
                 clicked={marcada}
               >
-                {posicion}
+                {parseInt(posicion) + 1}
               </Circle>
             ))}
           </GridContainer>
