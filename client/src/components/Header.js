@@ -89,6 +89,12 @@ const ContenedorMenu = styled.div`
   .boton-menu-hamburguesa {
     display: none;
   }
+  &.home {
+    & a {
+      background-color: var(--color-7);
+      box-shadow: var(--sombra-intensa);
+    }
+  }
   @media ${device.mobile1} {
     display: none;
     /* position: fixed;
@@ -244,7 +250,7 @@ const ContenedorMenuLateral = styled.div`
 
       opacity: 1;
     }
-    .ContenedorLogL{
+    .ContenedorLogL {
       display: flex;
       justify-content: center;
       flex-direction: row;
@@ -252,15 +258,15 @@ const ContenedorMenuLateral = styled.div`
       gap: 10px;
       color: white;
       & > .botonSalir {
-          /* border: solid 2px var(--color-2); */
-          border: none;
-          background-color: var(--alerta-error);
-          color: var(--color-);
-          padding: 5px 10px;
-          outline: none;
-          border-radius: 5px;
-          cursor: pointer;
-        }
+        /* border: solid 2px var(--color-2); */
+        border: none;
+        background-color: var(--alerta-error);
+        color: var(--color-);
+        padding: 5px 10px;
+        outline: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
     }
   }
 `;
@@ -341,15 +347,11 @@ const Header = ({ oculta }) => {
         <CustomNavLink to="/seller/tablasVendidas">
           Tablas Vendidas
         </CustomNavLink>
-        <CustomNavLink to="/seller/jugadas">
-          Jugadas
-        </CustomNavLink>
+        <CustomNavLink to="/seller/jugadas">Jugadas</CustomNavLink>
         <CustomNavLink to="/seller/tablasenvivo">
           Consultar Tablas
         </CustomNavLink>
-        <CustomNavLink to="/seller/infoClientes">
-          Info Cliente
-        </CustomNavLink>
+        <CustomNavLink to="/seller/infoClientes">Info Cliente</CustomNavLink>
         <CustomNavLink to="/seller/editarInfo">Editar PDFs</CustomNavLink>
         <CustomNavLink to="/seller/preview">PR</CustomNavLink>
       </MenuD>
@@ -366,7 +368,7 @@ const Header = ({ oculta }) => {
           />
           {/* <span onClick={() => navigate("/")}>HOME</span>{" "} */}
         </ContenedorLogo>
-        <ContenedorMenu>
+        <ContenedorMenu className={classNameBg}>
           {localStorage.getItem("rol") === "23" && <Menu />}
         </ContenedorMenu>
 

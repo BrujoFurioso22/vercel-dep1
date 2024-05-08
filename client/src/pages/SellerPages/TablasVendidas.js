@@ -254,6 +254,7 @@ const TablasVendidas = () => {
   const [datosTabla, setDatosTabla] = useState(null);
   const [datosAplanados, setDatosAplanados] = useState(null);
   const [datosFiltrados, setDatosFiltrados] = useState(null);
+
   const [busqueda, setBusqueda] = useState("");
 
   const ConsultarTablasVendedor = async () => {
@@ -261,9 +262,12 @@ const TablasVendidas = () => {
     if (idVendedor.data.id) {
       const res = await ConsultarVentas(idVendedor.data.id);
       // console.log(res.data.data);
+      console.log(res);
 
       if (res.data) {
         setDatosTabla(res.data.data);
+      } else {
+        setDatosTabla([]);
       }
     }
   };
@@ -273,16 +277,18 @@ const TablasVendidas = () => {
 
   useEffect(() => {
     if (datosTabla !== null) {
-      // console.log(datosTabla);
-      let var2 = datosTabla.flat();
-      setDatosAplanados(var2);
-      let var3 = var2.filter((venta) =>
-        Object.values(venta).some((valor) =>
-          valor?.toString().toLowerCase().includes(busqueda.toLowerCase())
-        )
-      );
-      // console.log(var3);
-      setDatosFiltrados(var3);
+      if (datosTabla.length !== 0) {
+        // console.log(datosTabla);
+        let var2 = datosTabla.flat();
+        setDatosAplanados(var2);
+        let var3 = var2.filter((venta) =>
+          Object.values(venta).some((valor) =>
+            valor?.toString().toLowerCase().includes(busqueda.toLowerCase())
+          )
+        );
+        // console.log(var3);
+        setDatosFiltrados(var3);
+      }
     }
   }, [busqueda, datosTabla]);
 
@@ -305,6 +311,8 @@ const TablasVendidas = () => {
         </ContenedorBuscar>
         {datosTabla === null || datosFiltrados === null ? (
           <div>Cargando Datos...</div>
+        ) : datosTabla.length === 0 ? (
+          <div>No existen ventas</div>
         ) : datosFiltrados !== null && datosFiltrados.length === 0 ? (
           <div>No se encontraron coincidencias</div>
         ) : (
