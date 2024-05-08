@@ -90,9 +90,33 @@ export async function UpdateTablaNormalDes({
     return err;
   }
 }
+export async function UpdateTablaRapidaDes({
+  contenido,
+  premio1,
+  fecha_hora,
+}) {
+  try {
+    const res = await axios.post(`${url}/api/descripciones/actualizardescripcionrapida`, {
+      contenido,
+      premio1,
+      fecha_hora,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
 export async function ObtenerDesNormal() {
   try {
     const res = await axios.get(`${url}/api/descripciones/obtenerdescripcionnormal`);
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
+export async function ObtenerDesRapida() {
+  try {
+    const res = await axios.get(`${url}/api/descripciones/obtenerdescripcionrapida`);
     return res;
   } catch (err) {
     return err;

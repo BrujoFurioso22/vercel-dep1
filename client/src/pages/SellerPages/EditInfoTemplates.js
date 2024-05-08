@@ -2,7 +2,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import { ObtenerDesNormal, UpdateTablaNormalDes } from "../../consultasBE/Tablas";
+import {
+  ObtenerDesNormal,
+  ObtenerDesRapida,
+  UpdateTablaNormalDes,
+  UpdateTablaRapidaDes,
+} from "../../consultasBE/Tablas";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -31,6 +36,7 @@ const ContenedorMenor = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 15px;
 `;
 const ContenedorMenor1 = styled.div`
@@ -189,7 +195,9 @@ const ContenedorContenido = styled.div`
 `;
 
 const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
-  const handleArrayChange1 = (index, col, value, maxLetras) => {
+  const [guardar, setGuardar] = useState(0);
+  const [validacionVacios, setValidacionVacios] = useState("");
+  const handleArrayChange1 = (col, value, maxLetras) => {
     if (col === "letras") {
       // Filtrar caracteres no deseados
       let sanitizedValue = value.replace(/[^A-Z]/gi, "").toUpperCase();
@@ -199,39 +207,85 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
       // Limitar el número de caracteres permitidos
       let limitedChars = uniqueChars.slice(0, maxLetras);
 
-      handleChange1(index, col, limitedChars); // Actualiza el estado
+      handleChange1(col, limitedChars); // Actualiza el estado
     } else {
-      const arreglo = value.split(",").map((item) => item.trim());
-      handleChange1(index, col, arreglo);
+      const arreglo =
+        value ==="" ? [] : value.split(",").map((item) => item.trim());
+      handleChange1(col, arreglo);
     }
   };
-  const handleChangeNumLetras = (index, col, value) => {
+  const handleChangeNumLetras = (col, value) => {
     if (value >= 4 && value <= 7) {
-      handleChange1(index, "letras", []);
-      handleChange1(index, col, value);
+      handleChange1("letras", []);
+      handleChange1(col, value);
     }
   };
-  const handlePremiosChange2 = (index, value) => {
+  const handlePremiosChange2 = (value) => {
     const premiosArray = value.split(",").map((item) => item.trim());
-    handleChange2(index, "premios", premiosArray);
+    handleChange2("premios", premiosArray);
+  };
+  const verificarDatosCompletos = (data) => {
+    // Lista de claves que pueden estar vacías
+    const clavesOpcionales = ["premios"];
+
+    // Iterar sobre cada clave en el objeto data
+    for (const clave of Object.keys(data)) {
+      // Chequear si la clave no es opcional
+      if (!clavesOpcionales.includes(clave)) {
+        // Si el valor es una cadena o un arreglo, verifica si está vacío
+        if (typeof data[clave] === "string" || Array.isArray(data[clave]) || typeof data[clave] ==="number") {
+          if (data[clave].length === 0) {
+            return false;
+          }
+        }
+        // Si el valor es otro tipo (número, objeto, etc.), verifica si es nulo o indefinido
+        else if (data[clave] == null) {
+          return false;
+        }
+      }
+    }
+
+    // Si todos los campos requeridos están llenos, devuelve true
+    return true;
   };
   const guardarCambios = async () => {
-    console.log(data1);
-    let premios1=data1[0].premios;
-    console.log(premios1);
-    let letras1=data1[0].letras;
-    const res = await UpdateTablaNormalDes({
-      contenido: data1[0].contenido,
-      premio1: data1[0].premio1,
-      premio2: data1[0].premio2,
-      premio3: data1[0].premio3,
-      premios: premios1.join(','),
-      fecha_hora:data1[0].fechayhora,
-      cantidad_letras:parseInt(data1[0].numletras),
-      letras:letras1.join(','),
-    });
-    console.log(res);
-    console.log(data2);
+    const datosCompletosData1 = verificarDatosCompletos(data1);
+    const datosCompletosData2 = verificarDatosCompletos(data2);
+    if (datosCompletosData1 === false || datosCompletosData2 === false) {
+      setValidacionVacios("Por favor, llene todos los campos.");
+    } else {
+      setValidacionVacios("");
+
+      setGuardar(1);
+      let premios1 = data1.premios.length === 0 ? "" : data1.premios.join(",");
+      let letras1 = data1.letras;
+      const res = await UpdateTablaNormalDes({
+        contenido: data1.contenido,
+        premio1: parseFloat(data1.premio1),
+        premio2: parseFloat(data1.premio2),
+        premio3: parseFloat(data1.premio3),
+        premios: premios1,
+        fecha_hora: data1.fecha_hora,
+        cantidad_letras: parseInt(data1.cantidad_letras),
+        letras: letras1.join(","),
+      });
+      const res1 = await UpdateTablaRapidaDes({
+        contenido: data2.contenido,
+        premio1: parseFloat(data2.premio1),
+        fecha_hora: data2.fecha_hora,
+      });
+      if (res.data.ok && res1.data.ok) {
+        setGuardar(2);
+        setTimeout(() => {
+          setGuardar(0);
+        }, 5000);
+      } else {
+        setGuardar(3);
+        setTimeout(() => {
+          setGuardar(0);
+        }, 5000);
+      }
+    }
   };
   return (
     <ContenedorMenor>
@@ -246,88 +300,78 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
         <ContenedorMenor1>
           <ContenedorGrid>
             <h3 style={{ margin: "0" }}>Tablón Normal</h3>
-            {data1.map((dato, indx) => (
-              <div key={indx} className="fila">
-                <span className="col-derecha">Contenido:</span>
-                <span className="col-izquierda">
-                  <InputField
-                    value={dato.contenido}
-                    type="text"
-                    onChange={(e) =>
-                      handleChange1(0, "contenido", e.target.value)
-                    }
-                  />
-                </span>
-                <span className="col-derecha">Premio 1:</span>
-                <span className="col-izquierda">
-                  {"$"}
-                  <InputField
-                    value={dato.premio1}
-                    type="number"
-                    onChange={(e) =>
-                      handleChange1(0, "premio1", e.target.value)
-                    }
-                  />
-                </span>
-                <span className="col-derecha">Premio 2:</span>
-                <span className="col-izquierda">
-                  {"$"}
-                  <InputField
-                    value={dato.premio2}
-                    type="number"
-                    onChange={(e) =>
-                      handleChange1(0, "premio2", e.target.value)
-                    }
-                  />
-                </span>
-                <span className="col-derecha">Premio 3:</span>
-                <span className="col-izquierda">
-                  {"$"}
-                  <InputField
-                    value={dato.premio3}
-                    type="number"
-                    onChange={(e) =>
-                      handleChange1(0, "premio3", e.target.value)
-                    }
-                  />
-                </span>
+            <div className="fila">
+              <span className="col-derecha">Contenido:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={data1.contenido}
+                  type="text"
+                  onChange={(e) => handleChange1("contenido", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premio 1:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={data1.premio1}
+                  type="number"
+                  onChange={(e) => handleChange1("premio1", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premio 2:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={data1.premio2}
+                  type="number"
+                  onChange={(e) => handleChange1("premio2", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premio 3:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={data1.premio3}
+                  type="number"
+                  onChange={(e) => handleChange1("premio3", e.target.value)}
+                />
+              </span>
 
-                <span className="col-derecha">
-                  Letras:
-                  <InputField
-                    style={{ maxWidth: "40px" }}
-                    type="number"
-                    min={3}
-                    max={7}
-                    value={dato.numletras}
-                    onChange={(e) =>
-                      handleChangeNumLetras(0, "numletras", e.target.value)
-                    }
-                  />
-                </span>
-                <span className="col-izquierda">
-                  <InputField
-                    value={dato.letras.join("-")}
-                    onChange={(e) =>
-                      handleArrayChange1(
-                        0,
-                        "letras",
-                        e.target.value,
-                        dato.numletras
-                      )
-                    }
-                  />
-                </span>
-                <span className="col-derecha">Premios:</span>
-                <span className="col-izquierda">
-                  <InputField
-                    value={dato.premios.join(", ")}
-                    onChange={(e) =>
-                      handleArrayChange1(0, "premios", e.target.value)
-                    }
-                  />
-                </span>
-                {/* <span className="col-derecha">Fecha y Hora:</span>
+              <span className="col-derecha">
+                Letras:
+                <InputField
+                  style={{ maxWidth: "40px" }}
+                  type="number"
+                  min={3}
+                  max={7}
+                  value={data1.cantidad_letras}
+                  onChange={(e) =>
+                    handleChangeNumLetras("cantidad_letras", e.target.value)
+                  }
+                />
+              </span>
+              <span className="col-izquierda">
+                <InputField
+                  value={data1.letras.join("-")}
+                  onChange={(e) =>
+                    handleArrayChange1(
+                      "letras",
+                      e.target.value,
+                      data1.cantidad_letras
+                    )
+                  }
+                />
+              </span>
+              <span className="col-derecha">Premios:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={data1.premios === "" ? [] : data1.premios.join(",")}
+                  onChange={(e) =>
+                    handleArrayChange1("premios", e.target.value)
+                  }
+                />
+              </span>
+              {/* <span className="col-derecha">Fecha y Hora:</span>
                 <span className="col-izquierda">
                   <InputField
                     value={dato.fecha}
@@ -335,48 +379,40 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                     onChange={(e) => handleChange1(0, "fecha", e.target.value)}
                   />
                 </span> */}
-                <span className="col-derecha">Fecha y Hora:</span>
-                <span className="col-izquierda">
-                  <InputField
-                    value={dato.fechayhora}
-                    type="datetime-local"
-                    onChange={(e) =>
-                      handleChange1(0, "fechayhora", e.target.value)
-                    }
-                  />
-                </span>
-              </div>
-            ))}
+              <span className="col-derecha">Fecha y Hora:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={data1.fecha_hora}
+                  type="datetime-local"
+                  onChange={(e) => handleChange1("fecha_hora", e.target.value)}
+                />
+              </span>
+            </div>
           </ContenedorGrid>
         </ContenedorMenor1>
         <ContenedorMenor1>
           <ContenedorGrid>
             <h3 style={{ margin: "0" }}>Tablón 2</h3>
 
-            {data2.map((dato, indx) => (
-              <div key={indx} className="fila">
-                <span className="col-derecha">Contenido:</span>
-                <span className="col-izquierda">
-                  <InputField
-                    value={dato.contenido}
-                    type="text"
-                    onChange={(e) =>
-                      handleChange2(0, "contenido", e.target.value)
-                    }
-                  />
-                </span>
-                <span className="col-derecha">Premio 1:</span>
-                <span className="col-izquierda">
-                  {"$"}
-                  <InputField
-                    value={dato.premio1}
-                    type="number"
-                    onChange={(e) =>
-                      handleChange2(0, "premio1", e.target.value)
-                    }
-                  />
-                </span>
-                {/* <span className="col-derecha">Fecha:</span>
+            <div className="fila">
+              <span className="col-derecha">Contenido:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={data2.contenido}
+                  type="text"
+                  onChange={(e) => handleChange2("contenido", e.target.value)}
+                />
+              </span>
+              <span className="col-derecha">Premio 1:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={data2.premio1}
+                  type="number"
+                  onChange={(e) => handleChange2("premio1", e.target.value)}
+                />
+              </span>
+              {/* <span className="col-derecha">Fecha:</span>
                 <span className="col-izquierda">
                   <InputField
                     value={dato.fecha}
@@ -390,69 +426,84 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                     onChange={(e) => handleChange2(0, "hora", e.target.value)}
                   />
                 </span> */}
-                <span className="col-derecha">Fecha y Hora:</span>
-                <span className="col-izquierda">
-                  <InputField
-                    value={dato.fechayhora}
-                    type="datetime-local"
-                    onChange={(e) =>
-                      handleChange2(0, "fechayhora", e.target.value)
-                    }
-                  />
-                </span>
-              </div>
-            ))}
+              <span className="col-derecha">Fecha y Hora:</span>
+              <span className="col-izquierda">
+                <InputField
+                  value={data2.fecha_hora}
+                  type="datetime-local"
+                  onChange={(e) => handleChange2("fecha_hora", e.target.value)}
+                />
+              </span>
+            </div>
           </ContenedorGrid>
         </ContenedorMenor1>
       </div>
-      <BotonSubmit onClick={() => guardarCambios()}>
-        Guardar Cambios
-      </BotonSubmit>
+      {validacionVacios !== "" && (
+        <span style={{ fontSize: "14px", color: "red" }}>
+          {validacionVacios}
+        </span>
+      )}
+      {guardar === 0 ? (
+        <BotonSubmit onClick={() => guardarCambios()}>
+          Guardar Cambios
+        </BotonSubmit>
+      ) : guardar === 1 ? (
+        <span>Guardando...</span>
+      ) : guardar === 2 ? (
+        <span>
+          Guardado Correctamente <i className="bi bi-check2-circle" />
+        </span>
+      ) : (
+        <span>
+          Ha ocurrido un error <i className="bi bi-x-octagon" />
+        </span>
+      )}
     </ContenedorMenor>
   );
 };
 const EditarInformacion = () => {
-  const [data1, setData1] = useState([
-    {
-      contenido: "",
-      premio1: "300",
-      premio2: "180",
-      premio3: "130",
-      premios: ["licuadora", "tostadora"],
-      numletras: 4,
-      letras: [],
-      fechayhora: "",
-    },
-  ]);
-  const [data2, setData2] = useState([
-    {
-      contenido: "",
-      premio1: "100",
-      fechayhora: "",
-    },
-  ]);
-  const handleChange1 = (index, attr, value) => {
-    setData1((prevData) =>
-      prevData.map((item, i) =>
-        i === index ? { ...item, [attr]: value } : item
-      )
-    );
+  const [data1, setData1] = useState({
+    contenido: "",
+    premio1: "",
+    premio2: "",
+    premio3: "",
+    premios: [],
+    cantidad_letras: 4,
+    letras: [],
+    fecha_hora: "",
+  });
+  const [data2, setData2] = useState({
+    contenido: "",
+    premio1: "",
+    fecha_hora: "",
+  });
+
+  const handleChange1 = (attr, value) => {
+    setData1((prevData) => ({
+      ...prevData,
+      [attr]: value,
+    }));
   };
-  const handleChange2 = (index, attr, value) => {
-    setData2((prevData) =>
-      prevData.map((item, i) =>
-        i === index ? { ...item, [attr]: value } : item
-      )
-    );
+  const handleChange2 = (attr, value) => {
+    setData2((prevData) => ({
+      ...prevData,
+      [attr]: value,
+    }));
   };
 
-  const ConsultarDatos =async ()=>{
+  const ConsultarDatos = async () => {
     const res = await ObtenerDesNormal();
-    console.log(res);
-  }
-  useEffect(()=>{
+    if (res.data) {
+      setData1(res.data.data);
+    }
+    const res1 = await ObtenerDesRapida();
+    if (res1.data) {
+      setData2(res1.data.data);
+    }
+  };
+  useEffect(() => {
     ConsultarDatos();
-  },[])
+  }, []);
 
   return (
     <ContenedorContenido>
