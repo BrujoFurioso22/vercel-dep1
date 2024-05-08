@@ -3,19 +3,22 @@ import { pool } from "../database.js";
 export const descripcionController = {
   obtenerdescripcionesnormal: async (req, res) => {
     try {
+      console.log("si entre")
       const { rows } = await pool.query("SELECT * FROM descripcionnormal");
       let var1 = {};
       if (rows.length > 0) {
+        const arreglopremios= rows[0].premios.split(",");
+        const arregloletras= rows[0].letras.split(",");
         var1 =
         {
           contenido: rows[0].contenido,
           premio1: rows[0].premio1,
           premio2: rows[0].premio2,
           premio3: rows[0].premio3,
-          premios: rows[0].premios,
+          premios: arreglopremios,
           fecha_hora: rows[0].fecha_hora,
           cantidad_letras: rows[0].cantidad_letras,
-          letras: rows[0].letras
+          letras: arregloletras
         }
       }
       return res.status(200).json({
