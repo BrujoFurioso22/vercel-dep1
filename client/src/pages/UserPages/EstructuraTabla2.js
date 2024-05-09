@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+
+import logo from "../../imgs/LogoChabelita1.ico";
+
 const TablaBingo = styled.div`
   width: fit-content;
   padding: 10px;
@@ -9,6 +12,10 @@ const ContenedorGrid = styled.div`
   flex-direction: column;
   /* gap: 10px; */
   /* padding: 20px; */
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), url(${logo});
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
   & > span {
     border: solid 1px var(--color-negro);
     border-bottom: none;
@@ -44,19 +51,21 @@ const GridCell = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 1px solid var(--color-negro);
-  border-bottom: 1px solid var(--color-negro);
+  /* border-right: 1px solid var(--color-negro); */
+  /* border-bottom: 1px solid var(--color-negro); */
+  font-weight: 800;
+
   &:nth-child(3n) {
-    border-right: none; /* No borders on the right for the 5th, 10th, 15th, 20th, and 25th cells (right-most cells) */
+    border-right: none;
   }
   &:nth-child(-n + 3) {
-    border-top: none; /* Top border only for the first row */
+    border-top: none;
   }
   &:nth-child(3n + 1) {
-    border-left: none; /* Left border for the cells in the first column */
+    border-left: none;
   }
   &:nth-last-child(-n + 3) {
-    border-bottom: none; /* No bottom borders for the last row */
+    border-bottom: none;
   }
   border-radius: ${({ isCorner, position }) => {
     if (!isCorner) return "0";
@@ -102,7 +111,25 @@ const GridH = ({ data }) => {
             index === 6 ? "bottom-left" : index === 8 ? "bottom-right" : null
           }
         >
-          {item}
+          <div
+            style={
+              index === 1 || index === 4
+                ?{}: {
+                    backgroundColor: "var(--color-4)",
+                    aspectRatio: "1",
+                    padding: "5px",
+                    width: "10mm",
+                    borderRadius: "100%",
+                    border: "solid 1px black",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }
+              
+            }
+          >
+            {item}
+          </div>
         </GridCell>
       ))}
     </Grid>

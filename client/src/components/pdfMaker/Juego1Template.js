@@ -56,7 +56,7 @@ const Header = styled.div`
       justify-content: flex-start;
       align-items: center;
       & > img {
-        width: 20mm;
+        width: 70%;
       }
     }
 
@@ -113,6 +113,18 @@ const Body = styled.div`
 `;
 
 export const HtmlTemplate1 = ({ dataJuego, dataInfo }) => {
+  function formatearFechaConHora(fechaISO) {
+    const opciones = {
+        day: 'numeric', 
+        month: 'long', 
+        hour: 'numeric', 
+        minute: 'numeric', 
+        hour12: true
+    };
+    const fecha = new Date(fechaISO);
+    const fechaFormateada = new Intl.DateTimeFormat('es-ES', opciones).format(fecha);
+    return fechaFormateada.replace(' a. m.', ' AM').replace(' p. m.', ' PM');
+}
   return (
     <Page>
       <Header>
@@ -134,11 +146,14 @@ export const HtmlTemplate1 = ({ dataJuego, dataInfo }) => {
             )}
 
             <div>Las letras a jugar son: {dataInfo[0].letras.join(", ")}</div>
+            <div>Ganancia por letra: $20</div>
+            <p>Se jugará el {formatearFechaConHora(dataInfo[0].fecha_hora)}</p>
           </div>
           <div class="c3-header">
             <h3>1era Tabla Llena: ${dataInfo[0].premio1}</h3>
             <h4>2da Tabla Llena: ${dataInfo[0].premio2}</h4>
             <h4>3ra Tabla Llena: ${dataInfo[0].premio3}</h4>
+            
           </div>
         </div>
       </Header>

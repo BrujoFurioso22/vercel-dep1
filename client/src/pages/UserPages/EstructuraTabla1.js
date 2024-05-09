@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import logo from "../../imgs/LogoChabelita1.ico";
+
 
 const TablaBingo = styled.div`
   width: fit-content;
@@ -10,7 +12,12 @@ const ContenedorGrid = styled.div`
   flex-direction: column;
   /* gap: 10px; */
   /* padding: 20px; */
+  background: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0)),url(${logo});
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
   & > span {
+    
     border: solid 1px var(--color-negro);
     border-bottom: none;
     padding: 10px;
@@ -47,6 +54,7 @@ const GridCell = styled.div`
   align-items: center;
   border-right: 1px solid var(--color-negro);
   border-bottom: 1px solid var(--color-negro);
+  font-weight: 800;
   &:nth-child(5n) {
     border-right: none; /* No borders on the right for the 5th, 10th, 15th, 20th, and 25th cells (right-most cells) */
   }

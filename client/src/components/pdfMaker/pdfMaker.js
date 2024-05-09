@@ -60,6 +60,7 @@ const GenerarPDFs = ({ idventa }) => {
           const resR = await ObtenerDesRapida();
           if (resR) {
             data2 = [resR.data.data];
+            console.log(data2);
           }
         };
         await ConsultarDatos();
