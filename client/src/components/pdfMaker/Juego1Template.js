@@ -112,7 +112,7 @@ const Body = styled.div`
   }
 `;
 
-export const HtmlTemplate1 = ({ dataJuego }) => {
+export const HtmlTemplate1 = ({ dataJuego, dataInfo }) => {
   return (
     <Page>
       <Header>
@@ -122,25 +122,28 @@ export const HtmlTemplate1 = ({ dataJuego }) => {
             <img src={logo} alt="Logo" />
           </div>
           <div class="c2-header">
-            <div class="c2-tit">Los premios seran:</div>
-            <div class="c2-content">
-              <div>licuadora</div>
-              <div>licuadora</div>
-              <div>licuadora</div>
-              <div>licuadora</div>
-              <div>licuadora</div>
-              <div>licuadora</div>
-              <div>licuadora</div>
-              <div>licuadora</div>
-            </div>
+            {dataInfo[0].premios.length > 0 && (
+              <>
+                <div class="c2-tit">Premios adicionales:</div>
+                <div class="c2-content">
+                  {dataInfo[0].premios.map((item, idx) => (
+                    <div key={idx}>{item}</div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            <div>Las letras a jugar son: {dataInfo[0].letras.join(", ")}</div>
           </div>
           <div class="c3-header">
-            <h3>Premio de $300</h3>
+            <h3>1era Tabla Llena: ${dataInfo[0].premio1}</h3>
+            <h4>2da Tabla Llena: ${dataInfo[0].premio2}</h4>
+            <h4>3ra Tabla Llena: ${dataInfo[0].premio3}</h4>
           </div>
         </div>
       </Header>
       <Body>
-        <LetrasGrid letras={["P", "E", "D", "R", "O","F"]} />
+        <LetrasGrid letras={dataInfo[0].letras} />
         <div class="bingo-container-u">
           {dataJuego.map((data, idx) => (
             <div class="bingo-card" key={idx}>
