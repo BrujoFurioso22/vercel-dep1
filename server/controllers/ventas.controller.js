@@ -33,18 +33,18 @@ export const ventasController = {
   obtenertotales: async (req, res) => {
     try {
       const { id_vendedor } = req.body;
-      const { rows: rowsprimera } = await pool.query("SELECT sum(cantidad_normal) AS total_normal, sum(cantidad_rapida) AS total_rapida, sum(cantidad_normal+cantidad_rapida) AS total_hojas FROM public.venta WHERE id_vendedor=$1 GROUP BY id_vendedor",
+      const { rows: rowsprimera } = await pool.query("SELECT sum(cantidad_normal) AS total_normal, sum(cantidad_rapida) AS total_rapida, sum(cantidad_normal+cantidad_rapida) AS total_juegos FROM public.venta WHERE id_vendedor=$1 GROUP BY id_vendedor",
         [id_vendedor]);
-      const { rows: rowssegunda } = await pool.query("SELECT sum(cantidad_normal) AS total_normal, sum(cantidad_rapida) AS total_rapida, sum(cantidad_normal+cantidad_rapida) AS total_hojas FROM public.venta");
+      const { rows: rowssegunda } = await pool.query("SELECT sum(cantidad_normal) AS total_normal, sum(cantidad_rapida) AS total_rapida, sum(cantidad_normal+cantidad_rapida) AS total_juegos FROM public.venta");
       let var1 = {};
       if (rowsprimera.length > 0 && rowssegunda.length > 0) {
         var1 = {
-          total_normal_id: rowsprimera[0].total_normal,
-          total_rapida_id: rowsprimera[0].total_rapida,
-          total_hojas_id: rowsprimera[0].total_hojas,
+          juegos_normal_vendedor: rowsprimera[0].total_normal,
+          juegos_rapida_vendedor: rowsprimera[0].total_rapida,
+          juegos_total_vendedor: rowsprimera[0].total_juegos,
           total_normal: rowssegunda[0].total_normal,
           total_rapida: rowssegunda[0].total_rapida,
-          total_hojas: rowssegunda[0].total_hojas,
+          total_juegos: rowssegunda[0].total_juegos,
         };
       }
       return res.status(200).json({

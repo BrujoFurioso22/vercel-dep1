@@ -6,7 +6,10 @@ import GeneratePdfButton, {
   downloadPdf,
 } from "../../components/pdfMaker/pdfMaker";
 import { device } from "../../components/styled-componets/MediaQ";
-import { ConsultarVentas } from "../../consultasBE/Tablas";
+import {
+  ConsultarVentas,
+  ConsultarVentasTotales,
+} from "../../consultasBE/Tablas";
 import { ObtenerIDUsuario } from "../../consultasBE/User";
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -30,7 +33,7 @@ const Contenedor1 = styled.div`
   background-color: var(--color-7);
   width: fit-content;
   min-width: 400px;
-  height: auto;
+  height: fit-content;
   padding: 5px;
   box-shadow: var(--sombra-ligera);
   border-radius: 10px;
@@ -39,6 +42,36 @@ const Contenedor1 = styled.div`
     display: flex;
     gap: 10px;
     align-items: center;
+  }
+`;
+const Contenedor2 = styled.div`
+  background-color: var(--color-7);
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
+  box-shadow: var(--sombra-ligera);
+  border-radius: 10px;
+  overflow: auto;
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto; /* 4 columnas */
+    grid-template-rows: auto auto auto; /* 3 filas */
+    gap: 1px; /* Espacio entre celdas */
+  }
+
+  .header {
+    background-color: #f4f4f4; /* Color de fondo para las cabeceras */
+    padding: 2px 7px;
+    text-align: center;
+    border: 1px solid #ccc; /* Borde para las cabeceras */
+  }
+
+  .cell {
+    background-color: transparent; /* Color de fondo para las celdas */
+    padding: 2px 7px;
+    text-align: center;
+    /* border: 1px solid #ccc; */
+    border: none;
   }
 `;
 
@@ -192,7 +225,7 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
   );
 };
 
-const Tablas = ({ datos }) => {
+const Tablas = ({ datos, datosVentas }) => {
   // console.log(datos);
   const flatDatos = datos.flat();
   const headers = Object.keys(flatDatos[0]).filter(
@@ -200,7 +233,7 @@ const Tablas = ({ datos }) => {
   );
 
   return (
-    <>
+    <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
       <Contenedor1>
         <TablaPersonalizada>
           <thead>
@@ -245,7 +278,23 @@ const Tablas = ({ datos }) => {
           visibleColumns={visibleColumns}
         />
       </Contenedor1>
-    </>
+      <Contenedor2>
+        <div class="grid-container">
+          <div class="header"># Ventas</div>
+          <div class="header">Normal</div>
+          <div class="header">Rápida</div>
+          <div class="header">Total</div>
+          <div class="header">Vendedor</div>
+          <div class="cell">{datosVentas.juegos_normal_vendedor}</div>
+          <div class="cell">{datosVentas.juegos_rapida_vendedor}</div>
+          <div class="cell">{datosVentas.juegos_total_vendedor}</div>
+          <div class="header">Total</div>
+          <div class="cell">{datosVentas.total_normal}</div>
+          <div class="cell">{datosVentas.total_rapida}</div>
+          <div class="cell">{datosVentas.total_juegos}</div>
+        </div>
+      </Contenedor2>
+    </div>
   );
 };
 
@@ -253,28 +302,42 @@ const TablasVendidas = () => {
   const idv = localStorage.getItem("id");
   const [datosTabla, setDatosTabla] = useState([]);
   const [datosFiltrados, setDatosFiltrados] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);  // Nuevo estado para manejar la carga
+  const [isLoading, setIsLoading] = useState(true); // Nuevo estado para manejar la carga
 
   const [busqueda, setBusqueda] = useState("");
+  const [dataVentas, setDataVentas] = useState([]);
 
   const ConsultarTablasVendedor = async () => {
-    setIsLoading(true);  // Inicia la carga
+    setIsLoading(true); // Inicia la carga
     try {
       const idVendedor = await ObtenerIDUsuario(idv);
       if (idVendedor.data.id) {
         const res = await ConsultarVentas(idVendedor.data.id);
-        console.log(res);
+        // console.log(res);
         setDatosTabla(res.data.data || []);
       }
     } catch (error) {
-      console.error('Error al consultar las ventas:', error);
+      console.error("Error al consultar las ventas:", error);
       setDatosTabla([]);
     }
-    setIsLoading(false);  // Termina la carga
+    setIsLoading(false); // Termina la carga
+  };
+
+  const ConsultarTablasTotalesVendidas = async () => {
+    const idVendedor = await ObtenerIDUsuario(idv);
+    if (idVendedor.data.id) {
+      let idV = idVendedor.data.id;
+      const res = await ConsultarVentasTotales({ id_vendedor: parseInt(idV) });
+      if (res !== null) {
+        setDataVentas(res);
+        console.log(res);
+      }
+    }
   };
 
   useEffect(() => {
     ConsultarTablasVendedor();
+    ConsultarTablasTotalesVendidas();
   }, []);
 
   useEffect(() => {
@@ -316,7 +379,7 @@ const TablasVendidas = () => {
         ) : datosFiltrados.length === 0 ? (
           <div>No existen datos según filtro</div>
         ) : (
-          <Tablas datos={datosFiltrados} />
+          <Tablas datos={datosFiltrados} datosVentas={dataVentas} />
         )}
       </ContenedorPagina>
     </ContenedorPadre>

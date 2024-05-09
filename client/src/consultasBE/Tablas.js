@@ -44,6 +44,20 @@ export async function ConsultarVentas(idvendedor) {
     return err;
   }
 }
+export async function ConsultarVentasTotales({ id_vendedor }) {
+  try {
+    const res = await axios.post(`${url}/api/ventas/obtenertotales`, {
+      id_vendedor,
+    });
+    if (res.data.exists) {
+      return res.data.data;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    return err;
+  }
+}
 export async function ConsultarTablasSegunIDVenta(idventa) {
   try {
     const res = await axios.post(`${url}/api/tablas/obtenertablasventa`, {

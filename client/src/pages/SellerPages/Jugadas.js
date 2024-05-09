@@ -130,15 +130,11 @@ const BotonFinalizarJuego = styled.button`
 
 const ContenedorJugadas = ({ data, setData, consulta }) => {
   const [seguro, setSeguro] = useState(0);
-  // console.log(data);
   let posiciones = [];
 
   if (data !== null) {
-    // console.log(data);
     posiciones = data.data;
-    // console.log(posiciones);
     posiciones = JSON.parse(posiciones);
-    // console.log(posiciones);
   }
 
   // Función para manejar el clic en un círculo
@@ -148,10 +144,7 @@ const ContenedorJugadas = ({ data, setData, consulta }) => {
       const newPositions = [...posiciones];
       // Cambiar el estado del círculo clicado
       newPositions[posicion] = !newPositions[posicion];
-      // console.log(newPositions);
       let data1 = JSON.stringify(newPositions);
-      console.log(data1);
-      console.log(data);
 
       const res = await UpdateJugada({ id: data.id, data: data1 });
       if (res) {
@@ -175,7 +168,6 @@ const ContenedorJugadas = ({ data, setData, consulta }) => {
     if (res) {
       setData(res);
     }
-    console.log(res);
   };
 
   const FinJugada = async () => {
