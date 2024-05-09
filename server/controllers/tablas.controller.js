@@ -72,9 +72,9 @@ export const tablasController = {
           isInserted = true;
         }
       } while (!isInserted);
-
+      const hexvalidador = generarCodigoHexadecimal();
       const tempor = await pool.query(
-        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6);",
+        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7);",
         [
           idvendedor,
           idcliente,
@@ -82,12 +82,13 @@ export const tablasController = {
           cantidadrapida,
           cantidaddinero,
           numerotransaccion,
+          hexvalidador
         ]
       );
 
       const { rows } = await pool.query(
-        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4;",
-        [idvendedor, idcliente, cantidadnormal, cantidadrapida]
+        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4 AND hex=$5",
+        [idvendedor, idcliente, cantidadnormal, cantidadrapida,hexvalidador]
       );
       // console.log(rows);
       let verif1 = true,
