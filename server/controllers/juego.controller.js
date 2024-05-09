@@ -71,6 +71,41 @@ export const juegoController = {
       res.status(500).json({ message: "An error occurred" });
     }
   },
+  obtenerPosiblesCompletos: async (req, res) => {
+    try {
+      const { rows: rowstablas } = await pool.query(
+        "SELECT * FROM tablanormal;"
+      );
+      const { rows: datosjuegos } = await pool.query(
+        "SELECT * FROM juegos;"
+      );
+
+      // Convierte la cadena en un array de booleanos
+      const array = JSON.parse(cadenaArray);
+
+      // Array para almacenar los números activados
+      const numerosActivados = [];
+
+      // Recorre el array y guarda los números activados
+      for (let i = 0; i < array.length; i++) {
+        if (array[i]) {
+          numerosActivados.push(i + 1); // Suma 1 al índice para obtener el número correspondiente
+        }
+      }
+
+      // Verifica si se encontraron números activados
+      if (numerosActivados.length > 0) {
+        
+        console.log("Los números activados son:", numerosActivados);
+      } else {
+        console.log("No se encontraron números activados.");
+      }
+      return res.status(404).json({ exists: false });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
   // create: async(req, res) => {
   //     try {
   //         const { name, price } = req.body
