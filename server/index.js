@@ -18,7 +18,7 @@ app.use(corsMiddleware());
 // Desactivar la cabecera 'x-powered-by'
 app.disable('x-powered-by');
 
-ventasRouter.use(timeout('30s'));  // 10 segundos de tiempo de espera
+ventasRouter.use(timeout('20s'));  // 10 segundos de tiempo de espera
 ventasRouter.use((req, res, next) => {
   if (!req.timedout) next();
 });

@@ -66,13 +66,13 @@ const VentanaEmergente = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    &>.cont1{
+    & > .cont1 {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 12px;
-      flex-direction:column;
-      &>i{
+      flex-direction: column;
+      & > i {
         font-size: 30px;
       }
     }
@@ -196,11 +196,13 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
         : parseFloat(datos.cantidadTransferencia),
       datos.numeroTransferencia
     );
-    // console.log(resp);
-    if (resp.data.ok) {
-      setVentaCorrecta(1);
-    } else {
-      setVentaCorrecta(2);
+    console.log(resp);
+    if (resp) {
+      if (resp.data.ok) {
+        setVentaCorrecta(1);
+      } else {
+        setVentaCorrecta(2);
+      }
     }
   };
 
