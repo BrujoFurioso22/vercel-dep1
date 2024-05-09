@@ -7,6 +7,7 @@ juegoRouter.post("/nuevojuego", juegoController.nuevoJuego);
 juegoRouter.post("/actualizardata", juegoController.actualizarData);
 juegoRouter.post("/finalizarjuego", juegoController.finalizarJuego);
 juegoRouter.get("/consultarjuegos", juegoController.buscarStatusJuegos);
+juegoRouter.get("/consultaraganar", juegoController.obtenerPosiblesCompletos);
 
 // router.get("/:id", bookController.getById)
 // router.post("/", bookController.create)
