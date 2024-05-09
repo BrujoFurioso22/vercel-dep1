@@ -30,49 +30,29 @@ export const ventasController = {
       res.status(500).json({ msg: error.msg });
     }
   },
-
-  // create: async(req, res) => {
-  //     try {
-  //         const { name, price } = req.body
-
-  //         const sql = 'INSERT INTO books(name, price) VALUES($1, $2) RETURNING *'
-
-  //         const { rows } = await postgre.query(sql, [name, price])
-
-  //         res.json({msg: "OK", data: rows[0]})
-
-  //     } catch (error) {
-  //         res.json({msg: error.msg})
-  //     }
-  // },
-  // updateById: async(req, res) => {
-  //     try {
-  //         const { name, price } = req.body
-
-  //         const sql = 'UPDATE books set name = $1, price = $2 where book_id = $3 RETURNING *'
-
-  //         const { rows } = await postgre.query(sql, [name, price, req.params.id])
-
-  //         res.json({msg: "OK", data: rows[0]})
-
-  //     } catch (error) {
-  //         res.json({msg: error.msg})
-  //     }
-  // },
-  // deleteById: async(req, res) => {
-  //     try {
-  //         const sql = 'DELETE FROM books where book_id = $1 RETURNING *'
-
-  //         const { rows } = await postgre.query(sql, [req.params.id])
-
-  //         if (rows[0]) {
-  //             return res.json({msg: "OK", data: rows[0]})
-  //         }
-
-  //         return res.status(404).json({msg: "not found"})
-
-  //     } catch (error) {
-  //         res.json({msg: error.msg})
-  //     }
-  // }
+  obtenertotales: async (req, res) => {
+    try {
+      const { id_vendedor } = req.body;
+      const { rows: rowsprimera } = await pool.query("SELECT sum(cantidad_normal) AS total_normal, sum(cantidad_rapida) AS total_rapida, sum(cantidad_normal+cantidad_rapida) AS total_hojas FROM public.venta WHERE id_vendedor=$1 GROUP BY id_vendedor",
+        [id_vendedor]);
+      const { rows: rowssegunda } = await pool.query("SELECT sum(cantidad_normal) AS total_normal, sum(cantidad_rapida) AS total_rapida, sum(cantidad_normal+cantidad_rapida) AS total_hojas FROM public.venta");
+      let var1 = {};
+      if (rowsprimera.length > 0 && rowssegunda.length > 0) {
+        var1 = {
+          total_normal_id: rowsprimera[0].total_normal,
+          total_rapida_id: rowsprimera[0].total_rapida,
+          total_hojas_id: rowsprimera[0].total_hojas,
+          total_normal: rowssegunda[0].total_normal,
+          total_rapida: rowssegunda[0].total_rapida,
+          total_hojas: rowssegunda[0].total_hojas,
+        };
+      }
+      return res.status(200).json({
+        exists: true,
+        data: var1,
+      });
+    } catch (error) {
+      res.json({ msg: error.msg });
+    }
+  },
 };

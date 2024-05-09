@@ -27,7 +27,7 @@ export const descripcionController = {
       res.json({ msg: error.msg });
     }
   },
-  obtenerdescripcionesrapida: async (req, res) => {
+  obtenerdescripcionesrapida: async (req, res) => { 
     try {
       const { rows } = await pool.query("SELECT * FROM descripcionrapida");
       let var1 = {};
