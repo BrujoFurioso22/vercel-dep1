@@ -62,7 +62,6 @@ const GenerarPDFs = ({ idventa }) => {
         orientation: "portrait",
         unit: "mm",
         format: "a4",
-        hotfixes: ["px_scaling"],
       });
       const processTable = (data, chunkSize, template) => {
         // console.log(data);
