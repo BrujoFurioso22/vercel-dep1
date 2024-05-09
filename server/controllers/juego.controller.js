@@ -75,12 +75,12 @@ export const juegoController = {
       const { rows: rowstablas } = await pool.query(
         "SELECT * FROM tablanormal;"
       );
-      //const { rows: datosjuegos } = await pool.query(
-      //  "SELECT * FROM juegos;"
-      //);
-      //const array = JSON.parse(datosjuegos[0].data);
-      const data = "[false,false,true,false,true,false,true,true,false,false,true,false,true,false,false,true,false,true,false,true,false,true,true,false,false,false,true,false,false,true,true,true,false,true,false,true,true,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,true,false,false,true,true,true,false,true,false,true,true,true,false,false,true]"
-      const array = JSON.parse(data);
+      const { rows: datosjuegos } = await pool.query(
+        "SELECT * FROM juegos WHERE estado = 'I';"
+      );
+      const array = JSON.parse(datosjuegos[0].data);
+      //const data = "[false,false,true,false,true,false,true,true,false,false,true,false,true,false,false,true,false,true,false,true,false,true,true,false,false,false,true,false,false,true,true,true,false,true,false,true,true,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,true,false,false,true,true,true,false,true,false,true,true,true,false,false,true]"
+      //onst array = JSON.parse(data);
       console.log(array);
       const numerosActivados = [];
       for (let i = 0; i < array.length; i++) {
