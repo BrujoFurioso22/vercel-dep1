@@ -6,6 +6,7 @@ import { corsMiddleware } from './middleware/cors.js';
 import { descripcionesRouter } from './routes/descripciones.router.js';
 import { ventasRouter } from './routes/ventas.router.js';
 import { juegoRouter } from './routes/juego.router.js';
+import timeout from 'connect-timeout'; 
 
 // Cargar las variables de entorno
 
@@ -16,6 +17,11 @@ app.use(corsMiddleware());
 
 // Desactivar la cabecera 'x-powered-by'
 app.disable('x-powered-by');
+
+ventasRouter.use(timeout('30s'));  // 10 segundos de tiempo de espera
+ventasRouter.use((req, res, next) => {
+  if (!req.timedout) next();
+});
 
 // Utilizar el enrutador de usuarios
 app.use("/api/users", userRouter);
