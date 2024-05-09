@@ -136,54 +136,54 @@ export const juegoController = {
             codigostablas18.push(linea.codigo);
           }
         }
-        const tempo18 = 
-          {
-            numeral: 18,
-            datos: codigostablas18
-          }
-        ;
-        const tempo19 = 
-          {
-            numeral: 19,
-            datos: codigostablas19
-          }
-        ;
-        const tempo20 = 
-          {
-            numeral: 20,
-            datos: codigostablas20
-          }
-        ;
-        const tempo21 = 
-          {
-            numeral: 21,
-            datos: codigostablas21
-          }
-        ;
-        const tempo22 = 
-          {
-            numeral: 22,
-            datos: codigostablas22
-          }
-        ;
-        const tempo23 = 
-          {
-            numeral: 23,
-            datos: codigostablas23
-          }
-        ;
+        const tempo18 =
+        {
+          numeral: 18,
+          datos: codigostablas18
+        }
+          ;
+        const tempo19 =
+        {
+          numeral: 19,
+          datos: codigostablas19
+        }
+          ;
+        const tempo20 =
+        {
+          numeral: 20,
+          datos: codigostablas20
+        }
+          ;
+        const tempo21 =
+        {
+          numeral: 21,
+          datos: codigostablas21
+        }
+          ;
+        const tempo22 =
+        {
+          numeral: 22,
+          datos: codigostablas22
+        }
+          ;
+        const tempo23 =
+        {
+          numeral: 23,
+          datos: codigostablas23
+        }
+          ;
         const tempo24 =
-          {
-            numeral: 24,
-            datos: codigostablas24
-          }
-        ;
-        const tempo25 = 
-          {
-            numeral: 25,
-            datos: codigostablas25
-          }
-        ;
+        {
+          numeral: 24,
+          datos: codigostablas24
+        }
+          ;
+        const tempo25 =
+        {
+          numeral: 25,
+          datos: codigostablas25
+        }
+          ;
         info.push(tempo18);
         info.push(tempo19);
         info.push(tempo20);
@@ -192,7 +192,7 @@ export const juegoController = {
         info.push(tempo23);
         info.push(tempo24);
         info.push(tempo25);
-  
+
         return res.status(200).json({
           exists: true,
           data1: info,
@@ -205,7 +205,48 @@ export const juegoController = {
       console.error(error);
       res.status(500).json({ message: "An error occurred" });
     }
-  }
+  },
+  obtenerPosiblesLetras: async (req, res) => {
+    try {
+      const { rows: rowsletras } = await pool.query("SELECT * FROM descripcionnormal;");
+      const letras = rowsletras[0].letras;
+  
+      const data = {
+        A: [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 20, 21, 25],
+        B: [1, 2, 3, 4, 6, 10, 11, 12, 13, 14, 16, 20, 21, 22, 23, 24],
+        C: [1, 2, 3, 4, 5, 6, 11, 16, 21, 22, 23, 24, 25],
+        D: [1, 2, 3, 4, 6, 10, 11, 15, 16, 20, 21, 22, 23, 24],
+        E: [1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15, 16, 21, 22, 23, 24, 25],
+        F: [1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15, 16, 21],
+        G: [1, 2, 3, 4, 5, 6, 11, 13, 14, 15, 16, 20, 21, 22, 23, 24, 25],
+        H: [1, 5, 6, 10, 11, 12, 13, 14, 15, 16, 20, 21, 25],
+        I: [1, 2, 3, 4, 5, 8, 13, 18, 21, 22, 23, 24, 25],
+        J: [1, 2, 3, 4, 5, 8, 13, 18, 21, 22, 23],
+        K: [1, 5, 6, 9, 11, 12, 13, 16, 19, 21, 25],
+        L: [1, 6, 11, 16, 21, 22, 23, 24, 25],
+        M: [1, 5, 6, 7, 9, 10, 11, 13, 15, 16, 20, 21, 25],
+        N: [1, 5, 6, 7, 10, 11, 13, 15, 16, 19, 20, 21, 25],
+        O: [1, 2, 3, 4, 5, 6, 10, 11, 15, 16, 20, 21, 22, 23, 24, 25],
+        P: [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 21],
+        Q: [1, 2, 3, 4, 5, 6, 10, 11, 15, 16, 19, 20, 21, 22, 23, 24, 25],
+        R: [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 19, 21, 25],
+        S: [1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15, 20, 21, 22, 23, 24, 25],
+        T: [1, 2, 3, 4, 5, 8, 13, 18, 23],
+        U: [1, 5, 6, 10, 11, 15, 16, 20, 21, 22, 23, 24, 25],
+        V: [1, 5, 6, 10, 12, 14, 17, 19, 23],
+        W: [1, 5, 6, 8, 10, 11, 13, 15, 16, 17, 19, 20, 21, 25],
+        X: [1, 5, 7, 9, 13, 17, 19, 21, 25],
+        Y: [1, 5, 7, 9, 13, 18, 23],
+        Z: [1, 2, 3, 4, 5, 9, 13, 17, 21, 22, 23, 24, 25]
+      };
+  
+      const arraysSeleccionados = letras.map(letra => data[letra]);
+      console.log(arraysSeleccionados);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
   // create: async(req, res) => {
   //     try {
   //         const { name, price } = req.body
