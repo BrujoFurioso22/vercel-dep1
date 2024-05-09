@@ -209,7 +209,7 @@ export const juegoController = {
   obtenerPosiblesLetras: async (req, res) => {
     try {
       const { rows: rowsletras } = await pool.query("SELECT * FROM descripcionnormal;");
-      const letras = rowsletras[0].letras;
+      const letras = rowsletras[0].letras.split(",");
   
       const data = {
         A: [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 20, 21, 25],
@@ -239,9 +239,9 @@ export const juegoController = {
         Y: [1, 5, 7, 9, 13, 18, 23],
         Z: [1, 2, 3, 4, 5, 9, 13, 17, 21, 22, 23, 24, 25]
       };
-  
       const arraysSeleccionados = letras.map(letra => data[letra]);
-      console.log(arraysSeleccionados);
+      
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "An error occurred" });
