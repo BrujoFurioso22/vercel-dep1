@@ -161,7 +161,6 @@ const ContenedorJugadas = ({ data, setData }) => {
     }
     let data = JSON.stringify(dataA);
     console.log(data);
-    console.log("hola");
 
     const res = await CrearNuevaJugada({ data });
     console.log(res);
