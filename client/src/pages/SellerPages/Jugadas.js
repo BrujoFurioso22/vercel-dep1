@@ -5,7 +5,9 @@ import { ContenedorPadre } from "../../components/styled-componets/ComponentsPri
 import {
   ConsultarTablasSegunIDTabla,
   CrearNuevaJugada,
+  FinalizarJugada,
   ObtenerJugadas,
+  UpdateJugada,
 } from "../../consultasBE/Tablas";
 import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
 import { EstructuraTabla2 } from "../UserPages/EstructuraTabla2";
@@ -126,31 +128,38 @@ const BotonFinalizarJuego = styled.button`
   cursor: pointer;
 `;
 
-const def = {
-  nombre: "",
-  cc: "",
-  ps: "",
-};
-
-const ContenedorJugadas = ({ data, setData }) => {
-  console.log(data);
+const ContenedorJugadas = ({ data, setData, consulta }) => {
+  const [seguro, setSeguro] = useState(0);
+  // console.log(data);
   let posiciones = [];
 
   if (data !== null) {
-    console.log(data);
+    // console.log(data);
     posiciones = data.data;
-    console.log(posiciones);
+    // console.log(posiciones);
     posiciones = JSON.parse(posiciones);
+    // console.log(posiciones);
   }
+
   // Función para manejar el clic en un círculo
-  const handleClick = (posicion) => {
-    if (data && data.data) {
+  const handleClick = async (posicion) => {
+    if (posiciones) {
       // Copiar el arreglo actual de posiciones
-      const newPositions = [...data.data];
+      const newPositions = [...posiciones];
       // Cambiar el estado del círculo clicado
       newPositions[posicion] = !newPositions[posicion];
+      // console.log(newPositions);
+      let data1 = JSON.stringify(newPositions);
+      console.log(data1);
+      console.log(data);
+
+      const res = await UpdateJugada({ id: data.id, data: data1 });
+      if (res) {
+        await consulta();
+      }
+
       // Actualizar el estado de 'data' con el nuevo arreglo de posiciones
-      setData({ ...data, data: newPositions });
+      // setData({ ...data, data: newPositions });
     }
   };
 
@@ -160,16 +169,38 @@ const ContenedorJugadas = ({ data, setData }) => {
       dataA[i] = false;
     }
     let data = JSON.stringify(dataA);
-    console.log(data);
+    // console.log(data);
 
     const res = await CrearNuevaJugada({ data });
+    if (res) {
+      setData(res);
+    }
     console.log(res);
   };
+
+  const FinJugada = async () => {
+    const res = await FinalizarJugada({ id: data.id });
+    if (res) {
+      setSeguro(0);
+      await consulta();
+    }
+  };
+  function formatearFechaLegible(fechaISO) {
+    const opciones = {
+      year: 'numeric', month: 'long', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', 
+      hour12: true,
+    };
+  
+    const fecha = new Date(fechaISO);
+    return fecha.toLocaleString('es-ES', opciones);
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
       {data !== null ? (
         <Contenedor1>
+          <span>Fecha Jugada: <em> {formatearFechaLegible(data.fecha_hora)} </em></span>
           <GridContainer>
             {Object.entries(posiciones).map(([posicion, marcada]) => (
               <Circle
@@ -182,7 +213,26 @@ const ContenedorJugadas = ({ data, setData }) => {
               </Circle>
             ))}
           </GridContainer>
-          <BotonFinalizarJuego>Finalizar Juego</BotonFinalizarJuego>
+          {seguro === 0 ? (
+            <BotonFinalizarJuego onClick={() => setSeguro(1)}>
+              Finalizar Juego
+            </BotonFinalizarJuego>
+          ) : (
+            <div>
+              <span>Seguro quiere finalizar el juego?</span>
+              <div style={{ display: "flex", padding: "0 10px", gap: "10px" }}>
+                <BotonFinalizarJuego onClick={FinJugada}>
+                  Si
+                </BotonFinalizarJuego>
+                <BotonFinalizarJuego
+                  style={{ backgroundColor: "transparent", color: "black" }}
+                  onClick={() => setSeguro(0)}
+                >
+                  No
+                </BotonFinalizarJuego>
+              </div>
+            </div>
+          )}
         </Contenedor1>
       ) : (
         <Contenedor1>
@@ -209,7 +259,7 @@ const Jugadas = () => {
     } else {
       setData(res[0]);
     }
-    console.log(res);
+    // console.log(res);
   };
   useEffect(() => {
     ConsultarJugadas();
@@ -220,7 +270,11 @@ const Jugadas = () => {
       <Header />
       <ContenedorPagina>
         <h1>Juegos Actuales</h1>
-        <ContenedorJugadas data={data} setData={setData}></ContenedorJugadas>
+        <ContenedorJugadas
+          data={data}
+          setData={setData}
+          consulta={ConsultarJugadas}
+        ></ContenedorJugadas>
       </ContenedorPagina>
     </ContenedorPadre>
   );

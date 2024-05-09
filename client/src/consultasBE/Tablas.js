@@ -143,8 +143,51 @@ export async function ObtenerJugadas() {
 export async function CrearNuevaJugada({ data }) {
   try {
     const res = await axios.post(`${url}/api/juegos/nuevojuego`, { data });
-    console.log(res);
-    return res;
+
+    if (res) {
+      if (res.data.exists) {
+        return res.data.data;
+      } else {
+        return null;
+      }
+    }
+    // return res;
+  } catch (err) {
+    return err;
+  }
+}
+export async function UpdateJugada({ id, data }) {
+  try {
+    const res = await axios.post(`${url}/api/juegos/actualizardata`, {
+      id,
+      data,
+    });
+
+    if (res) {
+      if (res.data.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    // return res;
+  } catch (err) {
+    return err;
+  }
+}
+export async function FinalizarJugada({ id }) {
+  try {
+    const res = await axios.post(`${url}/api/juegos/finalizarjuego`, {
+      id,
+    });
+    if (res) {
+      if (res.data.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    // return res;
   } catch (err) {
     return err;
   }

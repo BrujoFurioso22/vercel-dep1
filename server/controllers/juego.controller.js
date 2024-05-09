@@ -25,11 +25,10 @@ export const juegoController = {
         [data]
       );
       const { rows: rowsID } = await pool.query(
-        "SELECT id FROM public.juegos WHERE estado='I';"
+        "SELECT * FROM public.juegos WHERE estado='I';"
       );
       if (rowsID.length > 0) {
-        id = rowsID[0].id;
-        return res.status(200).json({ exists: true, id: rowsID[0].id });
+        return res.status(200).json({ exists: true, data: rowsID[0] });
       }
       return res.status(404).json({ exists: false });
     } catch (error) {
@@ -48,7 +47,7 @@ export const juegoController = {
       if (rows) {
         return res.status(200).json({ ok: true });
       }
-      return res.status(404).json({ exists: false });
+      return res.status(404).json({ ok: false });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "An error occurred" });
@@ -65,7 +64,7 @@ export const juegoController = {
       if (rows) {
         return res.status(200).json({ ok: true });
       }
-      return res.status(404).json({ exists: false });
+      return res.status(404).json({ ok: false });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "An error occurred" });
