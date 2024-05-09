@@ -73,6 +73,7 @@ export const tablasController = {
         }
       } while (!isInserted);
       const hexvalidador = generarCodigoHexadecimal();
+      //const { rows } = await pool.query(";");
       const tempor = await pool.query(
         "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7);",
         [
