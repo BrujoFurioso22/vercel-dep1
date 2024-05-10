@@ -273,7 +273,7 @@ export const tablasController = {
         return res.status(400).json({ ok: false });
       }
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ ok:false});
     }
   },
   obtenerDatosDeTabla: async (req, res) => {

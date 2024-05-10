@@ -19,19 +19,23 @@ export async function IngresarVenta(
   numerotransaccion
 ) {
   try {
-    const res = await axios.post(`${url}/api/tablas/insertarventa`, {
-      idvendedor: idvendedor,
-      cccliente: cccliente,
-      nombrecliente: nombrecliente,
-      cantidadnormal: cantidadnormal,
-      cantidadrapida: cantidadrapida,
-      cantidaddinero: cantidaddinero,
-      numerotransaccion: numerotransaccion,
-    },{timeout:30000});
+    const res = await axios.post(
+      `${url}/api/tablas/insertarventa`,
+      {
+        idvendedor: idvendedor,
+        cccliente: cccliente,
+        nombrecliente: nombrecliente,
+        cantidadnormal: cantidadnormal,
+        cantidadrapida: cantidadrapida,
+        cantidaddinero: cantidaddinero,
+        numerotransaccion: numerotransaccion,
+      },
+      { timeout: 30000 }
+    );
     console.log(res);
     return res;
   } catch (err) {
-    return err;
+    return { ok: false };
   }
 }
 
