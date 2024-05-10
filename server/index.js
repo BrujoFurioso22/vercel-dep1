@@ -9,8 +9,6 @@ import { juegoRouter } from './routes/juego.router.js';
 import timeout from 'connect-timeout'; 
 
 // Cargar las variables de entorno
-
-
 const app = express();
 app.use(express.json());
 app.use(corsMiddleware());
@@ -29,8 +27,6 @@ app.use("/api/tablas", tablasRouter);
 app.use("/api/descripciones", descripcionesRouter);
 app.use("/api/ventas", ventasRouter);
 app.use("/api/juegos", juegoRouter);
-
-
 
 // Escuchar en el puerto definido en las variables de entorno
 app.listen(process.env.PORT, () => console.log(`Server started on PORT ${process.env.PORT}`));

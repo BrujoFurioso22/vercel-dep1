@@ -16,6 +16,17 @@ function generarCodigoHexadecimal() {
   }
   return codigoHexadecimal;
 }
+function generarCodigoHexadecimallargo() {
+  const caracteresHexadecimales = "0123456789ABCDEF";
+  let codigoHexadecimal = "";
+  for (let i = 0; i < 10; i++) {
+    const indiceAleatorio = Math.floor(
+      Math.random() * caracteresHexadecimales.length
+    );
+    codigoHexadecimal += caracteresHexadecimales.charAt(indiceAleatorio);
+  }
+  return codigoHexadecimal;
+}
 
 function generarContrasenia() {
   const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
@@ -32,11 +43,31 @@ function encryptText(text, secretKey) {
   return CryptoJS.AES.encrypt(text, secretKey).toString();
 }
 
+async function insertarDatosEnLotes(pool, query, valores) {
+  const batchSize = 100; // Tamaño del lote
+  for (let i = 0; i < valores.length; i += batchSize) {
+    const batchValues = valores.slice(i, i + batchSize);
+    await pool.query(query, batchValues);
+  }
+}
+
 export const tablasController = {
-  probarEncriptado: () => {
-    const encriptado = encryptText("vend0105835276", secretKey);
-    const final = `${encriptado}${secretKey}`;
-    console.log(final);
+  probarEncriptado: async (req, res) => {
+    let banderin = false;
+    let hexvalidador;
+    do {
+      hexvalidador = generarCodigoHexadecimallargo();
+      const { rows: hexrows } = await pool.query(
+        "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
+        [hexvalidador]
+      );
+      console.log(hexrows.length);
+      if (hexrows.length === 0) {
+        banderin = true;
+      }
+      console.log(banderin);
+    } while (!banderin);
+    console.log(hexvalidador);
   },
   insertarVenta: async (req, res) => {
     try {
@@ -73,18 +104,21 @@ export const tablasController = {
         }
       } while (!isInserted);
       let banderin = false;
+      let hexvalidador;
       do {
-        const hexvalidador = generarCodigoHexadecimal();
-        const { rows: hexrepetido } = await pool.query(
-          "SELECT hex FROM venta WHERE hex=$1;",
+        hexvalidador = generarCodigoHexadecimallargo();
+        const { rows: hexrows } = await pool.query(
+          "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
           [hexvalidador]
         );
-        if (hexrepetido.length === 0) {
+        if (hexrows.length === 0) {
           banderin = true;
         }
       } while (!banderin);
+
+      const cantidadnormal_descompuesta = "";
       const tempor = await pool.query(
-        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7);",
+        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex_validador) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7);",
         [
           idvendedor,
           idcliente,
@@ -97,7 +131,7 @@ export const tablasController = {
       );
 
       const { rows } = await pool.query(
-        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4 AND hex=$5",
+        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4 AND hex_validador=$5",
         [idvendedor, idcliente, cantidadnormal, cantidadrapida, hexvalidador]
       );
       // console.log(rows);
@@ -149,12 +183,15 @@ export const tablasController = {
                 );
 
                 if (rows.length === 0) {
+                  const datosparainserta = [];
+                  datosparainserta.push(idventa);
+                  datosparainserta.push(codigonormal);
+                  for (let m = 0; m < numerosAsignados.length; m++) {
+                    datosparainserta.push(numerosAsignados[m]);
+                  }
                   // Insertar datos en la tabla
-                  await pool.query(
-                    `INSERT INTO tablanormal(id_venta, codigo, num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12, num14, num15, num16, num17, num18, num19, num20, num21, num22, num23, num24, num25)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)`,
-                    [idventa, codigonormal, ...numerosAsignados]
-                  );
+                  await insertarDatosEnLotes(pool, "INSERT INTO tablanormal(id_venta, codigo, num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12, num14, num15, num16, num17, num18, num19, num20, num21, num22, num23, num24, num25) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)", datosparainserta);
+              
                   isInserted = true; // Inserción exitosa, salir del bucle
                 }
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
@@ -206,11 +243,16 @@ export const tablasController = {
                 );
 
                 if (rows.length === 0) {
+                  const datosparainserta = [];
+                  datosparainserta.push(idventa);
+                  datosparainserta.push(codigorapido);
+                  for (let m = 0; m < numerosAsignados.length; m++) {
+                    datosparainserta.push(numerosAsignados[m]);
+                  }
+
                   // Insertar datos en la tabla
-                  await pool.query(
-                    `INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-                    [idventa, codigorapido, ...numerosAsignados]
-                  );
+                  await insertarDatosEnLotes(pool, "INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", datosparainserta);
+                  
                   isInserted = true; // Inserción exitosa, salir del bucle
                 }
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
