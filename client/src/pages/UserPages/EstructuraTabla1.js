@@ -11,12 +11,6 @@ const ContenedorGrid = styled.div`
   flex-direction: column;
   /* gap: 10px; */
   /* padding: 20px; */
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url(${logo});
-  background-size: 75mm;
-  background-position: center;
-  background-repeat: no-repeat;
-  
 
   & > span {
     border: solid 1px var(--color-negro);
@@ -45,6 +39,12 @@ const Grid = styled.div`
   overflow: hidden;
   border: solid 1px var(--color-negro);
   background-color: var(--color-4);
+  background: linear-gradient(rgba(44, 44, 44, 0.16), rgba(44, 44, 44, 0.16)),
+    url(${logo});
+
+  background-size: 80mm;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const GridCell = styled.div`
