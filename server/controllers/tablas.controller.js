@@ -191,11 +191,14 @@ export const tablasController = {
                   }
                   // Insertar datos en la tabla
                   await insertarDatosEnLotes(pool, "INSERT INTO tablanormal(id_venta, codigo, num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12, num14, num15, num16, num17, num18, num19, num20, num21, num22, num23, num24, num25) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)", datosparainserta);
-              
+
                   isInserted = true; // Inserción exitosa, salir del bucle
                 }
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
             }
+            // Enviar respuesta parcial al frontend indicando el progreso
+            const progreso = ((i + 1) / (cantidadnormal * 4)) * 100;
+            res.write(`Progreso: ${progreso.toFixed(2)}%\n`);
             // return res.status(200).json({ ok: true });
           } catch (error) {
             console.log("Error1");
@@ -252,11 +255,16 @@ export const tablasController = {
 
                   // Insertar datos en la tabla
                   await insertarDatosEnLotes(pool, "INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", datosparainserta);
-                  
+
                   isInserted = true; // Inserción exitosa, salir del bucle
                 }
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
+              // Enviar respuesta parcial al frontend indicando el progreso
+              const progreso =
+                ((i + 1) / (cantidadrapida * 6)) * 100;
+              res.write(`Progreso: ${progreso.toFixed(2)}%\n`);
             }
+
             // return res.status(200).json({ ok: true });
           } catch (error) {
             console.log("Error");
