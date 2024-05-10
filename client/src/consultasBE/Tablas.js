@@ -105,7 +105,6 @@ import url from "./config/Url";
 //   }
 // }
 
-
 export async function IngresarVenta(
   idvendedor,
   cccliente,
@@ -115,66 +114,8 @@ export async function IngresarVenta(
   cantidaddinero,
   numerotransaccion
 ) {
-  try {// Reemplaza 'tu_url_base' con la URL de tu backend
-    
-    // Función para manejar la respuesta parcial del backend
-    function handlePartialResponse(response) {
-      return new Promise((resolve, reject) => {
-        const reader = response.body.getReader();
-
-        function read() {
-          reader
-            .read()
-            .then(({ done, value }) => {
-              if (done) {
-                // Si la respuesta está completa, resolver la promesa
-                resolve();
-                return;
-              }
-
-              // Convertir el fragmento de la respuesta a texto
-              const chunk = new TextDecoder("utf-8").decode(value);
-
-              // Manejar la respuesta parcial, por ejemplo, actualizar la UI
-              console.log(chunk);
-
-              // Leer el próximo fragmento
-              read();
-            })
-            .catch(reject);
-        }
-
-        read(); // Comenzar a leer la respuesta
-      });
-    }
-    
-    // Función para realizar la solicitud al backend
-    async function insertDataToBackend(data) {
-      try {
-        const response = await fetch(`${url}/api/tablas/insertarventa`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        // Manejar la respuesta parcial del backend
-        await handlePartialResponse(response);
-
-        // Cuando se completa la respuesta parcial, mostrar mensaje de éxito o hacer otras acciones
-        console.log("Proceso de inserción completado");
-
-        return { ok: true };
-      } catch (error) {
-        // Manejar errores de la solicitud
-        console.error("Error al realizar la solicitud:", error);
-        return { ok: false };
-      }
-    }
-    
-    // Llamar a la función para realizar la inserción en el backend
-    return await insertDataToBackend({
+  try {
+    const data = {
       idvendedor: idvendedor,
       cccliente: cccliente,
       nombrecliente: nombrecliente,
@@ -182,11 +123,22 @@ export async function IngresarVenta(
       cantidadrapida: cantidadrapida,
       cantidaddinero: cantidaddinero,
       numerotransaccion: numerotransaccion,
+    };
+
+    // Realizar la solicitud POST con Axios
+    const response = await axios.post(`${url}/api/tablas/insertarventa`, data, {
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
 
-  } catch (err) {
-    console.error("Error:", err);
-    return { ok: false };
+    // Procesar la respuesta como necesites
+    console.log("Proceso de inserción completado", response.data);
+
+    return { ok: true, data: response.data };
+  } catch (error) {
+    console.error("Error al realizar la solicitud:", error);
+    return { ok: false, error: error.message };
   }
 }
 export async function ConsultarVentas(idvendedor) {
