@@ -12,12 +12,8 @@ const ContenedorGrid = styled.div`
   flex-direction: column;
   /* gap: 10px; */
   /* padding: 20px; */
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), url(${logo});
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
   & > span {
-    border: solid 1px var(--color-negro);
+    border: solid 1px #000000;
     border-bottom: none;
     padding: 10px;
     display: flex;
@@ -41,8 +37,11 @@ const Grid = styled.div`
   width: 75mm;
   border-radius: 0 0 15px 15px;
   overflow: hidden;
-  border: solid 1px var(--color-negro);
-  background-color: var(--color-4);
+  border: solid 1px #000000;
+  background: linear-gradient(#edededa9, #edededa9), url(${logo});
+  background-size: 80mm;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const GridCell = styled.div`

@@ -37,7 +37,7 @@ const Grid = styled.div`
   width: 75mm;
   border-radius: 0 0 15px 15px;
   overflow: hidden;
-  border: solid 1px var(--color-negro);
+  border: solid 1px #000000;
   background: linear-gradient(#edededa9, #edededa9), url(${logo});
   background-size: 80mm;
   background-position: center;
@@ -50,8 +50,8 @@ const GridCell = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 1px solid var(--color-negro);
-  border-bottom: 1px solid var(--color-negro);
+  border-right: 1px solid #000000;
+  border-bottom: 1px solid #000000;
   font-weight: 800;
   &:nth-child(5n) {
     border-right: none; /* No borders on the right for the 5th, 10th, 15th, 20th, and 25th cells (right-most cells) */
