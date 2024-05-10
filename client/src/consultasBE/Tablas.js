@@ -125,6 +125,9 @@ export async function IngresarVenta(
       numerotransaccion: numerotransaccion,
     };
 
+    const timeoutPromise = (timeout) => new Promise((resolve, reject) =>
+      setTimeout(() => reject(new Error('Request timed out')), timeout)
+    );
     const res = await axios.post(
       `${url}/api/tablas/insertarventa`,
       data,
