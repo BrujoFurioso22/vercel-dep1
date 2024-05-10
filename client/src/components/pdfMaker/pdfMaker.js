@@ -100,7 +100,7 @@ const GenerarPDFs = ({ idventa }) => {
 
         try {
           const canvas = await html2canvas(container, {
-            scale: 1,
+            scale: 2,
             useCORS: true,
           });
           const imgData = canvas.toDataURL("image/jpeg", 0.85);

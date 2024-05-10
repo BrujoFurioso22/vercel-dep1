@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import logo from "../../imgs/LogoChabelita1.ico";
 
-
 const TablaBingo = styled.div`
   width: fit-content;
   padding: 10px;
@@ -12,12 +11,14 @@ const ContenedorGrid = styled.div`
   flex-direction: column;
   /* gap: 10px; */
   /* padding: 20px; */
-  background: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0)),url(${logo});
-  background-size: cover;
-  background-position: center center;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(${logo});
+  background-size: 75mm;
+  background-position: center;
   background-repeat: no-repeat;
+  
+
   & > span {
-    
     border: solid 1px var(--color-negro);
     border-bottom: none;
     padding: 10px;

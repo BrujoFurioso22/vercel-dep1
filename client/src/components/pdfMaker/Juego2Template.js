@@ -116,7 +116,7 @@ export const HtmlTemplate2 = ({ dataJuego, dataInfo }) => {
           <p>Se jugará el {formatearFechaConHora(dataInfo[0].fecha_hora)}</p>
         </div>
         <div class="c3-header">
-          <h3>Tabla llena:$ {dataInfo[0].premio1}</h3>
+          <h3>Tabla llena: ${dataInfo[0].premio1}</h3>
         </div>
       </Header>
       <Body>
