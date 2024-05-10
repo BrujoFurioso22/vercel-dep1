@@ -1,14 +1,14 @@
 import axios from "axios";
 import url from "./config/Url";
 
-// export async function ObtenerUsuario() {
-//   try {
-//     const res = await axios.get(`${url}/api/users/`);
-//     return res.data.data;
-//   } catch (err) {
-//     return err;
-//   }
-// }
+export async function ObtenerUsuario() {
+  try {
+    const res = await axios.get(`${url}/api/users/`);
+    return res.data.data;
+  } catch (err) {
+    return err;
+  }
+}
 // export async function IngresarVenta(
 //   idvendedor,
 //   cccliente,
@@ -125,17 +125,13 @@ export async function IngresarVenta(
       numerotransaccion: numerotransaccion,
     };
 
-    // Realizar la solicitud POST con Axios
-    const response = await axios.post(`${url}/api/tablas/insertarventa`, data, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    // Procesar la respuesta como necesites
-    console.log("Proceso de inserción completado", response.data);
-
-    return { ok: true, data: response.data };
+    const res = await axios.post(
+      `${url}/api/tablas/insertarventa`,
+      data,
+      { timeout: 30000 }
+    );
+    console.log(res);
+    return { ok: true, data: res.data };
   } catch (error) {
     console.error("Error al realizar la solicitud:", error);
     return { ok: false, error: error.message };
