@@ -16,6 +16,17 @@ function generarCodigoHexadecimal() {
   }
   return codigoHexadecimal;
 }
+function generarCodigoHexadecimallargo() {
+  const caracteresHexadecimales = "0123456789ABCDEF";
+  let codigoHexadecimal = "";
+  for (let i = 0; i < 10; i++) {
+    const indiceAleatorio = Math.floor(
+      Math.random() * caracteresHexadecimales.length
+    );
+    codigoHexadecimal += caracteresHexadecimales.charAt(indiceAleatorio);
+  }
+  return codigoHexadecimal;
+}
 
 function generarContrasenia() {
   const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
@@ -33,10 +44,22 @@ function encryptText(text, secretKey) {
 }
 
 export const tablasController = {
-  probarEncriptado: () => {
-    const encriptado = encryptText("vend0105835276", secretKey);
-    const final = `${encriptado}${secretKey}`;
-    console.log(final);
+  probarEncriptado: async (req, res) => {
+    let banderin = false;
+    let hexvalidador;
+    do {
+      hexvalidador = generarCodigoHexadecimallargo();
+      const { rows: hexrows } = await pool.query(
+        "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
+        [hexvalidador]
+      );
+      console.log(hexrows.length);
+      if (hexrows.length === 0) {
+        banderin = true;
+      }
+      console.log(banderin);
+    } while (!banderin);
+    console.log(hexvalidador);
   },
   insertarVenta: async (req, res) => {
     try {
@@ -73,18 +96,19 @@ export const tablasController = {
         }
       } while (!isInserted);
       let banderin = false;
+      let hexvalidador;
       do {
-        const hexvalidador = generarCodigoHexadecimal();
-        const { rows: hexrepetido } = await pool.query(
-          "SELECT hex FROM venta WHERE hex=$1;",
+        hexvalidador = generarCodigoHexadecimallargo();
+        const { rows: hexrows } = await pool.query(
+          "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
           [hexvalidador]
         );
-        if (hexrepetido.length === 0) {
+        if (hexrows.length === 0) {
           banderin = true;
         }
       } while (!banderin);
       const tempor = await pool.query(
-        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7);",
+        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex_validador) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7);",
         [
           idvendedor,
           idcliente,
@@ -97,7 +121,7 @@ export const tablasController = {
       );
 
       const { rows } = await pool.query(
-        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4 AND hex=$5",
+        "SELECT id FROM venta WHERE id_vendedor = $1 AND id_cliente = $2 AND cantidad_normal = $3 AND cantidad_rapida = $4 AND hex_validador=$5",
         [idvendedor, idcliente, cantidadnormal, cantidadrapida, hexvalidador]
       );
       // console.log(rows);
