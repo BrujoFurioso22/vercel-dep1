@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../imgs/LogoChabelita1.ico";
+import logo from "../../imgs/FondoTabla1.png";
 
 const TablaBingo = styled.div`
   width: fit-content;
