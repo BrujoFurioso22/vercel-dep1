@@ -206,6 +206,36 @@ export async function FinalizarJugada({ id }) {
     return err;
   }
 }
+export async function ObtenerTablasGanadoras() {
+  try {
+    const res = await axios.get(`${url}/api/juegos/consultaraganar`);
+    if (res) {
+      if (res.data.exists) {
+        return res.data.data1;
+      } else {
+        return false;
+      }
+    }
+    // return res;
+  } catch (err) {
+    return err;
+  }
+}
+export async function ObtenerTablasLetrasGanadoras() {
+  try {
+    const res = await axios.get(`${url}/api/juegos/consultarletrasaganar`);
+    if (res) {
+      if (res.data.exists) {
+        return res.data.data1;
+      } else {
+        return false;
+      }
+    }
+    // return res;
+  } catch (err) {
+    return err;
+  }
+}
 export async function ConsultarTablasdelCliente({ cccliente }) {
   try {
     const res = await axios.post(`${url}/api/tablas/obtenertablascliente`, {

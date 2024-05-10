@@ -7,6 +7,8 @@ import {
   CrearNuevaJugada,
   FinalizarJugada,
   ObtenerJugadas,
+  ObtenerTablasGanadoras,
+  ObtenerTablasLetrasGanadoras,
   UpdateJugada,
 } from "../../consultasBE/Tablas";
 import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
@@ -19,6 +21,7 @@ const ContenedorPagina = styled.div`
   padding: 20px 2vw;
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
+  overflow-y: auto;
 `;
 
 const Contenedor1 = styled.div`
@@ -92,7 +95,7 @@ const flipAnimation = keyframes`
 `;
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(15, 1fr);
+  grid-template-columns: repeat(13, 1fr);
   grid-gap: 10px;
 `;
 
@@ -128,7 +131,13 @@ const BotonFinalizarJuego = styled.button`
   cursor: pointer;
 `;
 
-const ContenedorJugadas = ({ data, setData, consulta }) => {
+const ContenedorJugadas = ({
+  data,
+  setData,
+  consulta,
+  setTablaLlena,
+  setLetrasTabla,
+}) => {
   const [seguro, setSeguro] = useState(0);
   let posiciones = [];
 
@@ -150,6 +159,13 @@ const ContenedorJugadas = ({ data, setData, consulta }) => {
       if (res) {
         await consulta();
       }
+      // const resTablaLlena = await ObtenerTablasGanadoras();
+      // setTablaLlena(resTablaLlena);
+      // console.log(resTablaLlena);
+
+      // const resTablaLetras = await ObtenerTablasLetrasGanadoras();
+      // setLetrasTabla(resTablaLetras);
+      // console.log(resTablaLetras);
 
       // Actualizar el estado de 'data' con el nuevo arreglo de posiciones
       // setData({ ...data, data: newPositions });
@@ -174,25 +190,32 @@ const ContenedorJugadas = ({ data, setData, consulta }) => {
     const res = await FinalizarJugada({ id: data.id });
     if (res) {
       setSeguro(0);
+      setTablaLlena([]);
+      setLetrasTabla({});
       await consulta();
     }
   };
   function formatearFechaLegible(fechaISO) {
     const opciones = {
-      year: 'numeric', month: 'long', day: 'numeric',
-      hour: '2-digit', minute: '2-digit', 
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
       hour12: true,
     };
-  
+
     const fecha = new Date(fechaISO);
-    return fecha.toLocaleString('es-ES', opciones);
+    return fecha.toLocaleString("es-ES", opciones);
   }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
       {data !== null ? (
         <Contenedor1>
-          <span>Fecha Jugada: <em> {formatearFechaLegible(data.fecha_hora)} </em></span>
+          <span>
+            Fecha Jugada: <em> {formatearFechaLegible(data.fecha_hora)} </em>
+          </span>
           <GridContainer>
             {Object.entries(posiciones).map(([posicion, marcada]) => (
               <Circle
@@ -237,12 +260,80 @@ const ContenedorJugadas = ({ data, setData, consulta }) => {
   );
 };
 
+const GridContainerTab1 = styled.div`
+  display: grid;
+  grid-template-columns: auto;
+  width: fit-content;
+  max-width: 250px;
+  gap: 6px;
+  padding: 5px;
+  .gridItem {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .title {
+    color: #333;
+    margin: 0;
+  }
+  .DataList {
+    padding-left: 5px;
+  }
+
+  .NoDataText {
+    color: #666;
+    font-style: italic;
+  }
+`;
+
+const GridComponent1 = ({ items }) => {
+  return (
+    <GridContainerTab1>
+      {items
+        .filter((item) => item.datos.length > 0)
+        .map((item) => (
+          <div className="gridItem" key={item.numeral}>
+            <div className="DataList">
+              {"["}
+              {item.numeral}
+              {"]: "}
+              {item.datos.join(", ")}
+            </div>
+          </div>
+        ))}
+    </GridContainerTab1>
+  );
+};
+
+const GridComponent2 = ({ data }) => {
+  return (
+    <GridContainerTab1>
+      {Object.entries(data)
+        .filter(([, value]) => value.tablas && value.tablas.length > 0)
+        .map(([key, value]) => (
+          <div className="gridItem" key={key}>
+            <span className="title">
+              {"["}
+              {key}
+              {"]: "}
+              {value.tablas.join(", ")}
+            </span>
+          </div>
+        ))}
+    </GridContainerTab1>
+  );
+};
+
 const Jugadas = () => {
   const initialPositions = {};
   for (let i = 1; i <= 75; i++) {
     initialPositions[i] = false;
   }
   const [data, setData] = useState(null);
+  const [dataTotales, setDataTotales] = useState([]);
+  const [dataTablasLetas, setTablasLetra] = useState({});
 
   const ConsultarJugadas = async () => {
     const res = await ObtenerJugadas();
@@ -251,6 +342,12 @@ const Jugadas = () => {
     } else {
       setData(res[0]);
     }
+    const resTablaLlena = await ObtenerTablasGanadoras();
+    setDataTotales(resTablaLlena);
+    console.log(resTablaLlena);
+
+    const resTablaLetras = await ObtenerTablasLetrasGanadoras();
+    setTablasLetra(resTablaLetras);
     // console.log(res);
   };
   useEffect(() => {
@@ -262,11 +359,29 @@ const Jugadas = () => {
       <Header />
       <ContenedorPagina>
         <h1>Juegos Actuales</h1>
-        <ContenedorJugadas
-          data={data}
-          setData={setData}
-          consulta={ConsultarJugadas}
-        ></ContenedorJugadas>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "15px" }}>
+          <ContenedorJugadas
+            data={data}
+            setData={setData}
+            consulta={ConsultarJugadas}
+            setTablaLlena={setDataTotales}
+            setLetrasTabla={setTablasLetra}
+          ></ContenedorJugadas>
+          <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
+            {dataTotales.length > 0 && (
+              <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
+                <span>Números en Tabla</span>
+                <GridComponent1 items={dataTotales} />
+              </Contenedor1>
+            )}
+            {Object.keys(dataTablasLetas).length > 0 && (
+              <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
+                <span>Letras en Tabla</span>
+                <GridComponent2 data={dataTablasLetas} />
+              </Contenedor1>
+            )}
+          </div>
+        </div>
       </ContenedorPagina>
     </ContenedorPadre>
   );

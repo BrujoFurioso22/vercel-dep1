@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import GeneratePdfButton, {
-  downloadPdf,
-} from "../../components/pdfMaker/pdfMaker";
-import { device } from "../../components/styled-componets/MediaQ";
+import GeneratePdfButton from "../../components/pdfMaker/pdfMaker";
 import {
   ConsultarVentas,
   ConsultarVentasTotales,
