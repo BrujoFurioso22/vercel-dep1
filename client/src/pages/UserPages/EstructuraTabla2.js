@@ -39,8 +39,8 @@ const Grid = styled.div`
   overflow: hidden;
   border: solid 1px #000000;
   background: linear-gradient(#edededa9, #edededa9), url(${logo});
-  background-size: 80mm;
-  background-position: center;
+  background-size: 50mm;
+  background-position: start;
   background-repeat: no-repeat;
 `;
 
