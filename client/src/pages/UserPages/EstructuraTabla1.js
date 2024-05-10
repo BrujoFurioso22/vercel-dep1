@@ -38,9 +38,7 @@ const Grid = styled.div`
   border-radius: 0 0 15px 15px;
   overflow: hidden;
   border: solid 1px var(--color-negro);
-  background-color: var(--color-4);
-  background: linear-gradient(rgba(44, 44, 44, 0.16), rgba(44, 44, 44, 0.16)),
-    url(${logo});
+  background: linear-gradient(var(--color-4), var(--color-4)), url(${logo});
 
   background-size: 80mm;
   background-position: center;
