@@ -137,7 +137,7 @@ export const tablasController = {
               // Asignar números a las variables n1, n2, ..., n25
               const numerosAsignados = todosLosNumeros.slice(0, 24);
 
-              // console.log(numerosAsignados);
+              console.log(numerosAsignados);
 
               let isInserted = false;
               do {

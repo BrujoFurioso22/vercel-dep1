@@ -30,49 +30,127 @@ const Boton = styled.button`
 
 const GenerarPDFs = ({ idventa }) => {
   const [bloq, setBloq] = useState(false);
-  const ConsultarDatos = async () => {
-    if (bloq) return; // Evita doble clic
 
+  const ConsultarDatos = async () => {
+    if (bloq) return;
     setBloq(true);
+
     try {
       const res = await ConsultarTablasSegunIDVenta(idventa);
-      let dataTabla = [],
-        dataTabla2 = [];
       if (res) {
-        console.log(res.data);
-        dataTabla = res.data.data1;
-        dataTabla2 = res.data.data2;
-        let data1 = [],
-          data2 = [];
-        const ConsultarDatos = async () => {
-          const resN = await ObtenerDesNormal();
-          if (resN) {
-            function limpiarArreglo(arreglo) {
-              return arreglo.filter((item) => item.trim() !== "");
-            }
-            let bo = {
-              ...resN.data.data,
-              premios: limpiarArreglo(resN.data.data.premios),
-            };
-            data1 = [bo];
-          }
+        const dataTabla = res.data.data1;
+        const dataTabla2 = res.data.data2;
 
-          const resR = await ObtenerDesRapida();
-          if (resR) {
-            data2 = [resR.data.data];
-            console.log(data2);
-          }
-        };
-        await ConsultarDatos();
-        console.log(data1);
-        // console.log(data2);
-        await generatePdf(dataTabla, dataTabla2, data1, data2);
+        // Obtener datos adicionales para los PDFs
+        const data1 = await obtenerDatosAdicionales(ObtenerDesNormal);
+        const data2 = await obtenerDatosAdicionales(ObtenerDesRapida);
+
+        if (typeof window !== "undefined") {
+          // Asegura que esto se ejecute solo en el lado del cliente
+          generatePdf(dataTabla, dataTabla2, data1, data2);
+        }
       }
     } catch (error) {
       console.error("Error al generar el PDF:", error);
     } finally {
-      setBloq(false); // Siempre restablece el estado, incluso en caso de error
+      setBloq(false);
     }
+  };
+
+  const obtenerDatosAdicionales = async (funcionObtener) => {
+    const res = await funcionObtener();
+    if (res) {
+      // Verifica si existe el campo 'premios' y lo procesa adecuadamente
+      let info = { ...res.data.data };
+      if (info.premios) {
+        info.premios = limpiarArreglo(info.premios);
+      }
+      return [info];
+    }
+    return [];
+  };
+
+  const limpiarArreglo = (arreglo) => {
+    return arreglo.filter((item) => item.trim() !== "");
+  };
+
+  const generatePdf = (dataTabla, dataTabla2, data1, data2) => {
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const processTable = async (data, chunkSize, template, info) => {
+      if (data.length === 0) return;
+
+      const dataChunks = chunkData(data, chunkSize);
+      for (let index = 0; index < dataChunks.length; index++) {
+        const chunk = dataChunks[index];
+        const htmlString = ReactDOMServer.renderToString(
+          template({ dataJuego: chunk, dataInfo: info })
+        );
+        const container = document.createElement("div");
+        document.body.appendChild(container);
+        container.innerHTML = htmlString;
+        container.style.position = "absolute";
+        container.style.left = "-9999px";
+        container.style.top = "-9999px";
+        container.style.width = "210mm";
+
+        try {
+          const canvas = await html2canvas(container, {
+            scale: 1,
+            useCORS: true,
+          });
+          const imgData = canvas.toDataURL("image/jpeg", 0.85);
+          document.body.removeChild(container);
+          if (index === 0 && pdf.internal.getNumberOfPages() === 0) {
+            pdf.addImage(
+              imgData,
+              "JPEG",
+              0,
+              0,
+              pdf.internal.pageSize.getWidth(),
+              pdf.internal.pageSize.getHeight()
+            );
+          } else {
+            pdf.addPage();
+            pdf.addImage(
+              imgData,
+              "JPEG",
+              0,
+              0,
+              pdf.internal.pageSize.getWidth(),
+              pdf.internal.pageSize.getHeight()
+            );
+          }
+        } catch (error) {
+          console.error("Error generating PDF", error);
+          throw error;
+        }
+      }
+    };
+
+    Promise.all([
+      processTable(dataTabla, 4, HtmlTemplate1, data1),
+      processTable(dataTabla2, 6, HtmlTemplate2, data2),
+    ])
+      .then(() => {
+        if (pdf.internal.getNumberOfPages() > 1) {
+          pdf.deletePage(1);
+        }
+        const blob = pdf.output("blob");
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "combined.pdf";
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+      .catch((err) => {
+        console.error("Error al finalizar la generación del PDF", err);
+      });
   };
 
   const chunkData = (data, chunkSize) => {
@@ -81,77 +159,6 @@ const GenerarPDFs = ({ idventa }) => {
       results.push(data.slice(i, i + chunkSize));
     }
     return results;
-  };
-
-  const generatePdf = (dataTabla, dataTabla2, data1, data2) => {
-    return new Promise((resolve, reject) => {
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-      const processTable = (data, chunkSize, template, info) => {
-        // console.log(data);
-        if (data.length === 0) return; // Si no hay datos, no procesar esta tabla
-        const dataChunks = chunkData(data, chunkSize);
-
-        dataChunks.forEach((chunk, index) => {
-          const htmlString = ReactDOMServer.renderToString(
-            template({ dataJuego: chunk, dataInfo: info })
-          );
-          const container = document.createElement("div");
-          container.innerHTML = htmlString;
-          container.style.position = "absolute";
-          container.style.left = "-9999px";
-          container.style.top = "-9999px";
-          container.style.width = "210mm";
-          document.body.appendChild(container);
-
-          html2canvas(container, { scale: 1, useCORS: true })
-            .then((canvas) => {
-              const imgData = canvas.toDataURL("image/jpeg", 0.85);
-              document.body.removeChild(container); // Limpiar el contenedor inmediatamente después de usarlo
-              // Añadir la imagen al PDF
-              // Verificar si es necesario añadir una nueva página
-              if (index === 0 && pdf.internal.getNumberOfPages() === 0) {
-                // Si es el primer chunk y no hay páginas, añadir la imagen directamente
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                pdf.addImage(imgData, "JPEG", 0, 0, pageWidth, pageHeight);
-              } else {
-                // Para otros chunks o si ya se había añadido la primera imagen, añadir página antes de la imagen
-                pdf.addPage();
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                pdf.addImage(imgData, "JPEG", 0, 0, pageWidth, pageHeight);
-              }
-
-              // Guardar el PDF después del último chunk de la última tabla
-              if (data === dataTabla2 && index === dataChunks.length - 1) {
-                if (pdf.internal.getNumberOfPages() > 1) {
-                  pdf.deletePage(1);
-                }
-                const blob = pdf.output("blob");
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "combined.pdf";
-                a.click();
-                URL.revokeObjectURL(url);
-                resolve();
-              }
-            })
-            .catch((err) => {
-              console.error("Error generating PDF", err);
-              reject(err);
-            });
-        });
-      };
-
-      // Procesar cada tabla
-      processTable(dataTabla, 4, HtmlTemplate1, data1);
-      processTable(dataTabla2, 6, HtmlTemplate2, data2);
-    });
   };
 
   return (

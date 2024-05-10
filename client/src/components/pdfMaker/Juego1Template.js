@@ -135,7 +135,6 @@ export const HtmlTemplate1 = ({ dataJuego, dataInfo }) => {
     );
     return fechaFormateada.replace(" a. m.", " AM").replace(" p. m.", " PM");
   }
-  console.log(dataInfo);
   return (
     <Page>
       <Header>
