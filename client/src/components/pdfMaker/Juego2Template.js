@@ -91,7 +91,21 @@ const Body = styled.div`
   }
 `;
 
-export const HtmlTemplate2 = ({ dataJuego , dataInfo}) => {
+export const HtmlTemplate2 = ({ dataJuego, dataInfo }) => {
+  function formatearFechaConHora(fechaISO) {
+    const opciones = {
+      day: "numeric",
+      month: "long",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    const fecha = new Date(fechaISO);
+    const fechaFormateada = new Intl.DateTimeFormat("es-ES", opciones).format(
+      fecha
+    );
+    return fechaFormateada.replace(" a. m.", " AM").replace(" p. m.", " PM");
+  }
   return (
     <Page>
       <Header>
@@ -99,14 +113,10 @@ export const HtmlTemplate2 = ({ dataJuego , dataInfo}) => {
           <img src={logo} alt="Logo" />
         </div>
         <div class="c2-header">
-          <div class="c2-tit">Los premios seran:</div>
-          <div class="c2-content">
-          </div>
+          <p>Se jugará el {formatearFechaConHora(dataInfo[0].fecha_hora)}</p>
         </div>
         <div class="c3-header">
-          <h3>Premio de $300</h3>
-          <div>10/05/2024</div>
-
+          <h3>Tabla llena:$ {dataInfo[0].premio1}</h3>
         </div>
       </Header>
       <Body>

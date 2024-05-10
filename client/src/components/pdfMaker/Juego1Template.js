@@ -32,7 +32,7 @@ const Header = styled.div`
   flex-direction: column;
   width: 100%;
   gap: 2mm;
-  & h4 {
+  & > h4 {
     margin: 0;
     width: 100%;
     padding-bottom: 1mm;
@@ -45,24 +45,25 @@ const Header = styled.div`
     bottom: 0;
     display: flex;
     align-items: center;
-    gap: 2mm;
+    gap: 10mm;
     justify-content: space-evenly;
     width: 100%;
-    & > div {
-      flex: 1;
-    }
     & > .c1-header {
+      flex: 1;
       display: flex;
       justify-content: flex-start;
       align-items: center;
       & > img {
-        width: 20mm;
+        width: 100%;
       }
     }
 
     & > .c2-header {
+      flex: 3;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      gap: 2mm;
       & > .c2-content {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
@@ -72,6 +73,13 @@ const Header = styled.div`
         padding: 1mm 2mm;
         border-radius: 2mm;
       }
+    }
+    & > .c3-header {
+      flex: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
     }
   }
 `;
@@ -113,6 +121,21 @@ const Body = styled.div`
 `;
 
 export const HtmlTemplate1 = ({ dataJuego, dataInfo }) => {
+  function formatearFechaConHora(fechaISO) {
+    const opciones = {
+      day: "numeric",
+      month: "long",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    const fecha = new Date(fechaISO);
+    const fechaFormateada = new Intl.DateTimeFormat("es-ES", opciones).format(
+      fecha
+    );
+    return fechaFormateada.replace(" a. m.", " AM").replace(" p. m.", " PM");
+  }
+  console.log(dataInfo);
   return (
     <Page>
       <Header>
@@ -123,22 +146,28 @@ export const HtmlTemplate1 = ({ dataJuego, dataInfo }) => {
           </div>
           <div class="c2-header">
             {dataInfo[0].premios.length > 0 && (
-              <>
+              <div>
                 <div class="c2-tit">Premios adicionales:</div>
                 <div class="c2-content">
                   {dataInfo[0].premios.map((item, idx) => (
                     <div key={idx}>{item}</div>
                   ))}
                 </div>
-              </>
+              </div>
             )}
-
-            <div>Las letras a jugar son: {dataInfo[0].letras.join(", ")}</div>
+            <div>
+              <div>Las letras a jugar son: {dataInfo[0].letras.join(", ")}</div>
+              <div>Ganancia por letra: $20</div>
+            </div>
+            
           </div>
           <div class="c3-header">
             <h3>1era Tabla Llena: ${dataInfo[0].premio1}</h3>
-            <h4>2da Tabla Llena: ${dataInfo[0].premio2}</h4>
-            <h4>3ra Tabla Llena: ${dataInfo[0].premio3}</h4>
+            <span>2da Tabla Llena: ${dataInfo[0].premio2}</span>
+            <span>3ra Tabla Llena: ${dataInfo[0].premio3}</span>
+            <span>
+              Se jugará el {formatearFechaConHora(dataInfo[0].fecha_hora)}
+            </span>
           </div>
         </div>
       </Header>
