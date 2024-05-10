@@ -41,14 +41,10 @@ const Tablas = () => {
       setD1(res[0]);
       setD2(res[1]);
     }
-
   };
   useEffect(() => {
     ConsultarTablasCliente();
   }, []);
-  const datos = dataTabla;
-  const datos1 = dataTabla2;
-  console.log(dataTabla);
   return (
     <ContenedorPadre>
       <Header />

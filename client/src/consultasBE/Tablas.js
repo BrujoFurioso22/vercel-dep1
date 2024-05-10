@@ -211,7 +211,6 @@ export async function ConsultarTablasdelCliente({ cccliente }) {
     const res = await axios.post(`${url}/api/tablas/obtenertablascliente`, {
       cccliente,
     });
-    console.log(res);
     if (res) {
       if (res.data.ok) {
         return [res.data.data1, res.data.data2];
