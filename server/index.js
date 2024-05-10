@@ -16,10 +16,8 @@ app.use(corsMiddleware());
 // Desactivar la cabecera 'x-powered-by'
 app.disable('x-powered-by');
 
-ventasRouter.use(timeout('20s'));  // 10 segundos de tiempo de espera
-ventasRouter.use((req, res, next) => {
-  if (!req.timedout) next();
-});
+app.use(timeout('30s'));  // 30 segundos de tiempo de espera
+
 
 // Utilizar el enrutador de usuarios
 app.use("/api/users", userRouter);

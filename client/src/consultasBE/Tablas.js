@@ -27,7 +27,8 @@ export async function IngresarVenta(
       cantidadrapida: cantidadrapida,
       cantidaddinero: cantidaddinero,
       numerotransaccion: numerotransaccion,
-    });
+    },{timeout:30000});
+    console.log(res);
     return res;
   } catch (err) {
     return err;
