@@ -195,10 +195,12 @@ export const tablasController = {
                   isInserted = true; // Inserción exitosa, salir del bucle
                 }
               } while (!isInserted); // Bucle mientras no se haya insertado correctamente
+              
+              // Enviar respuesta parcial al frontend indicando el progreso
+              const progreso = ((i + 1) / (cantidadnormal * 4)) * 100;
+              res.write(`Progreso: ${progreso.toFixed(2)}%\n`);
             }
-            // Enviar respuesta parcial al frontend indicando el progreso
-            const progreso = ((i + 1) / (cantidadnormal * 4)) * 100;
-            res.write(`Progreso: ${progreso.toFixed(2)}%\n`);
+            res.end("Normales generadas")
             // return res.status(200).json({ ok: true });
           } catch (error) {
             console.log("Error1");
@@ -264,6 +266,8 @@ export const tablasController = {
                 ((i + 1) / (cantidadrapida * 6)) * 100;
               res.write(`Progreso: ${progreso.toFixed(2)}%\n`);
             }
+            res.end("Rapidas generadas")
+
 
             // return res.status(200).json({ ok: true });
           } catch (error) {
