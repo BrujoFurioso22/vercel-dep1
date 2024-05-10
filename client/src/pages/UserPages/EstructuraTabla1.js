@@ -13,7 +13,7 @@ const ContenedorGrid = styled.div`
   /* padding: 20px; */
 
   & > span {
-    border: solid 1px var(--color-negro);
+    border: solid 1px #000000;
     border-bottom: none;
     padding: 10px;
     display: flex;
