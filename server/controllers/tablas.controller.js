@@ -120,7 +120,7 @@ export const tablasController = {
               // Generar números aleatorios para diferentes rangos
               const numerosRango1 = generarNumerosAleatorios(1, 15, 5);
               const numerosRango2 = generarNumerosAleatorios(16, 30, 5);
-              const numerosRango3 = generarNumerosAleatorios(31, 45, 5);
+              const numerosRango3 = generarNumerosAleatorios(31, 45, 4);
               const numerosRango4 = generarNumerosAleatorios(46, 60, 5);
               const numerosRango5 = generarNumerosAleatorios(61, 75, 5);
 
