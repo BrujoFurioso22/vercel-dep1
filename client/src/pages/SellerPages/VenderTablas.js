@@ -198,9 +198,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
     );
     console.log(resp);
     if (resp) {
-      if(!resp.ok){
-        setVentaCorrecta(2);
-      }else if (resp.data.ok) {
+      if(resp.ok){
         setVentaCorrecta(1);
       } else {
         setVentaCorrecta(2);
