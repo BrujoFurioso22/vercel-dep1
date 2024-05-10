@@ -9,13 +9,14 @@ const ContenedorPadre = styled.div`
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  height: calc(100vh);
+  height: 100%;
   width: 100%;
   /* background-image: url("/back1.webp"), rgba(255, 255, 255, 0.1); */
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.2)),
-    url("/back1.webp");
-  background-size: cover;
-  background-repeat: no-repeat;
+    url("/fondo3.svg");
+  
+    background-size: auto;
+  background-repeat: repeat;
   background-position: center center;
 `;
 const UserRoutes = () => {

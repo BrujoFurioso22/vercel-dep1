@@ -1,9 +1,9 @@
 import { log } from "console";
 import { pool } from "../database.js";
-import CryptoJS from 'crypto-js';
-import crypto from 'crypto';
+import CryptoJS from "crypto-js";
+import crypto from "crypto";
 
-const secretKey = crypto.randomBytes(32).toString('hex');
+const secretKey = crypto.randomBytes(32).toString("hex");
 
 function generarCodigoHexadecimal() {
   const caracteresHexadecimales = "0123456789ABCDEF";
@@ -72,16 +72,17 @@ export const tablasController = {
           isInserted = true;
         }
       } while (!isInserted);
-      let banderin = false; 
+      let banderin = false;
       do {
         const hexvalidador = generarCodigoHexadecimal();
-        const { rows: hexrepetido } = await pool.query("SELECT hex FROM venta WHERE hex=$1;",
+        const { rows: hexrepetido } = await pool.query(
+          "SELECT hex FROM venta WHERE hex=$1;",
           [hexvalidador]
         );
         if (hexrepetido.length === 0) {
           banderin = true;
         }
-      } while (!banderin); 
+      } while (!banderin);
       const tempor = await pool.query(
         "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7);",
         [
@@ -91,7 +92,7 @@ export const tablasController = {
           cantidadrapida,
           cantidaddinero,
           numerotransaccion,
-          hexvalidador
+          hexvalidador,
         ]
       );
 
@@ -311,11 +312,11 @@ export const tablasController = {
     try {
       const { cccliente } = req.body;
       const { rows: rowsTablaNormal } = await pool.query(
-        `SELECT tablanormal.* FROM public.tablanormal, public.venta, public.users WHERE tablanormal.id_venta=venta.id and venta.id_cliente=users.id and users.cc = '$1'`,
+        "SELECT tablanormal.* FROM public.tablanormal, public.venta, public.users WHERE tablanormal.id_venta=venta.id and venta.id_cliente=users.id and users.cc =$1",
         [cccliente]
       );
       const { rows: rowsTablaRapida } = await pool.query(
-        `SELECT tablarapida.* FROM public.tablarapida, public.venta, public.users WHERE tablarapida.id_venta=venta.id and venta.id_cliente=users.id and users.cc = '$1'`,
+        "SELECT tablarapida.* FROM public.tablarapida, public.venta, public.users WHERE tablarapida.id_venta=venta.id and venta.id_cliente=users.id and users.cc =$1",
         [cccliente]
       );
       let var1 = [],
@@ -366,6 +367,7 @@ export const tablasController = {
         }));
       }
       return res.status(200).json({
+        ok: true,
         data1: var1,
         data2: var2,
       });

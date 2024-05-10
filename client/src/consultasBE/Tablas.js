@@ -206,3 +206,21 @@ export async function FinalizarJugada({ id }) {
     return err;
   }
 }
+export async function ConsultarTablasdelCliente({ cccliente }) {
+  try {
+    const res = await axios.post(`${url}/api/tablas/obtenertablascliente`, {
+      cccliente,
+    });
+    console.log(res);
+    if (res) {
+      if (res.data.ok) {
+        return [res.data.data1, res.data.data2];
+      } else {
+        return [];
+      }
+    }
+    // return res;
+  } catch (err) {
+    return false;
+  }
+}
