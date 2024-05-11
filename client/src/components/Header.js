@@ -144,6 +144,7 @@ const ContenedorLogin = styled.div`
     color: var(--color-blanco);
     text-decoration: none;
   }
+  
   @media ${device.mobile1} {
     display: none;
   }
@@ -165,6 +166,10 @@ const ContenedorDerecho = styled.div`
     align-items: center;
     justify-content: flex-end;
     width: 100%;
+    color: black;
+    &.home{
+      color: white;
+    }
     & > i {
       font-size: 28px;
     }
@@ -261,7 +266,7 @@ const ContenedorMenuLateral = styled.div`
         /* border: solid 2px var(--color-2); */
         border: none;
         background-color: var(--alerta-error);
-        color: var(--color-);
+        color: black;
         padding: 5px 10px;
         outline: none;
         border-radius: 5px;
@@ -372,11 +377,11 @@ const Header = ({ oculta }) => {
           {localStorage.getItem("rol") === "23" && <Menu />}
         </ContenedorMenu>
 
-        <ContenedorLogin className="ContenedorLogin">
+        <ContenedorLogin className={`ContenedorLogin ${classNameBg}`} >
           {!oculta &&
             (localStorage.getItem("id") ? (
               <ContenedorDerecho>
-                <div className="cuenta">
+                <div className={`cuenta ${classNameBg}`}>
                   <i className="bi bi-person-circle" />
                   <div className="cuentaDrop">
                     <div>

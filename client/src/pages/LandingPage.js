@@ -5,6 +5,9 @@ import Header from "../components/Header";
 import { useAuth } from "../auth/AuthContext";
 import { BotonWpp } from "../components/styled-componets/ComponentsPrincipales";
 import { device } from "../components/styled-componets/MediaQ";
+import { ObtenerDesNormal, ObtenerDesRapida } from "../consultasBE/Tablas";
+import juego1 from "../imgs/juegonormal.jpg";
+import juego2 from "../imgs/juegorapido.jpg";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -133,19 +136,26 @@ const ContenedorElemento1 = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
+  height: fit-content;
   .imgTabla {
     width: 50%;
-    height: 70%;
+    height: 500px;
     background: var(--color-5);
     display: flex;
     justify-content: center;
     align-items: center;
+
+    & > img {
+      object-fit: contain;
+      aspect-ratio: 1;
+      width: 100%;
+    }
   }
 
   & > .contenedor1 {
     display: flex;
     flex-direction: row;
-    height: 500px;
+    height: fit-content;
     width: 100%;
     @media ${device.mobile} {
       flex-direction: column;
@@ -163,6 +173,15 @@ const ContenedorElemento1 = styled.div`
         height: 45dvh;
       }
     }
+
+    .d1,
+    .d2 {
+      & > h2 {
+        margin: 0;
+      }
+      display: flex;
+      gap: 10px;
+    }
     .d1 {
       background-color: var(--color-2);
     }
@@ -176,6 +195,8 @@ function LandingPage() {
   const { isAuthenticated } = useAuth();
   const rol = localStorage.getItem("rol") ?? "99";
   const [usu, setUsu] = useState(null);
+  const [cont1, setCont1] = useState([]);
+  const [cont2, setCont2] = useState([]);
   useEffect(() => {
     if (isAuthenticated) {
       setUsu(localStorage.getItem("id"));
@@ -194,7 +215,48 @@ function LandingPage() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+  const limpiarArreglo = (arreglo) => {
+    return arreglo.filter((item) => item.trim() !== "");
+  };
+  const obtenerDatosAdicionales = async (funcionObtener) => {
+    const res = await funcionObtener();
+    if (res) {
+      // Verifica si existe el campo 'premios' y lo procesa adecuadamente
+      let info = { ...res.data.data };
+      if (info.premios) {
+        info.premios = limpiarArreglo(info.premios);
+      }
+      return [info];
+    }
+    return [];
+  };
 
+  const ObtenerContenidoJuegos = async () => {
+    const data1 = await obtenerDatosAdicionales(ObtenerDesNormal);
+    const data2 = await obtenerDatosAdicionales(ObtenerDesRapida);
+    setCont1(data1[0]);
+    setCont2(data2[0]);
+    console.log(data1[0]);
+  };
+
+  useEffect(() => {
+    ObtenerContenidoJuegos();
+  }, []);
+
+  function formatearFechaConHora(fechaISO) {
+    const opciones = {
+      day: "numeric",
+      month: "long",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    const fecha = new Date(fechaISO);
+    const fechaFormateada = new Intl.DateTimeFormat("es-ES", opciones).format(
+      fecha
+    );
+    return fechaFormateada.replace(" a. m.", " AM").replace(" p. m.", " PM");
+  }
   return (
     <ContenedorPadre>
       <Header />
@@ -221,11 +283,22 @@ function LandingPage() {
           </ContenedorVerMas>
         </ContenedorPP>
         <ContenedorElemento1 id="elemento1">
-          <h2>Esta semana se juega...</h2>
+          <h2>
+            Ven, disfruta y gana...
+          </h2>
           <div className="contenedor1">
             <div className="d1">
-              <span>Cartilla 1</span>
-              <div className="imgTabla">...</div>
+              <h2>Tablón</h2>
+              <span>{cont1.contenido}</span>
+              <div className="imgTabla">
+                <img src={juego1} alt="juego1" />
+              </div>
+              <h4>
+                Fecha de próximo juego {"->"}{" "}
+                {Object.keys(cont1).length > 0 &&
+                  formatearFechaConHora(cont1.fecha_hora)}
+              </h4>
+
               <div>
                 <BotonWpp
                   phoneNumber={"593939188903"}
@@ -236,8 +309,17 @@ function LandingPage() {
               </div>
             </div>
             <div className="d2">
-              <span>Cartilla 2</span>
-              <div className="imgTabla">...</div>
+              <h2>Única</h2>
+              <span>{cont2.contenido}</span>
+
+              <div className="imgTabla">
+                <img src={juego2} alt="juego1" />
+              </div>
+              <h4>
+                Fecha de próximo juego {"->"}{" "}
+                {Object.keys(cont2).length > 0 &&
+                  formatearFechaConHora(cont2.fecha_hora)}
+              </h4>
               <div>
                 {" "}
                 <BotonWpp

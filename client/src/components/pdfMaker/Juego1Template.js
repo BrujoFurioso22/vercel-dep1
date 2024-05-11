@@ -120,7 +120,7 @@ const Body = styled.div`
   }
 `;
 
-export const HtmlTemplate1 = ({ dataJuego, dataInfo }) => {
+export const HtmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
   function formatearFechaConHora(fechaISO) {
     const opciones = {
       day: "numeric",
@@ -183,7 +183,7 @@ export const HtmlTemplate1 = ({ dataJuego, dataInfo }) => {
         </div>
       </Body>
       {/* <GenerateTableHtml datos={datos} /> */}
-      <Footer>Contactate a los numeros : uifhsdifhasf</Footer>
+      <Footer>---------- Vendida por: {nombreRes} ----------</Footer>
     </Page>
   );
 };
