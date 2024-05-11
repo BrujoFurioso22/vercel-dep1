@@ -147,6 +147,7 @@ export const tablasController = {
     try {
       const {
         idventanormal,
+        cantidadrapida,
       } = req.body;
 
       // Función para generar números aleatorios sin repetición en un rango específico
@@ -215,6 +216,7 @@ export const tablasController = {
     try {
       const {
         idventarapida,
+        cantidadnormal
       } = req.body;
       // Función para generar números aleatorios sin repetición en un rango específico
       const generarNumerosAleatorios = (min, max, cantidad) => {
