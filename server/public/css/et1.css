@@ -1,0 +1,77 @@
+.tabla-bingo {
+  width: fit-content;
+  padding: 10px;
+}
+
+.contenedor-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.contenedor-grid > span {
+  border: solid 1px #000000;
+  border-bottom: none;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px 15px 0 0;
+  background-color: var(--color-4);
+  letter-spacing: 10px;
+  text-align: center;
+}
+
+.contenedor-grid > span::after {
+  content: "";
+  margin-left: -10px; /* Ajusta esto al valor de tu letter-spacing */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 0;
+  width: 75mm;
+  border-radius: 0 0 15px 15px;
+  overflow: hidden;
+  border: solid 1px #000000;
+  background: linear-gradient(#edededa9, #edededa9), url("path_to_logo_image");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.grid-cell {
+  background-color: transparent;
+  height: 15mm;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  font-weight: 800;
+}
+
+.grid-cell:nth-child(5n) {
+  border-right: none; /* No borders on the right for the right-most cells */
+}
+
+.grid-cell:nth-child(-n + 5) {
+  border-top: none; /* No top border for the first row */
+}
+
+.grid-cell:nth-child(5n + 1) {
+  border-left: none; /* No left border for the cells in the first column */
+}
+
+.grid-cell:nth-last-child(-n + 5) {
+  border-bottom: none; /* No bottom borders for the last row */
+}
+
+/* Considerations for border-radius */
+.grid-cell.bottom-left {
+  border-radius: 0 0 0 15px;
+}
+
+.grid-cell.bottom-right {
+  border-radius: 0 0 15px 0;
+}

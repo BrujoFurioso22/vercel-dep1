@@ -182,7 +182,6 @@ export const HtmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
           ))}
         </div>
       </Body>
-      {/* <GenerateTableHtml datos={datos} /> */}
       <Footer>---------- Vendida por: {nombreRes} ----------</Footer>
     </Page>
   );

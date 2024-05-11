@@ -8,6 +8,7 @@ import {
   ConsultarVentasTotales,
 } from "../../consultasBE/Tablas";
 import { ObtenerIDUsuario } from "../../consultasBE/User";
+import GenerarPDFs1 from "../../components/pdfMaker/pdfMakerBack";
 // const ContenedorPadre = styled.div`
 //   display: flex;
 //   flex-direction: column;
@@ -264,6 +265,7 @@ const Tablas = ({ datos, datosVentas }) => {
                 ))}
                 <td>
                   <GeneratePdfButton idventa={parseInt(venta.id)} />
+                  <GenerarPDFs1 idventa={parseInt(venta.id)} />
                 </td>
               </tr>
             ))}
