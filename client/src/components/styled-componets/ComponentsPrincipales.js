@@ -7,7 +7,8 @@ export const ContenedorPadre = styled.div`
   height: 100vh;
   width: 100%;
   z-index: 1;
-  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1)),url("/fondo3.svg");
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1)),
+    url("/fondo3.svg");
   background-size: auto;
   background-repeat: repeat;
   background-position: center center;
@@ -99,7 +100,11 @@ export const InputFieldCustom = ({ onChange, label, type }) => {
       {type === "password" && (
         <div className="boton-ver" onClick={toggleType}>
           {/* Aquí puedes usar un ícono como <EyeIcon /> si tienes uno, o un emoji como alternativa simple */}
-          {inputType === "password" ? "👁️" : "👁️‍🗨️"}
+          {inputType === "password" ? (
+            <i className="bi bi-eye-fill"></i>
+          ) : (
+            <i className="bi bi-eye-slash-fill"></i>
+          )}
         </div>
       )}
     </InputField>

@@ -12,6 +12,7 @@ import {
   ObtenerDesRapida,
 } from "../../consultasBE/Tablas";
 import styled from "styled-components";
+import { ObtenerIDUsuario } from "../../consultasBE/User";
 
 const Boton = styled.button`
   padding: 8px 16px;
@@ -45,9 +46,17 @@ const GenerarPDFs = ({ idventa }) => {
         const data1 = await obtenerDatosAdicionales(ObtenerDesNormal);
         const data2 = await obtenerDatosAdicionales(ObtenerDesRapida);
 
+        const vendidoPor = await ObtenerIDUsuario(localStorage.getItem("id"));
+        let nombreVend= "";
+        console.log(vendidoPor);
+        if(vendidoPor.status === 200){
+          nombreVend= vendidoPor.data.nombre;
+        }
+        console.log(nombreVend);
+
         if (typeof window !== "undefined") {
           // Asegura que esto se ejecute solo en el lado del cliente
-          generatePdf(dataTabla, dataTabla2, data1, data2);
+          generatePdf(dataTabla, dataTabla2, data1, data2,nombreVend);
         }
       }
     } catch (error) {
@@ -74,7 +83,7 @@ const GenerarPDFs = ({ idventa }) => {
     return arreglo.filter((item) => item.trim() !== "");
   };
 
-  const generatePdf = (dataTabla, dataTabla2, data1, data2) => {
+  const generatePdf = (dataTabla, dataTabla2, data1, data2, nombreVend) => {
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "mm",
@@ -88,7 +97,7 @@ const GenerarPDFs = ({ idventa }) => {
       for (let index = 0; index < dataChunks.length; index++) {
         const chunk = dataChunks[index];
         const htmlString = ReactDOMServer.renderToString(
-          template({ dataJuego: chunk, dataInfo: info })
+          template({ dataJuego: chunk, dataInfo: info, nombreRes:nombreVend })
         );
         const container = document.createElement("div");
         document.body.appendChild(container);
