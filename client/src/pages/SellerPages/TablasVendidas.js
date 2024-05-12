@@ -278,19 +278,19 @@ const Tablas = ({ datos, datosVentas }) => {
         />
       </Contenedor1>
       <Contenedor2>
-        <div class="grid-container">
-          <div class="header"># Ventas</div>
-          <div class="header">Normal</div>
-          <div class="header">Rápida</div>
-          <div class="header">Total</div>
-          <div class="header">Vendedor</div>
-          <div class="cell">{datosVentas.juegos_normal_vendedor}</div>
-          <div class="cell">{datosVentas.juegos_rapida_vendedor}</div>
-          <div class="cell">{datosVentas.juegos_total_vendedor}</div>
-          <div class="header">Total</div>
-          <div class="cell">{datosVentas.total_normal}</div>
-          <div class="cell">{datosVentas.total_rapida}</div>
-          <div class="cell">{datosVentas.total_juegos}</div>
+        <div className="grid-container">
+          <div className="header"># Ventas</div>
+          <div className="header">Normal</div>
+          <div className="header">Rápida</div>
+          <div className="header">Total</div>
+          <div className="header">Vendedor</div>
+          <div className="cell">{datosVentas.juegos_normal_vendedor}</div>
+          <div className="cell">{datosVentas.juegos_rapida_vendedor}</div>
+          <div className="cell">{datosVentas.juegos_total_vendedor}</div>
+          <div className="header">Total</div>
+          <div className="cell">{datosVentas.total_normal}</div>
+          <div className="cell">{datosVentas.total_rapida}</div>
+          <div className="cell">{datosVentas.total_juegos}</div>
         </div>
       </Contenedor2>
     </div>
@@ -329,7 +329,7 @@ const TablasVendidas = () => {
       const res = await ConsultarVentasTotales({ id_vendedor: parseInt(idV) });
       if (res !== null) {
         setDataVentas(res);
-        console.log(res);
+        // console.log(res);
       }
     }
   };

@@ -94,7 +94,11 @@ const GenerarPDFs1 = ({ idventa }) => {
     const dataChunks = chunkData(dataTabla, 4);
     const chunk = dataChunks[0];
 
-    const result = await CrearPdf({ chunk, data1, nombreVend });
+    const result = await CrearPdf({
+      dataJuego: chunk,
+      dataInfo: data1,
+      nombreRes: nombreVend,
+    });
     if (result instanceof Error) {
       console.log("Failed to download PDF:", result);
     } else {

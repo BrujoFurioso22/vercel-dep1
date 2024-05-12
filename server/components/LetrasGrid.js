@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const gridMap = {
   A: [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 20, 21, 25],
   B: [1, 2, 3, 4, 6, 10, 11, 12, 13, 14, 16, 20, 21, 22, 23, 24],
@@ -30,30 +29,41 @@ const gridMap = {
   Z: [1, 2, 3, 4, 5, 9, 13, 17, 21, 22, 23, 24, 25],
 };
 
-function LetrasGrid(letras) {
-  const contenedorGridLetras = letras.map(letra => SingleGrid(letra)).join('');
-  return `<div className="ContenedorGridLetras">${contenedorGridLetras}</div>`;
+function LetrasGrid({ letras }) {
+  console.log(letras);
+  const contenedorGridLetras = letras
+    .map((letra) => SingleGrid({letra}))
+    .join("");
+  return `<div style="display: flex;  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;" className="ContenedorGridLetras">${contenedorGridLetras}</div>`;
 }
 const SingleGrid = ({ letra }) => {
-  const grid = Array.from({ length: 25 }, (_, index) => ({
-    index: index + 1,
-    isColored: gridMap[letra]?.includes(index + 1),
-  }));
+  const grid = Array.from({ length: 25 }, (_, index) => {
+    let adjustedIndex = index + 1;
+    let isColored = gridMap[letra]?.includes(adjustedIndex);
+    return {
+      index: adjustedIndex,
+      isColored: isColored,
+    };
+  });
+
+  console.log(gridMap["A"].includes(1));
   const gridItems = grid
-    .map(
-      (cell) => `
-    <div style="
-      width: 3mm;
-      height: 3mm;
-      background-color: ${cell.isColored ? "orange" : "white"};
-      border: 0.1mm solid rgba(0, 0, 0, 0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    ">
-    </div>
-  `
-    )
+    .map((cell) => {
+      return `
+        <div style="
+          width: 3mm;
+          height: 3mm;
+          background-color: ${cell.isColored ? 'orange' : 'white'};
+          border: 0.1mm solid rgba(0, 0, 0, 0.6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+        </div>
+      `;
+    })
     .join("");
   return `
     <div style="
