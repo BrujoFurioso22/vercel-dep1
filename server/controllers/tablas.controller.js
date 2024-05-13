@@ -6,9 +6,9 @@ import crypto from "crypto";
 const secretKey = crypto.randomBytes(32).toString("hex");
 
 function generarCodigoHexadecimal() {
-  const caracteresHexadecimales = "0123456789ABCDEF";
+  const caracteresHexadecimales = "0123456789";
   let codigoHexadecimal = "";
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 5; i++) {
     const indiceAleatorio = Math.floor(
       Math.random() * caracteresHexadecimales.length
     );
@@ -53,11 +53,175 @@ async function insertarDatosEnLotes(pool, query, valores) {
 
 export const tablasController = {
   probarInsercionNueva: async (req, res) => {
-    const cadena = "[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,valor6]"
-    const { rows: hexrows } = await pool.query(
-      "INSERT INTO public.venta(id, id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex_validador,tablas) VALUES (4,5,37,'2024-05-10 21:04:42+00',1,2,2.5,'TRANSA','45482C844C',$1);",
-      [cadena]
-    );
+    const cantidadnormal = 1;
+    const cantidadrapida = 1;
+    if (cantidadnormal > 0) {
+      try {
+        // Función para generar números aleatorios sin repetición en un rango específico
+        const generarNumerosAleatorios = (min, max, cantidad) => {
+          let numeros = new Set();
+          while (numeros.size < cantidad) {
+            let num = Math.floor(Math.random() * (max - min + 1)) + min;
+            numeros.add(num);
+          }
+          return Array.from(numeros);
+        };
+        let banderin = false;
+        let hexvalidador;
+        do {
+          hexvalidador = generarCodigoHexadecimallargo();
+          const { rows: hexrows } = await pool.query(
+            "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
+            [hexvalidador]
+          );
+          if (hexrows.length === 0) {
+            banderin = true;
+          }
+        } while (!banderin);
+        let cadenaparalatabla = ""; // Cambiar de const a let
+        for (let i = 0; i < cantidadnormal * 4; i++) {
+
+          // Generar números aleatorios para diferentes rangos
+          const numerosRango1 = generarNumerosAleatorios(1, 15, 5);
+          const numerosRango2 = generarNumerosAleatorios(16, 30, 5);
+          const numerosRango3 = generarNumerosAleatorios(31, 45, 4);
+          const numerosRango4 = generarNumerosAleatorios(46, 60, 5);
+          const numerosRango5 = generarNumerosAleatorios(61, 75, 5);
+
+          // Combinar todos los números generados
+          const todosLosNumeros = [
+            ...numerosRango1,
+            ...numerosRango2,
+            ...numerosRango3,
+            ...numerosRango4,
+            ...numerosRango5,
+            // Combinar otros rangos aquí...
+          ];
+
+          // Asignar números a las variables n1, n2, ..., n25
+          const numerosAsignados = todosLosNumeros.slice(0, 24);
+
+          console.log(numerosAsignados);
+          let banderadecodigo = false
+          let codigonormal = "";
+          do {
+            codigonormal = "N" + generarCodigoHexadecimal();
+            console.log(codigonormal);
+            const { rows: tablasnormales } = await pool.query(
+              "SELECT tablas_normal FROM venta"
+            );
+            if (tablasnormales.length > 0) {
+              for (let i = 0; i < tablasnormales.length; i++) {
+                if (tablasnormales[i].tablas_normal.includes(codigonormal)) {
+                  banderadecodigo = true;
+                  console.log(banderadecodigo);
+                  break;
+                }
+              }
+            } else {
+              banderadecodigo = true
+            }
+          } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
+
+          let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigonormal + "]";
+
+          if (i === 0) {
+            cadenaparalatabla = cadenaNumeros;
+          } else {
+            cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
+          }
+        }
+        console.log(cadenaparalatabla);
+        // return res.status(200).json({ ok: true });
+      } catch (error) {
+        console.log("Error1");
+        //verif1 = false;
+        // res.status(500).json({ error: error.message });
+      }
+    }
+
+    if (cantidadrapida > 0) {
+      try {
+        // Función para generar números aleatorios sin repetición en un rango específico
+        const generarNumerosAleatorios = (min, max, cantidad) => {
+          let numeros = new Set();
+          while (numeros.size < cantidad) {
+            let num = Math.floor(Math.random() * (max - min + 1)) + min;
+            numeros.add(num);
+          }
+          return Array.from(numeros);
+        };
+        let banderin = false;
+        let hexvalidador;
+        do {
+          hexvalidador = generarCodigoHexadecimallargo();
+          const { rows: hexrows } = await pool.query(
+            "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
+            [hexvalidador]
+          );
+          if (hexrows.length === 0) {
+            banderin = true;
+          }
+        } while (!banderin);
+        let cadenaparalatabla = ""; // Cambiar de const a let
+        for (let i = 0; i < cantidadnormal * 6; i++) {
+
+          // Generar números aleatorios para diferentes rangos
+          const numerosRango1 = generarNumerosAleatorios(1, 25, 3);
+          const numerosRango2 = generarNumerosAleatorios(26, 50, 1);
+          const numerosRango3 = generarNumerosAleatorios(51, 75, 3);
+
+          // Combinar todos los números generados
+          const todosLosNumeros = [
+            ...numerosRango1,
+            ...numerosRango2,
+            ...numerosRango3,
+            // Combinar otros rangos aquí...
+          ];
+
+          // Asignar números a las variables n1, n2, ..., n25
+          const numerosAsignados = todosLosNumeros.slice(0, 7);
+
+          console.log(numerosAsignados);
+          let banderadecodigo = false
+          let codigorapido = "";
+          do {
+            codigorapido = "R" + generarCodigoHexadecimal();
+            console.log(codigorapido);
+            const { rows: tablasrapidas } = await pool.query(
+              "SELECT tablas_rapida FROM venta"
+            );
+            if (tablasrapidas.length > 0) {
+              for (let i = 0; i < tablasrapidas.length; i++) {
+                if (tablasrapidas[i].tablas_normal.includes(codigorapido)) {
+                  banderadecodigo = true;
+                  console.log(banderadecodigo);
+                  break;
+                }
+              }
+            } else {
+              banderadecodigo = true
+            }
+          } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
+
+          let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigorapido + "]";
+
+          if (i === 0) {
+            cadenaparalatabla = cadenaNumeros;
+          } else {
+            cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
+          }
+        }
+        console.log(cadenaparalatabla);
+        // return res.status(200).json({ ok: true });
+      } catch (error) {
+        console.log("Error1");
+        //verif1 = false;
+        // res.status(500).json({ error: error.message });
+      }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
   },
   insertarVenta: async (req, res) => {
     try {
@@ -96,171 +260,171 @@ export const tablasController = {
 
       let verif1 = true,
         verif2 = true;
-      if (rows.length > 0) {
-        let idventa = rows[0].id;
-        if (cantidadnormal > 0) {
-          try {
-            // Función para generar números aleatorios sin repetición en un rango específico
-            const generarNumerosAleatorios = (min, max, cantidad) => {
-              let numeros = new Set();
-              while (numeros.size < cantidad) {
-                let num = Math.floor(Math.random() * (max - min + 1)) + min;
-                numeros.add(num);
-              }
-              return Array.from(numeros);
-            };
-            let banderin = false;
-            let hexvalidador;
-            do {
-              hexvalidador = generarCodigoHexadecimallargo();
-              const { rows: hexrows } = await pool.query(
-                "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
-                [hexvalidador]
-              );
-              if (hexrows.length === 0) {
-                banderin = true;
-              }
-            } while (!banderin);
-            const cadenaparalatabla="";
-            for (let i = 0; i < cantidadnormal * 4; i++) {
-              
-              // Generar números aleatorios para diferentes rangos
-              const numerosRango1 = generarNumerosAleatorios(1, 15, 5);
-              const numerosRango2 = generarNumerosAleatorios(16, 30, 5);
-              const numerosRango3 = generarNumerosAleatorios(31, 45, 4);
-              const numerosRango4 = generarNumerosAleatorios(46, 60, 5);
-              const numerosRango5 = generarNumerosAleatorios(61, 75, 5);
 
-              // Combinar todos los números generados
-              const todosLosNumeros = [
-                ...numerosRango1,
-                ...numerosRango2,
-                ...numerosRango3,
-                ...numerosRango4,
-                ...numerosRango5,
-                // Combinar otros rangos aquí...
-              ];
-
-              // Asignar números a las variables n1, n2, ..., n25
-              const numerosAsignados = todosLosNumeros.slice(0, 24);
-
-              console.log(numerosAsignados);
-         
-
-              let isInserted = false;
-              do {
-                const codigonormal = "N" + generarCodigoHexadecimal();
-                const { rows: tablasnormales } = await pool.query(
-                  `SELECT tablas_normal FROM venta`,
-                );
-                let banderadecodigo = false
-                if (tablasnormales.length > 0) {
-                  for (let i = 0; i < tablasnormales.length; i++) {
-                    if (tablasnormales[i].tablas_normal.includes(codigonormal)) {
-                      banderadecodigo = true;
-                      break;
-                    }
-                  }
-                  isInserted = true; // Inserción exitosa, salir del bucle
-                }
-              } while (!isInserted && !banderadecodigo); // Bucle mientras no se haya insertado correctamente
-              numerosAsignados.push(codigonormal);
-              if(i===0){
-                cadenaparalatabla =  numerosAsignados;
-              }else{
-                cadenaparalatabla = cadenaparalatabla + ","+ numerosAsignados;
-              }
+      if (cantidadnormal > 0) {
+        try {
+          // Función para generar números aleatorios sin repetición en un rango específico
+          const generarNumerosAleatorios = (min, max, cantidad) => {
+            let numeros = new Set();
+            while (numeros.size < cantidad) {
+              let num = Math.floor(Math.random() * (max - min + 1)) + min;
+              numeros.add(num);
             }
-            console.log(cadenaparalatabla);
-            // return res.status(200).json({ ok: true });
-          } catch (error) {
-            console.log("Error1");
-            verif1 = false;
-            // res.status(500).json({ error: error.message });
-          }
-        }
-
-        if (cantidadrapida > 0) {
-          try {
-            // Función para generar números aleatorios sin repetición en un rango específico
-            const generarNumerosAleatorios = (min, max, cantidad) => {
-              let numeros = new Set();
-              while (numeros.size < cantidad) {
-                let num = Math.floor(Math.random() * (max - min + 1)) + min;
-                numeros.add(num);
-              }
-              return Array.from(numeros);
-            };
-            let banderin = false;
-            let hexvalidador;
-            
-            
-            do {
-              hexvalidador = generarCodigoHexadecimallargo();
-              const { rows: hexrows } = await pool.query(
-                "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
-                [hexvalidador]
-              );
-              if (hexrows.length === 0) {
-                banderin = true;
-              }
-            } while (!banderin);
-            const cadenaparalatabla="";
-            for (let i = 0; i < cantidadrapida * 6; i++) {
-              // Generar números aleatorios para diferentes rangos
-              const numerosRango1 = generarNumerosAleatorios(1, 25, 3);
-              const numerosRango2 = generarNumerosAleatorios(26, 50, 1);
-              const numerosRango3 = generarNumerosAleatorios(51, 75, 3);
-
-              // Combinar todos los números generados
-              const todosLosNumeros = [
-                ...numerosRango1,
-                ...numerosRango2,
-                ...numerosRango3,
-                // Combinar otros rangos aquí...
-              ];
-
-              // Asignar números a las variables n1, n2, ..., n25
-              const numerosAsignados = todosLosNumeros.slice(0, 7);
-
-              // console.log(numerosAsignados);
-              console.log(numerosAsignados);
-         
-
-              let isInserted = false;
-              do {
-                const codigonormal = "R" + generarCodigoHexadecimal();
-                const { rows: tablasnormales } = await pool.query(
-                  `SELECT tablas_rapida FROM venta`,
-                );
-                let banderadecodigo = false
-                if (tablasnormales.length > 0) {
-                  for (let i = 0; i < tablasnormales.length; i++) {
-                    if (tablasnormales[i].tablas_normal.includes(codigonormal)) {
-                      banderadecodigo = true;
-                      break;
-                    }
-                  }
-                  isInserted = true; // Inserción exitosa, salir del bucle
-                }
-              } while (!isInserted && !banderadecodigo); // Bucle mientras no se haya insertado correctamente
-              numerosAsignados.push(codigonormal);
-              if(i===0){
-                cadenaparalatabla =  numerosAsignados;
-              }else{
-                cadenaparalatabla = cadenaparalatabla + ","+ numerosAsignados;
-              }
+            return Array.from(numeros);
+          };
+          let banderin = false;
+          let hexvalidador;
+          do {
+            hexvalidador = generarCodigoHexadecimallargo();
+            const { rows: hexrows } = await pool.query(
+              "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
+              [hexvalidador]
+            );
+            if (hexrows.length === 0) {
+              banderin = true;
             }
-            console.log(cadenaparalatabla);
-            // return res.status(200).json({ ok: true });
-          } catch (error) {
-            console.log("Error");
-            verif2 = false;
-            // res.status(500).json({ error: error.message });
+          } while (!banderin);
+          let cadenaparalatabla = ""; // Cambiar de const a let
+          for (let i = 0; i < cantidadnormal * 4; i++) {
+
+            // Generar números aleatorios para diferentes rangos
+            const numerosRango1 = generarNumerosAleatorios(1, 15, 5);
+            const numerosRango2 = generarNumerosAleatorios(16, 30, 5);
+            const numerosRango3 = generarNumerosAleatorios(31, 45, 4);
+            const numerosRango4 = generarNumerosAleatorios(46, 60, 5);
+            const numerosRango5 = generarNumerosAleatorios(61, 75, 5);
+
+            // Combinar todos los números generados
+            const todosLosNumeros = [
+              ...numerosRango1,
+              ...numerosRango2,
+              ...numerosRango3,
+              ...numerosRango4,
+              ...numerosRango5,
+              // Combinar otros rangos aquí...
+            ];
+
+            // Asignar números a las variables n1, n2, ..., n25
+            const numerosAsignados = todosLosNumeros.slice(0, 24);
+
+            console.log(numerosAsignados);
+            let banderadecodigo = false
+            let codigonormal = "";
+            do {
+              codigonormal = "N" + generarCodigoHexadecimal();
+              console.log(codigonormal);
+              const { rows: tablasnormales } = await pool.query(
+                "SELECT tablas_normal FROM venta"
+              );
+              if (tablasnormales.length > 0) {
+                for (let i = 0; i < tablasnormales.length; i++) {
+                  if (tablasnormales[i].tablas_normal.includes(codigonormal)) {
+                    banderadecodigo = true;
+                    console.log(banderadecodigo);
+                    break;
+                  }
+                }
+              } else {
+                banderadecodigo = true
+              }
+            } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
+
+            let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigonormal + "]";
+
+            if (i === 0) {
+              cadenaparalatabla = cadenaNumeros;
+            } else {
+              cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
+            }
           }
+          // return res.status(200).json({ ok: true });
+        } catch (error) {
+          console.log("Error1");
+          verif1 = false;
+          // res.status(500).json({ error: error.message });
         }
       }
 
+      if (cantidadrapida > 0) {
+        try {
+          // Función para generar números aleatorios sin repetición en un rango específico
+          const generarNumerosAleatorios = (min, max, cantidad) => {
+            let numeros = new Set();
+            while (numeros.size < cantidad) {
+              let num = Math.floor(Math.random() * (max - min + 1)) + min;
+              numeros.add(num);
+            }
+            return Array.from(numeros);
+          };
+          let banderin = false;
+          let hexvalidador;
+          do {
+            hexvalidador = generarCodigoHexadecimallargo();
+            const { rows: hexrows } = await pool.query(
+              "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
+              [hexvalidador]
+            );
+            if (hexrows.length === 0) {
+              banderin = true;
+            }
+          } while (!banderin);
+          let cadenaparalatabla = ""; // Cambiar de const a let
+          for (let i = 0; i < cantidadnormal * 6; i++) {
+
+            // Generar números aleatorios para diferentes rangos
+            const numerosRango1 = generarNumerosAleatorios(1, 25, 3);
+            const numerosRango2 = generarNumerosAleatorios(26, 50, 1);
+            const numerosRango3 = generarNumerosAleatorios(51, 75, 3);
+
+            // Combinar todos los números generados
+            const todosLosNumeros = [
+              ...numerosRango1,
+              ...numerosRango2,
+              ...numerosRango3,
+              // Combinar otros rangos aquí...
+            ];
+
+            // Asignar números a las variables n1, n2, ..., n25
+            const numerosAsignados = todosLosNumeros.slice(0, 7);
+
+            console.log(numerosAsignados);
+            let banderadecodigo = false
+            let codigorapido = "";
+            do {
+              codigorapido = "R" + generarCodigoHexadecimal();
+              console.log(codigorapido);
+              const { rows: tablasrapidas } = await pool.query(
+                "SELECT tablas_rapida FROM venta"
+              );
+              if (tablasrapidas.length > 0) {
+                for (let i = 0; i < tablasrapidas.length; i++) {
+                  if (tablasrapidas[i].tablas_normal.includes(codigorapido)) {
+                    banderadecodigo = true;
+                    console.log(banderadecodigo);
+                    break;
+                  }
+                }
+              } else {
+                banderadecodigo = true
+              }
+            } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
+
+            let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigorapido + "]";
+
+            if (i === 0) {
+              cadenaparalatabla = cadenaNumeros;
+            } else {
+              cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
+            }
+          }
+          console.log(cadenaparalatabla);
+          // return res.status(200).json({ ok: true });
+        } catch (error) {
+          console.log("Error1");
+          verif2 = false;
+          // res.status(500).json({ error: error.message });
+        }
+      }
       // console.log(rows);
 
       // console.log(verif1);
@@ -272,147 +436,6 @@ export const tablasController = {
       }
     } catch (error) {
       res.status(500).json({ ok: false });
-    }
-  },
-  insertarDatosRapida: async (req, res) => {
-    try {
-      const {
-        idventanormal,
-        cantidadrapida,
-      } = req.body;
-
-      // Función para generar números aleatorios sin repetición en un rango específico
-      const generarNumerosAleatorios = (min, max, cantidad) => {
-        let numeros = new Set();
-        while (numeros.size < cantidad) {
-          let num = Math.floor(Math.random() * (max - min + 1)) + min;
-          numeros.add(num);
-        }
-        return Array.from(numeros);
-      };
-
-      for (let i = 0; i < cantidadrapida * 6; i++) {
-        // Generar números aleatorios para diferentes rangos
-        const numerosRango1 = generarNumerosAleatorios(1, 25, 3);
-        const numerosRango2 = generarNumerosAleatorios(26, 50, 1);
-        const numerosRango3 = generarNumerosAleatorios(51, 75, 3);
-
-        // Combinar todos los números generados
-        const todosLosNumeros = [
-          ...numerosRango1,
-          ...numerosRango2,
-          ...numerosRango3,
-          // Combinar otros rangos aquí...
-        ];
-
-        // Asignar números a las variables n1, n2, ..., n25
-        const numerosAsignados = todosLosNumeros.slice(0, 7);
-
-        // console.log(numerosAsignados);
-        let isInserted = false;
-        do {
-          const codigorapido = "R" + generarCodigoHexadecimal();
-          const { rows } = await pool.query(
-            `SELECT * FROM tablarapida WHERE codigo = $1`,
-            [codigorapido]
-          );
-
-          if (rows.length === 0) {
-            const datosparainserta = [];
-            datosparainserta.push(idventanormal);
-            datosparainserta.push(codigorapido);
-            for (let m = 0; m < numerosAsignados.length; m++) {
-              datosparainserta.push(numerosAsignados[m]);
-            }
-            // Insertar datos en la tabla
-            await insertarDatosEnLotes(
-              pool,
-              "INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-              datosparainserta
-            );
-
-            isInserted = true; // Inserción exitosa, salir del bucle
-          }
-        } while (!isInserted); // Bucle mientras no se haya insertado correctamente
-        // Enviar respuesta parcial al frontend indicando el progreso
-      }
-      return res.status(200).json({ ok: true });
-    } catch (error) {
-      console.log("Error");
-      verif2 = false;
-      // res.status(500).json({ error: error.message });
-    }
-  },
-  insertarDatosNormal: async (req, res) => {
-    try {
-      const {
-        idventarapida,
-        cantidadnormal
-      } = req.body;
-      // Función para generar números aleatorios sin repetición en un rango específico
-      const generarNumerosAleatorios = (min, max, cantidad) => {
-        let numeros = new Set();
-        while (numeros.size < cantidad) {
-          let num = Math.floor(Math.random() * (max - min + 1)) + min;
-          numeros.add(num);
-        }
-        return Array.from(numeros);
-      };
-
-      for (let i = 0; i < cantidadnormal * 4; i++) {
-        // Generar números aleatorios para diferentes rangos
-        const numerosRango1 = generarNumerosAleatorios(1, 15, 5);
-        const numerosRango2 = generarNumerosAleatorios(16, 30, 5);
-        const numerosRango3 = generarNumerosAleatorios(31, 45, 4);
-        const numerosRango4 = generarNumerosAleatorios(46, 60, 5);
-        const numerosRango5 = generarNumerosAleatorios(61, 75, 5);
-
-        // Combinar todos los números generados
-        const todosLosNumeros = [
-          ...numerosRango1,
-          ...numerosRango2,
-          ...numerosRango3,
-          ...numerosRango4,
-          ...numerosRango5,
-          // Combinar otros rangos aquí...
-        ];
-
-        // Asignar números a las variables n1, n2, ..., n25
-        const numerosAsignados = todosLosNumeros.slice(0, 24);
-
-        console.log(numerosAsignados);
-
-        let isInserted = false;
-        do {
-          const codigonormal = "N" + generarCodigoHexadecimal();
-          const { rows } = await pool.query(
-            `SELECT * FROM tablanormal WHERE codigo = $1`,
-            [codigonormal]
-          );
-
-          if (rows.length === 0) {
-            const datosparainserta = [];
-            datosparainserta.push(idventarapida);
-            datosparainserta.push(codigonormal);
-            for (let m = 0; m < numerosAsignados.length; m++) {
-              datosparainserta.push(numerosAsignados[m]);
-            }
-            // Insertar datos en la tabla
-            await insertarDatosEnLotes(
-              pool,
-              "INSERT INTO tablanormal(id_venta, codigo, num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12, num14, num15, num16, num17, num18, num19, num20, num21, num22, num23, num24, num25) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)",
-              datosparainserta
-            );
-
-            isInserted = true; // Inserción exitosa, salir del bucle
-          }
-        } while (!isInserted); // Bucle mientras no se haya insertado correctamente
-      }
-      return res.status(200).json({ ok: true });
-    } catch (error) {
-      console.log("Error1");
-      verif1 = false;
-      // res.status(500).json({ error: error.message });
     }
   },
   obtenerDatosDeTabla: async (req, res) => {

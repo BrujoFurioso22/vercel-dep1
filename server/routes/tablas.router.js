@@ -4,8 +4,6 @@ import { tablasController } from "../controllers/tablas.controller.js";
 export const tablasRouter = Router();
 
 tablasRouter.post("/insertarventa", tablasController.insertarVenta);
-tablasRouter.post("/insertardatosnormal", tablasController.insertarDatosNormal);
-tablasRouter.post("/insertardatosrapida", tablasController.insertarDatosRapida);
 tablasRouter.post("/buscartabla", tablasController.obtenerDatosDeTabla);
 tablasRouter.post("/obtenertablascliente", tablasController.obtenerTablasCliente);
 tablasRouter.post("/obtenertablasventa", tablasController.obtenerTablasVenta);
