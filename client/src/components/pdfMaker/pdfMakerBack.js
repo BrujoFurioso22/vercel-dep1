@@ -13,15 +13,26 @@ import styled from "styled-components";
 import { ObtenerIDUsuario } from "../../consultasBE/User";
 import { CrearPdf } from "../../consultasBE/Pdf";
 
-const Boton = styled.button`
-  padding: 8px 16px;
+const Boton = styled.div`
+  padding: 4px 10px;
   border: none;
   background-color: #007bff;
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: background-color 0.3s ease;
-  &:disabled {
+  & > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+  }
+  &.disabled {
     background-color: #ffffff;
     color: black;
     cursor: default;
@@ -119,8 +130,20 @@ const GenerarPDFs1 = ({ idventa }) => {
   };
 
   return (
-    <Boton disabled={bloq} onClick={ConsultarDatos}>
-      {bloq ? "Descargando..." : "Descargar PDF Back"}
+    <Boton className={bloq && "disabled"} onClick={ConsultarDatos}>
+      {bloq ? (
+        <span>
+          {" "}
+          <img
+            style={{ width: "30px" }}
+            src={`${process.env.REACT_APP_URL_CLIENT}/Blocks.svg`}
+            alt=""
+          />
+          {"Descargando... "}
+        </span>
+      ) : (
+        "PDF"
+      )}
     </Boton>
   );
 };

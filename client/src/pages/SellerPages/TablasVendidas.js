@@ -216,7 +216,9 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
                 : fila[header]}
             </div>
           ))}
-          <GeneratePdfButton idventa={parseInt(fila.id)} />
+          {/* <GeneratePdfButton idventa={parseInt(fila.id)} /> */}
+          <GenerarPDFs1 idventa={parseInt(fila.id)} />
+
         </div>
       ))}
     </TablaCard>
@@ -264,7 +266,7 @@ const Tablas = ({ datos, datosVentas }) => {
                   </td>
                 ))}
                 <td>
-                  <GeneratePdfButton idventa={parseInt(venta.id)} />
+                  {/* <GeneratePdfButton idventa={parseInt(venta.id)} /> */}
                   <GenerarPDFs1 idventa={parseInt(venta.id)} />
                 </td>
               </tr>

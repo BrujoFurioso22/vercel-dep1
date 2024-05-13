@@ -13,7 +13,7 @@ export const pdfController = {
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2, nombreRes } =
         req.body;
-      const browser = await puppeteer.launch({ headless: "new" });
+      const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
       const pdfs = [];
       let inicioHTML = ` <!DOCTYPE html>
@@ -109,7 +109,7 @@ export const pdfController = {
       // const finalPdf = await combinePdfs(pdfs);
       // const finalPdf = Buffer.concat(pdfs);
       // console.log(finalPdf);
-      await browser.close();
+      // await browser.close();
       res.contentType("application/pdf");
 
       // res.setHeader("Content-Type", "application/pdf");
@@ -118,10 +118,14 @@ export const pdfController = {
       //   'attachment; filename="combined.pdf"'
       // );
       console.log(pdfBuffer);
-      res.send(pdfBuffer);
+      return res.status(200).json(pdfBuffer);
+      // res.send(pdfBuffer);
     } catch (error) {
       console.error("Error generating PDF", error);
       res.status(500).send("Error generating PDF");
+    }finally {
+      await page.close();
+      await browser.close();
     }
   },
 };
