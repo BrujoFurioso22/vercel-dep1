@@ -44,62 +44,7 @@ export const htmlTemplate2 = ({ dataJuego, dataInfo, nombreRes }) => {
     .join("");
 
   return `
-  <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-        * {
-          box-sizing: border-box;
-        }
-        .contenedor-grid > span::after {
-            content: "";
-            margin-left: -10px;
-        }
-        .grid-cell:nth-child(5n) {
-          border-right: none; 
-        }
-        
-        .grid-cell:nth-child(-n + 5) {
-          border-top: none; 
-        }
-        
-        .grid-cell:nth-child(5n + 1) {
-          border-left: none;
-        }
-        
-        .grid-cell:nth-last-child(-n + 5) {
-          border-bottom: none; 
-        }
-        
-        .grid-cell.bottom-left {
-          border-radius: 0 0 0 15px;
-        }
-        
-        .grid-cell.bottom-right {
-          border-radius: 0 0 15px 0;
-        }
-
-        .grid-cell-r:nth-child(3n) {
-          border-right: none;
-        }
-        .grid-cell-r:nth-child(-n + 3) {
-          border-top: none;
-        }
-        .grid-cell-r:nth-child(3n + 1) {
-          border-left: none;
-        }
-        .grid-cell-r:nth-last-child(-n + 3) {
-          border-bottom: none;
-        }
-        
-    </style>
-        <title>El Gran Bingo Chabelita</title>
-      </head>
-      <body style="width:100%;margin:0;display: flex;
-      justify-content: center;
-      align-items: center;">
+  
     <div style="font-family: 'Arial', sans-serif;
         width: 210mm;
         min-height: 297mm;
@@ -182,7 +127,5 @@ export const htmlTemplate2 = ({ dataJuego, dataInfo, nombreRes }) => {
       border-radius: 10px;
       bottom: 0;" class="footer">---------- Vendida por: ${nombreRes} ----------</div>
     </div>
-    </body>
-    </html>
   `;
 };
