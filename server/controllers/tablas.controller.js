@@ -250,10 +250,6 @@ export const tablasController = {
               cadenaparatablarapida = cadenaparatablarapida + "," + cadenaNumeros;
             }
           }
-          const quse = await pool.query(
-            "INSERT INTO venta(name, cc, password) VALUES ($1, $2, $3);",
-            [nombrecliente, cccliente, final]
-          );
 
           // return res.status(200).json({ ok: true });
         } catch (error) {
