@@ -100,7 +100,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
             value={codigo}
             onChange={(e) => handleCodigoChange(e.target.value)}
           />
-          {codigo.length > 7 && (
+          {codigo.length > 5 && (
             <ButtonVerif onClick={BuscarTabla}>
               {verif ? "Buscando..." : "Verificar"}
             </ButtonVerif>

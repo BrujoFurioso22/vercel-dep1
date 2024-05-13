@@ -43,12 +43,20 @@ const Contenedor1 = styled.div`
     justify-content: flex-start;
   }
 `;
-const InputField = styled.input`
+const SelectField = styled.select`
   padding: 4px 5px;
   border: solid 1px var(--color-5);
   outline: none;
   border-radius: 5px;
   width: 100%;
+`;
+const InputField = styled.input`
+  padding: 4px 5px;
+  border: solid 1px var(--color-5);
+  outline: none;
+  border-radius: 5px;
+  width: 80px;
+  min-width: 20px;
 `;
 const ButtonVerif = styled.button`
   outline: none;
@@ -137,8 +145,13 @@ const ContenedorJugadas = ({
   consulta,
   setTablaLlena,
   setLetrasTabla,
+  setMostrarTJ,
+  setJuego,
+  TP,
 }) => {
   const [seguro, setSeguro] = useState(0);
+  const [numero, setNumero] = useState("");
+  const [cadena, setCadena] = useState("");
   let posiciones = [];
 
   if (data !== null) {
@@ -147,7 +160,40 @@ const ContenedorJugadas = ({
   }
 
   // Función para manejar el clic en un círculo
-  const handleClick = async (posicion) => {
+  const handleClick = async (event) => {
+    event.preventDefault();
+    if (posiciones) {
+      if(numero <= 75 && numero >= 1){
+
+      
+      let nnumero = numero - 1;
+      // Copiar el arreglo actual de posiciones
+      const newPositions = [...posiciones];
+      // Cambiar el estado del círculo clicado
+      newPositions[nnumero] = !newPositions[nnumero];
+      let data1 = JSON.stringify(newPositions);
+
+      const res = await UpdateJugada({ id: data.id, data: data1 });
+      if (res) {
+        let numbers = cadena ? cadena.split(",").map((num) => num.trim()):[];
+        const index = numbers.indexOf(numero.toString());
+        if (index === -1) {
+          // Si el número no está en la cadena, añadirlo
+          numbers.push(numero.toString());
+        } else {
+          // Si el número ya está, quitarlo
+          numbers.splice(index, 1);
+        }
+        // Convertir el array de vuelta a una cadena
+        const updatedCadena = numbers.join(", ").trim();
+        setCadena(updatedCadena);
+        setNumero("");
+        await consulta();
+      }
+    }
+    }
+  };
+  const handleClick1 = async (posicion) => {
     if (posiciones) {
       // Copiar el arreglo actual de posiciones
       const newPositions = [...posiciones];
@@ -157,18 +203,23 @@ const ContenedorJugadas = ({
 
       const res = await UpdateJugada({ id: data.id, data: data1 });
       if (res) {
+        let num = parseInt(posicion) + 1;
+
+        let numbers = cadena ? cadena.split(",").map((num1) => num1.trim()):[];
+        const index = numbers.indexOf(num.toString());
+        if (index === -1) {
+          // Si el número no está en la cadena, añadirlo
+          numbers.push(num.toString());
+        } else {
+          // Si el número ya está, quitarlo
+          numbers.splice(index, 1);
+        }
+        // Convertir el array de vuelta a una cadena
+        const updatedCadena = numbers.join(", ").trim();
+        setCadena(updatedCadena);
+        setNumero("");
         await consulta();
       }
-      // const resTablaLlena = await ObtenerTablasGanadoras();
-      // setTablaLlena(resTablaLlena);
-      // console.log(resTablaLlena);
-
-      // const resTablaLetras = await ObtenerTablasLetrasGanadoras();
-      // setLetrasTabla(resTablaLetras);
-      // console.log(resTablaLetras);
-
-      // Actualizar el estado de 'data' con el nuevo arreglo de posiciones
-      // setData({ ...data, data: newPositions });
     }
   };
 
@@ -182,6 +233,7 @@ const ContenedorJugadas = ({
 
     const res = await CrearNuevaJugada({ data });
     if (res) {
+      setMostrarTJ(false);
       setData(res);
     }
   };
@@ -192,6 +244,8 @@ const ContenedorJugadas = ({
       setSeguro(0);
       setTablaLlena([]);
       setLetrasTabla({});
+      setMostrarTJ(true);
+      setJuego("");
       await consulta();
     }
   };
@@ -213,15 +267,38 @@ const ContenedorJugadas = ({
     <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
       {data !== null ? (
         <Contenedor1>
-          <span>
-            Fecha Jugada: <em> {formatearFechaLegible(data.fecha_hora)} </em>
-          </span>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span>
+              Fecha Jugada: <em> {formatearFechaLegible(data.fecha_hora)} </em>
+            </span>
+            <h3 style={{ margin: "0" }}>
+              {TP === "0" ? "JUEGO NORMAL" : "LA ÚNICA"}
+            </h3>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              <form action="" onSubmit={handleClick}>
+                <label>Número: </label>
+                <InputField
+                  type="number"
+                  value={numero}
+                  min={1}
+                  max={75}
+                  onChange={(e) => setNumero(e.target.value)}
+                />
+              </form>
+            </div>
+            <div style={{ overflow: "auto", maxWidth: "500px" }}>
+              <span>{cadena}</span>
+            </div>
+          </div>
+
           <GridContainer>
             {Object.entries(posiciones).map(([posicion, marcada]) => (
               <Circle
                 key={posicion}
                 marked={marcada}
-                onClick={() => handleClick(posicion)} // Manejar el clic
+                onClick={() => handleClick1(posicion)} // Manejar el clic
                 clicked={marcada}
               >
                 {parseInt(posicion) + 1}
@@ -331,9 +408,11 @@ const Jugadas = () => {
   for (let i = 1; i <= 75; i++) {
     initialPositions[i] = false;
   }
+  const [tipodeJuego, setTipodeJuego] = useState("");
   const [data, setData] = useState(null);
   const [dataTotales, setDataTotales] = useState([]);
   const [dataTablasLetas, setTablasLetra] = useState({});
+  const [mostrarTipoJuego, setMostrarTipoJuego] = useState(true);
 
   const ConsultarJugadas = async () => {
     const res = await ObtenerJugadas();
@@ -343,14 +422,17 @@ const Jugadas = () => {
       setData(res[0]);
     }
     const resTablaLlena = await ObtenerTablasGanadoras();
-    if(resTablaLlena.status===200){
-      setDataTotales(resTablaLlena);
+    if (resTablaLlena.length > 0) {
+      const hasNonEmptyDatos = resTablaLlena.some(
+        (item) => item.datos.length > 0
+      );
+      if (hasNonEmptyDatos) {
+        setDataTotales(resTablaLlena);
+      }
     }
-    console.log(resTablaLlena);
 
     const resTablaLetras = await ObtenerTablasLetrasGanadoras();
-    if(resTablaLetras.status === 200){
-
+    if (resTablaLetras.length > 0) {
       setTablasLetra(resTablaLetras);
     }
     // console.log(res);
@@ -359,19 +441,43 @@ const Jugadas = () => {
     ConsultarJugadas();
   }, []);
 
+  const handleOptions = (value) => {
+    setTipodeJuego(value);
+  };
+
   return (
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
         <h1>Juegos Actuales</h1>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "15px" }}>
-          <ContenedorJugadas
-            data={data}
-            setData={setData}
-            consulta={ConsultarJugadas}
-            setTablaLlena={setDataTotales}
-            setLetrasTabla={setTablasLetra}
-          ></ContenedorJugadas>
+          {mostrarTipoJuego && (
+            <Contenedor1 style={{ minWidth: "fit-content" }}>
+              <SelectField
+                onChange={(e) => handleOptions(e.target.value)}
+                style={{ width: "fit-content" }}
+                name=""
+                id=""
+              >
+                <option value="">Seleccione un juego</option>
+                <option value="0">Tabla Llena</option>
+                <option value="1">La única</option>
+              </SelectField>
+            </Contenedor1>
+          )}
+          {tipodeJuego !== "" && (
+            <ContenedorJugadas
+              data={data}
+              setData={setData}
+              consulta={ConsultarJugadas}
+              setTablaLlena={setDataTotales}
+              setLetrasTabla={setTablasLetra}
+              setMostrarTJ={setMostrarTipoJuego}
+              setJuego={setTipodeJuego}
+              TP={tipodeJuego}
+            ></ContenedorJugadas>
+          )}
+
           <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
             {dataTotales.length > 0 && (
               <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
