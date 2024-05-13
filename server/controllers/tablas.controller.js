@@ -288,45 +288,71 @@ export const tablasController = {
       const { codigotabla } = req.body;
 
       const { rows: rows1 } = await pool.query(
-        "SELECT * FROM tablanormal WHERE codigo = $1;",
+        "SELECT tablas_normal FROM venta WHERE tablas_normal LIKE '%$1%';",
         [codigotabla]
       );
 
       const { rows: rows2 } = await pool.query(
-        "SELECT * FROM tablarapida WHERE codigo = $1;",
+        "SELECT tablas_rapida FROM venta WHERE tablas_rapida LIKE '%$1%';",
         [codigotabla]
       );
       // console.log(rows2);
 
       if (rows1.length > 0) {
+
+        // Divide la cadena en cada coma para obtener los elementos individuales
+        const elementos = rows1[0].tablas_normal.split(",");
+        // Inicializa una variable para almacenar el conjunto de números que contiene "cod3"
+        let conjuntoCod3;
+
+        // Itera sobre los elementos para encontrar el conjunto que contiene "cod3"
+        elementos.forEach(elemento => {
+          if (elemento.includes(codigotabla)) {
+            conjuntoCod3 = elemento;
+          }
+        });
+
+        // Elimina los corchetes y las comillas de los extremos y convierte la cadena en un arreglo
+        const arregloCod = conjuntoCod3.slice(1, -1).split(",").map(elemento => {
+          // Convierte los elementos numéricos a números
+          if (!isNaN(elemento)) {
+            return parseInt(elemento);
+          } else {
+            // Mantén las comillas para el código
+            return elemento;
+          }
+        });
+
+        console.log(arregloCod);
+
         const var1 = [
           {
-            numtabla: rows1[0].codigo,
+            numtabla: arregloCod[arregloCod.length],
             datos: {
-              1: rows1[0].num1,
-              2: rows1[0].num6,
-              3: rows1[0].num11,
-              4: rows1[0].num16,
-              5: rows1[0].num21,
-              6: rows1[0].num2,
-              7: rows1[0].num7,
-              8: rows1[0].num12,
-              9: rows1[0].num17,
-              10: rows1[0].num22,
-              11: rows1[0].num3,
-              12: rows1[0].num8,
-              14: rows1[0].num18,
-              15: rows1[0].num23,
-              16: rows1[0].num4,
-              17: rows1[0].num9,
-              18: rows1[0].num14,
-              19: rows1[0].num19,
-              20: rows1[0].num24,
-              21: rows1[0].num5,
-              22: rows1[0].num10,
-              23: rows1[0].num15,
-              24: rows1[0].num20,
-              25: rows1[0].num25,
+              1: arregloCod[0],
+              2: arregloCod[5],
+              3: arregloCod[10],
+              4: arregloCod[15],
+              5: arregloCod[20],
+              6: arregloCod[1],
+              7: arregloCod[6],
+              8: arregloCod[11],
+              9: arregloCod[16],
+              10: arregloCod[21],
+              11: arregloCod[2],
+              12: arregloCod[7],
+              14: arregloCod[17],
+              15: arregloCod[22],
+              16: arregloCod[3],
+              17: arregloCod[8],
+              18: arregloCod[13],
+              19: arregloCod[18],
+              20: arregloCod[23],
+              21: arregloCod[4],
+              22: arregloCod[9],
+              23: arregloCod[14],
+              24: arregloCod[19],
+              25: arregloCod[24]
             },
           },
         ];
@@ -334,17 +360,41 @@ export const tablasController = {
           data: var1,
         });
       } else if (rows2.length > 0) {
+        // Divide la cadena en cada coma para obtener los elementos individuales
+        const elementos = rows2[0].tablas_normal.split(",");
+        // Inicializa una variable para almacenar el conjunto de números que contiene "cod3"
+        let conjuntoCod3;
+
+        // Itera sobre los elementos para encontrar el conjunto que contiene "cod3"
+        elementos.forEach(elemento => {
+          if (elemento.includes(codigotabla)) {
+            conjuntoCod3 = elemento;
+          }
+        });
+
+        // Elimina los corchetes y las comillas de los extremos y convierte la cadena en un arreglo
+        const arregloCod = conjuntoCod3.slice(1, -1).split(",").map(elemento => {
+          // Convierte los elementos numéricos a números
+          if (!isNaN(elemento)) {
+            return parseInt(elemento);
+          } else {
+            // Mantén las comillas para el código
+            return elemento;
+          }
+        });
+
+        console.log(arregloCod);
         const var2 = [
           {
-            numtabla: rows2[0].codigo,
+            numtabla: arregloCod[arregloCod.length].codigo,
             datos: {
-              1: rows2[0].num1,
-              3: rows2[0].num7,
-              4: rows2[0].num3,
-              6: rows2[0].num8,
-              7: rows2[0].num4,
-              8: rows2[0].num6,
-              9: rows2[0].num9,
+              1: arregloCod[0],
+              3: arregloCod[4],
+              4: arregloCod[1],
+              6: arregloCod[5],
+              7: arregloCod[2],
+              8: arregloCod[3],
+              9: arregloCod[6],
             },
           },
         ];
