@@ -55,14 +55,14 @@ const GridH = ({ data }) => {
     .join(""); // Unimos todos los elementos del array en una sola cadena
 
   return `<div style="display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-gap: 0;
-  width: 75mm;
-  border-radius: 0 0 15px 15px;
-  overflow: hidden;
-  border: solid 1px #000000;
-  background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('${process.env.FRONT_URL}/LogoChabelita1.ico');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;" class="grid">${gridItems}</div>`;
+      grid-template-columns: repeat(5, 1fr);
+      grid-gap: 0;
+      width: 75mm;
+      border-radius: 0 0 15px 15px;
+      overflow: hidden;
+      border: solid 1px #000000;
+      background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('${process.env.FRONT_URL}/LogoChabelita1.ico');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;" class="grid">${gridItems}</div>`;
 };

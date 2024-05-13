@@ -55,7 +55,7 @@ const GenerarPDFs1 = ({ idventa }) => {
 
         if (typeof window !== "undefined") {
           // Asegura que esto se ejecute solo en el lado del cliente
-          generatePdf(dataTabla, dataTabla2, data1, data2, nombreVend);
+          await generatePdf(dataTabla, dataTabla2, data1, data2, nombreVend);
         }
       }
     } catch (error) {
@@ -91,12 +91,16 @@ const GenerarPDFs1 = ({ idventa }) => {
   ) => {
     // if (data.length === 0) return;
 
-    const dataChunks = chunkData(dataTabla, 4);
-    const chunk = dataChunks[0];
+    const dataChunks1 = chunkData(dataTabla, 4);
+    const dataChunks2 = chunkData(dataTabla2, 6);
+    // console.log(dataChunks);
+    // const chunk = dataChunks[0];
 
     const result = await CrearPdf({
-      dataJuego: chunk,
-      dataInfo: data1,
+      dataJuego1: dataChunks1,
+      dataJuego2: dataChunks2,
+      dataInfo1: data1,
+      dataInfo2: data2,
       nombreRes: nombreVend,
     });
     if (result instanceof Error) {

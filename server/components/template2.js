@@ -1,7 +1,6 @@
-import { EstructuraTabla1 } from "./EstructuraTabla1.js";
-import LetrasGrid from "./LetrasGrid.js";
+import { EstructuraTabla2 } from "./EstructuraTabla2.js";
 
-export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
+export const htmlTemplate2 = ({ dataJuego, dataInfo, nombreRes }) => {
   function formatearFechaConHora(fechaISO) {
     const opciones = {
       day: "numeric",
@@ -17,9 +16,6 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
     return fechaFormateada.replace(" a. m.", " AM").replace(" p. m.", " PM");
   }
 
-  const premiosContent = dataInfo[0].premios
-    .map((item, idx) => `<div key="${idx}">${item}</div>`)
-    .join("");
   const juegoContent = dataJuego
     .map(
       (data, idx) => `
@@ -38,7 +34,7 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
           flex-direction: column;
           justify-content: center;
           align-items: center;" class="bingo-card" key="${idx}">
-            <div class="bingo-table">${EstructuraTabla1({
+            <div class="bingo-table">${EstructuraTabla2({
               dataTables: data,
             })}</div>
           </div>
@@ -138,51 +134,31 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
         justify-content: space-evenly;
         width: 100%;" class="header-body">
           <div style="flex: 1;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;" class="c1-header">
-            <img style="width: 100%;" src="${process.env.FRONT_URL}/LogoChabelita1.ico" alt="Logo" />
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;" 
+            class="c1-header">
+            <img style="width: 100%;" src="${
+              process.env.FRONT_URL
+            }/LogoChabelita1.ico" alt="Logo" />
           </div>
-
-          <div style="flex: 3;
+          
+          <div style="flex: 2;
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 2mm;" class="c2-header">
-            ${
-              dataInfo[0].premios.length > 0
-                ? `
-              <div>
-                <div class="c2-tit">Premios adicionales:</div>
-                <div style="display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                column-gap: 3mm;
-                row-gap: 1.5mm;
-                border: solid 1px rgba(0, 0, 0, 0.3);
-                padding: 1mm 2mm;
-                border-radius: 2mm;" class="c2-content">${premiosContent}</div>
-              </div>
-            `
-                : ""
-            }
-            <div>
-              <div>Las letras a jugar son: ${dataInfo[0].letras.join(
-                ", "
-              )}</div>
-              <div>Ganancia por letra: $20</div>
-            </div>
+              <p>Se jugará el ${formatearFechaConHora(
+                dataInfo[0].fecha_hora
+              )}</p>
           </div>
           <div style="flex: 2;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-direction: column;" class="c3-header">
-            <h3>1era Tabla Llena: $${dataInfo[0].premio1}</h3>
-            <span>2da Tabla Llena: $${dataInfo[0].premio2}</span>
-            <span>3ra Tabla Llena: $${dataInfo[0].premio3}</span>
-            <span>Se jugará el ${formatearFechaConHora(
-              dataInfo[0].fecha_hora
-            )}</span>
+            <h3>Tabla Llena: $${dataInfo[0].premio1}</h3>
+           
           </div>
         </div>
       </div>
@@ -191,7 +167,6 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
       padding: 0;
       flex-direction: column;
       justify-content: center;" class="body">
-        ${LetrasGrid({ letras: dataInfo[0].letras })}
         <div style="width: 100%;
         display: grid;
         grid-template-columns: 1fr 1fr;

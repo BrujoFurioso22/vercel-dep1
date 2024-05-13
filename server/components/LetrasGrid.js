@@ -30,7 +30,7 @@ const gridMap = {
 };
 
 function LetrasGrid({ letras }) {
-  console.log(letras);
+  // console.log(letras);
   const contenedorGridLetras = letras
     .map((letra) => SingleGrid({letra}))
     .join("");
@@ -48,7 +48,6 @@ const SingleGrid = ({ letra }) => {
     };
   });
 
-  console.log(gridMap["A"].includes(1));
   const gridItems = grid
     .map((cell) => {
       return `
