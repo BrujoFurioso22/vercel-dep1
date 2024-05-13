@@ -343,11 +343,16 @@ const Jugadas = () => {
       setData(res[0]);
     }
     const resTablaLlena = await ObtenerTablasGanadoras();
-    setDataTotales(resTablaLlena);
+    if(resTablaLlena.status===200){
+      setDataTotales(resTablaLlena);
+    }
     console.log(resTablaLlena);
 
     const resTablaLetras = await ObtenerTablasLetrasGanadoras();
-    setTablasLetra(resTablaLetras);
+    if(resTablaLetras.status === 200){
+
+      setTablasLetra(resTablaLetras);
+    }
     // console.log(res);
   };
   useEffect(() => {
