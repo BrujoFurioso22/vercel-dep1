@@ -9,7 +9,7 @@ tablasRouter.post("/insertardatosrapida", tablasController.insertarDatosRapida);
 tablasRouter.post("/buscartabla", tablasController.obtenerDatosDeTabla);
 tablasRouter.post("/obtenertablascliente", tablasController.obtenerTablasCliente);
 tablasRouter.post("/obtenertablasventa", tablasController.obtenerTablasVenta);
-tablasRouter.get("/probarcosas", tablasController.probarEncriptado);
+tablasRouter.get("/probarcosas", tablasController.probarInsercionNueva);
 
 
 // router.get("/:id", bookController.getById)
