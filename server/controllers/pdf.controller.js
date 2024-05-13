@@ -22,8 +22,9 @@ export const pdfController = {
       const page = await browser.newPage();
 
       await page.setContent(htmlMinify, {
-        waitUntil: "domcontentloaded",
+        waitUntil: "networkidle0",
       });
+      // page.emulateMedia('screen');
       const pdf = await page.pdf({
         format: "A4",
         printBackground: true

@@ -129,7 +129,7 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
           display: flex;
           justify-content: flex-start;
           align-items: center;" class="c1-header">
-            <img style="width: 100%;" src="/FondoTabla1.png" alt="Logo" />
+            <img style="width: 100%;" src="${process.env.FRONT_URL}/LogoChabelita1.ico" alt="Logo" />
           </div>
           <div style="flex: 3;
           display: flex;
