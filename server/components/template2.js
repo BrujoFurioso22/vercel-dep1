@@ -93,7 +93,7 @@ export const htmlTemplate2 = ({ dataJuego, dataInfo, nombreRes }) => {
           flex-direction: column;
           align-items: center;
           gap: 2mm;" class="c2-header">
-              <p>Se jugará el ${formatearFechaConHora(
+              <p>Se jugará el: <br></br> ${formatearFechaConHora(
                 dataInfo[0].fecha_hora
               )}</p>
           </div>

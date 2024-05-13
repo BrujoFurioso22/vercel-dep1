@@ -6,20 +6,7 @@ import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
 import { PDFDocument } from "pdf-lib";
 
-async function combinePdfs(pdfs) {
-  console.log(pdfs);
-  const mergedPdf = await PDFDocument.create();
 
-  for (const pdfBytes of pdfs) {
-    const pdf = await PDFDocument.load(pdfBytes);
-    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-    copiedPages.forEach((page) => {
-      mergedPdf.addPage(page);
-    });
-  }
-
-  return await mergedPdf.save();
-}
 
 export const pdfController = {
   generatePDF: async (req, res) => {
@@ -122,7 +109,7 @@ export const pdfController = {
       // const finalPdf = await combinePdfs(pdfs);
       // const finalPdf = Buffer.concat(pdfs);
       // console.log(finalPdf);
-      // await browser.close();
+      await browser.close();
       res.contentType("application/pdf");
 
       // res.setHeader("Content-Type", "application/pdf");

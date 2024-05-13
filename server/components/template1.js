@@ -125,7 +125,7 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
             <h3>1era Tabla Llena: $${dataInfo[0].premio1}</h3>
             <span>2da Tabla Llena: $${dataInfo[0].premio2}</span>
             <span>3ra Tabla Llena: $${dataInfo[0].premio3}</span>
-            <span>Se jugará el ${formatearFechaConHora(
+            <span>Se jugará el: <br></br>${formatearFechaConHora(
               dataInfo[0].fecha_hora
             )}</span>
           </div>
