@@ -8,16 +8,16 @@ import { ventasRouter } from './routes/ventas.router.js';
 import { juegoRouter } from './routes/juego.router.js';
 import { pdfRouter } from './routes/pdf.router.js';
 import timeout from 'connect-timeout'; 
-
 // Cargar las variables de entorno
 const app = express();
 
-app.use(express.static('public'));
 app.use(express.json());
 app.use(corsMiddleware());
 
 // Desactivar la cabecera 'x-powered-by'
 app.disable('x-powered-by');
+
+app.use(express.static('public'));
 
 app.use(timeout('30s'));  // 30 segundos de tiempo de espera
 

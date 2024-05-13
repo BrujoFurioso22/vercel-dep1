@@ -24,7 +24,10 @@ export const pdfController = {
       await page.setContent(htmlMinify, {
         waitUntil: "domcontentloaded",
       });
-      const pdf = await page.pdf({ format: "A4", printBackground: true });
+      const pdf = await page.pdf({
+        format: "A4",
+        printBackground: true
+      });
 
       // await browser.close();
 

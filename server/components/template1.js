@@ -25,18 +25,26 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
   const juegoContent = dataJuego
     .map(
       (data, idx) => `
-    <div style="width: 100%;
-    height: fit-content;
-    padding: 2mm;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;" class="bingo-card" key="${idx}">
-      <div class="bingo-table">${EstructuraTabla1({ dataTables: data })}</div>
-    </div>
+      <div style="width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        ">
+          <div style="width: 100%;
+          height: fit-content;
+          padding: 2mm;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;" class="bingo-card" key="${idx}">
+            <div class="bingo-table">${EstructuraTabla1({
+              dataTables: data,
+            })}</div>
+          </div>
+        </div>
   `
     )
     .join("");
@@ -48,6 +56,9 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
+        * {
+          box-sizing: border-box;
+        }
         .contenedor-grid > span::after {
             content: "";
             margin-left: -10px;
@@ -78,12 +89,15 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
     </style>
         <title>El Gran Bingo Chabelita</title>
       </head>
-      <body style="width:100%;margin:10mm">
+      <body style="width:100%;margin:0;display: flex;
+      justify-content: center;
+      align-items: center;">
     <div style="font-family: 'Arial', sans-serif;
         width: 210mm;
         min-height: 297mm;
         height: 100%;
         background: white;
+        padding: 2mm;
         color: black;
         display: flex;
         flex-direction: column;
@@ -115,7 +129,7 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
           display: flex;
           justify-content: flex-start;
           align-items: center;" class="c1-header">
-            <img style="width: 100%;" src="${process.env.URL_LINK}/server/public/FondoTabla1.png" alt="Logo" />
+            <img style="width: 100%;" src="/FondoTabla1.png" alt="Logo" />
           </div>
           <div style="flex: 3;
           display: flex;
@@ -161,15 +175,17 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
       </div>
       <div style="display: flex;
       width: 100%;
-      padding: 10mm;
-      padding-top: 3mm;
+      padding: 0;
       flex-direction: column;
       justify-content: center;" class="body">
         ${LetrasGrid({ letras: dataInfo[0].letras })}
         <div style="width: 100%;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 5mm;" class="bingo-container-u">${juegoContent}</div>
+        gap: 5mm;" class="bingo-container-u">
+        
+        ${juegoContent}
+        </div>
       </div>
       <div style="padding: 2mm;
       background-color: #f1f1f1;

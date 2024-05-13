@@ -10,10 +10,10 @@ export async function CrearPdf({ dataJuego, dataInfo, nombreRes }) {
       `${url}/api/pdf/generarPDF`,
       { dataJuego, dataInfo, nombreRes },{responseType:"blob"}
     );
-    // console.log(res);
+    console.log(res);
     // Crear un URL y descargar el PDF
     const urll = window.URL.createObjectURL(new Blob([res.data]));
-    console.log(urll);
+    // console.log(urll);
     
     const link = document.createElement('a');
     link.href = urll;
