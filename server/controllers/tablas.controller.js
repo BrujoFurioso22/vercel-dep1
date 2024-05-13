@@ -53,175 +53,7 @@ async function insertarDatosEnLotes(pool, query, valores) {
 
 export const tablasController = {
   probarInsercionNueva: async (req, res) => {
-    const cantidadnormal = 1;
-    const cantidadrapida = 1;
-    if (cantidadnormal > 0) {
-      try {
-        // Función para generar números aleatorios sin repetición en un rango específico
-        const generarNumerosAleatorios = (min, max, cantidad) => {
-          let numeros = new Set();
-          while (numeros.size < cantidad) {
-            let num = Math.floor(Math.random() * (max - min + 1)) + min;
-            numeros.add(num);
-          }
-          return Array.from(numeros);
-        };
-        let banderin = false;
-        let hexvalidador;
-        do {
-          hexvalidador = generarCodigoHexadecimallargo();
-          const { rows: hexrows } = await pool.query(
-            "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
-            [hexvalidador]
-          );
-          if (hexrows.length === 0) {
-            banderin = true;
-          }
-        } while (!banderin);
-        let cadenaparalatabla = ""; // Cambiar de const a let
-        for (let i = 0; i < cantidadnormal * 4; i++) {
 
-          // Generar números aleatorios para diferentes rangos
-          const numerosRango1 = generarNumerosAleatorios(1, 15, 5);
-          const numerosRango2 = generarNumerosAleatorios(16, 30, 5);
-          const numerosRango3 = generarNumerosAleatorios(31, 45, 4);
-          const numerosRango4 = generarNumerosAleatorios(46, 60, 5);
-          const numerosRango5 = generarNumerosAleatorios(61, 75, 5);
-
-          // Combinar todos los números generados
-          const todosLosNumeros = [
-            ...numerosRango1,
-            ...numerosRango2,
-            ...numerosRango3,
-            ...numerosRango4,
-            ...numerosRango5,
-            // Combinar otros rangos aquí...
-          ];
-
-          // Asignar números a las variables n1, n2, ..., n25
-          const numerosAsignados = todosLosNumeros.slice(0, 24);
-
-          console.log(numerosAsignados);
-          let banderadecodigo = false
-          let codigonormal = "";
-          do {
-            codigonormal = "N" + generarCodigoHexadecimal();
-            console.log(codigonormal);
-            const { rows: tablasnormales } = await pool.query(
-              "SELECT tablas_normal FROM venta"
-            );
-            if (tablasnormales.length > 0) {
-              for (let i = 0; i < tablasnormales.length; i++) {
-                if (tablasnormales[i].tablas_normal.includes(codigonormal)) {
-                  banderadecodigo = true;
-                  console.log(banderadecodigo);
-                  break;
-                }
-              }
-            } else {
-              banderadecodigo = true
-            }
-          } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
-
-          let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigonormal + "]";
-
-          if (i === 0) {
-            cadenaparalatabla = cadenaNumeros;
-          } else {
-            cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
-          }
-        }
-        console.log(cadenaparalatabla);
-        // return res.status(200).json({ ok: true });
-      } catch (error) {
-        console.log("Error1");
-        //verif1 = false;
-        // res.status(500).json({ error: error.message });
-      }
-    }
-
-    if (cantidadrapida > 0) {
-      try {
-        // Función para generar números aleatorios sin repetición en un rango específico
-        const generarNumerosAleatorios = (min, max, cantidad) => {
-          let numeros = new Set();
-          while (numeros.size < cantidad) {
-            let num = Math.floor(Math.random() * (max - min + 1)) + min;
-            numeros.add(num);
-          }
-          return Array.from(numeros);
-        };
-        let banderin = false;
-        let hexvalidador;
-        do {
-          hexvalidador = generarCodigoHexadecimallargo();
-          const { rows: hexrows } = await pool.query(
-            "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
-            [hexvalidador]
-          );
-          if (hexrows.length === 0) {
-            banderin = true;
-          }
-        } while (!banderin);
-        let cadenaparalatabla = ""; // Cambiar de const a let
-        for (let i = 0; i < cantidadnormal * 6; i++) {
-
-          // Generar números aleatorios para diferentes rangos
-          const numerosRango1 = generarNumerosAleatorios(1, 25, 3);
-          const numerosRango2 = generarNumerosAleatorios(26, 50, 1);
-          const numerosRango3 = generarNumerosAleatorios(51, 75, 3);
-
-          // Combinar todos los números generados
-          const todosLosNumeros = [
-            ...numerosRango1,
-            ...numerosRango2,
-            ...numerosRango3,
-            // Combinar otros rangos aquí...
-          ];
-
-          // Asignar números a las variables n1, n2, ..., n25
-          const numerosAsignados = todosLosNumeros.slice(0, 7);
-
-          console.log(numerosAsignados);
-          let banderadecodigo = false
-          let codigorapido = "";
-          do {
-            codigorapido = "R" + generarCodigoHexadecimal();
-            console.log(codigorapido);
-            const { rows: tablasrapidas } = await pool.query(
-              "SELECT tablas_rapida FROM venta"
-            );
-            if (tablasrapidas.length > 0) {
-              for (let i = 0; i < tablasrapidas.length; i++) {
-                if (tablasrapidas[i].tablas_normal.includes(codigorapido)) {
-                  banderadecodigo = true;
-                  console.log(banderadecodigo);
-                  break;
-                }
-              }
-            } else {
-              banderadecodigo = true
-            }
-          } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
-
-          let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigorapido + "]";
-
-          if (i === 0) {
-            cadenaparalatabla = cadenaNumeros;
-          } else {
-            cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
-          }
-        }
-        console.log(cadenaparalatabla);
-        // return res.status(200).json({ ok: true });
-      } catch (error) {
-        console.log("Error1");
-        //verif1 = false;
-        // res.status(500).json({ error: error.message });
-      }
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////
   },
   insertarVenta: async (req, res) => {
     try {
@@ -257,6 +89,7 @@ export const tablasController = {
           isInserted = true;
         }
       } while (!isInserted);
+      console.log();
 
       let verif1 = true,
         verif2 = true;
@@ -368,8 +201,8 @@ export const tablasController = {
               banderin = true;
             }
           } while (!banderin);
-          let cadenaparalatabla = ""; // Cambiar de const a let
-          for (let i = 0; i < cantidadnormal * 6; i++) {
+          let cadenaparatablarapida = ""; // Cambiar de const a let
+          for (let i = 0; i < cantidadrapida * 6; i++) {
 
             // Generar números aleatorios para diferentes rangos
             const numerosRango1 = generarNumerosAleatorios(1, 25, 3);
@@ -412,12 +245,16 @@ export const tablasController = {
             let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigorapido + "]";
 
             if (i === 0) {
-              cadenaparalatabla = cadenaNumeros;
+              cadenaparatablarapida = cadenaNumeros;
             } else {
-              cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
+              cadenaparatablarapida = cadenaparatablarapida + "," + cadenaNumeros;
             }
           }
-          console.log(cadenaparalatabla);
+          const quse = await pool.query(
+            "INSERT INTO venta(name, cc, password) VALUES ($1, $2, $3);",
+            [nombrecliente, cccliente, final]
+          );
+
           // return res.status(200).json({ ok: true });
         } catch (error) {
           console.log("Error1");
@@ -426,7 +263,20 @@ export const tablasController = {
         }
       }
       // console.log(rows);
-
+      const insercionfinal = await pool.query(
+        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex_validador,tablas_normal,tablas_rapida) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7, $8, $9);",
+        [
+          idvendedor,
+          idcliente,
+          cantidadnormal,
+          cantidadrapida,
+          cantidaddinero,
+          numerotransaccion,
+          hexvalidador,
+          cadenaparalatabla,
+          cadenaparatablarapida
+        ]
+      );
       // console.log(verif1);
       // console.log(verif2);
       if (verif1 === true && verif2 === true) {
