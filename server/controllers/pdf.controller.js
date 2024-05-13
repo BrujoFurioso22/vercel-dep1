@@ -6,8 +6,6 @@ import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
 import { PDFDocument } from "pdf-lib";
 
-
-
 export const pdfController = {
   generatePDF: async (req, res) => {
     try {
@@ -79,19 +77,21 @@ export const pdfController = {
         dataInfo,
         htmlTemplateFunc
       ) {
-        for (const chunk of dataJuego) {
-          const htmlOrig = htmlTemplateFunc({
-            dataJuego: chunk,
-            dataInfo,
-            nombreRes,
-          });
-          const htmlMinify = minify(htmlOrig, {
-            removeComments: true,
-            collapseWhitespace: true,
-            minifyJS: true,
-            minifyCSS: true,
-          });
-          htmls = htmls + htmlMinify;
+        if (dataJuego.length > 0) {
+          for (const chunk of dataJuego) {
+            const htmlOrig = htmlTemplateFunc({
+              dataJuego: chunk,
+              dataInfo,
+              nombreRes,
+            });
+            const htmlMinify = minify(htmlOrig, {
+              removeComments: true,
+              collapseWhitespace: true,
+              minifyJS: true,
+              minifyCSS: true,
+            });
+            htmls = htmls + htmlMinify;
+          }
           // console.log(htmlMinify);
         }
       }
@@ -123,7 +123,7 @@ export const pdfController = {
     } catch (error) {
       console.error("Error generating PDF", error);
       res.status(500).send("Error generating PDF");
-    }finally {
+    } finally {
       await page.close();
       await browser.close();
     }

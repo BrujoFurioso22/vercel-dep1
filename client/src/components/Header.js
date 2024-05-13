@@ -144,7 +144,7 @@ const ContenedorLogin = styled.div`
     color: var(--color-blanco);
     text-decoration: none;
   }
-  
+
   @media ${device.mobile1} {
     display: none;
   }
@@ -167,7 +167,7 @@ const ContenedorDerecho = styled.div`
     justify-content: flex-end;
     width: 100%;
     color: black;
-    &.home{
+    &.home {
       color: white;
     }
     & > i {
@@ -362,6 +362,13 @@ const Header = ({ oculta }) => {
       </MenuD>
     );
   };
+  const MenuADM = () => {
+    return (
+      <MenuD>
+        <CustomNavLink to="/adm/manageUsers">Administrar Usuarios</CustomNavLink>
+      </MenuD>
+    );
+  };
   return (
     <ContenedorHeader className={classNameBg}>
       <ContenedorHeader1>
@@ -374,10 +381,14 @@ const Header = ({ oculta }) => {
           {/* <span onClick={() => navigate("/")}>HOME</span>{" "} */}
         </ContenedorLogo>
         <ContenedorMenu className={classNameBg}>
-          {localStorage.getItem("rol") === "23" && <Menu />}
+          {localStorage.getItem("rol") === "23" ? (
+            <Menu />
+          ) : (
+            localStorage.getItem("rol") === "57" && <MenuADM />
+          )}
         </ContenedorMenu>
 
-        <ContenedorLogin className={`ContenedorLogin ${classNameBg}`} >
+        <ContenedorLogin className={`ContenedorLogin ${classNameBg}`}>
           {!oculta &&
             (localStorage.getItem("id") ? (
               <ContenedorDerecho>
@@ -426,7 +437,11 @@ const Header = ({ oculta }) => {
           </span>
         </div>
         <div className="ContenedorMenuL">
-          {localStorage.getItem("rol") === "23" && <Menu />}
+          {localStorage.getItem("rol") === "23" ? (
+            <Menu />
+          ) : (
+            localStorage.getItem("rol") === "57" && <MenuADM />
+          )}
         </div>
         <hr style={{ width: "85%" }} />
         <div className="ContenedorLogL">

@@ -10,6 +10,8 @@ import { AuthProvider } from "./auth/AuthContext";
 import { UserPR } from "./routes/UserPR";
 import { SellerPR } from "./routes/SellerPR";
 import SellerRoutes from "./pages/PaginasPadre/SellerRoutes";
+import { AdminPR } from "./routes/AdminPR";
+import AdminRoutes from "./pages/PaginasPadre/AdminRoutes";
 
 function App() {
   return (
@@ -34,6 +36,14 @@ function App() {
               <SellerPR>
                 <SellerRoutes />
               </SellerPR>
+            }
+          />
+          <Route
+            path="/adm/*"
+            element={
+              <AdminPR>
+                <AdminRoutes />
+              </AdminPR>
             }
           />
           <Route path="*" element={<NotFound />} />

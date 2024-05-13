@@ -236,7 +236,7 @@ function LandingPage() {
     const data2 = await obtenerDatosAdicionales(ObtenerDesRapida);
     setCont1(data1[0]);
     setCont2(data2[0]);
-    console.log(data1[0]);
+    // console.log(data1[0]);
   };
 
   useEffect(() => {
