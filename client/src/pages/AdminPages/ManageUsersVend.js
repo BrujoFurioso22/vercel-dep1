@@ -183,6 +183,11 @@ const GridItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &.editando{
+    background-color: #b7dfed;
+  }
+
   & > button {
     border: none;
     border-radius: 5px;
@@ -233,11 +238,11 @@ function UserGrid({ users, toggleBlock, editID, setEditID }) {
       {/* Datos de los usuarios */}
       {users.map((user, index) => (
         <React.Fragment key={index}>
-          <GridItem className="user-cc">{user.cc}</GridItem>
-          <GridItem className="user-alias">{user.alias}</GridItem>
-          <GridItem className="user-name">{user.name}</GridItem>
-          <GridItem className="user-password">{user.password}</GridItem>
-          <GridItem className="user-action">
+          <GridItem className={`${user.cc === editID && "editando"} user-cc`}>{user.cc}</GridItem>
+          <GridItem className={`${user.cc === editID && "editando"} user-alias`}>{user.alias}</GridItem>
+          <GridItem className={`${user.cc === editID && "editando"} user-name`}>{user.name}</GridItem>
+          <GridItem className={`${user.cc === editID && "editando"} user-password`}>{user.password}</GridItem>
+          <GridItem className= {`${user.cc === editID && "editando"} user-action`}>
             <button
               className={user.bloq && "bloqueado"}
               onClick={() => toggleBlock(user.cc)}
@@ -245,7 +250,7 @@ function UserGrid({ users, toggleBlock, editID, setEditID }) {
               {user.bloq ? "Desbloquear" : "Bloquear"}
             </button>
           </GridItem>
-          <GridItem className="user-edit">
+          <GridItem className={`${user.cc === editID && "editando"} user-edit`}>
             <button
               className={`${editID === user.cc && "selected"} edit`}
               onClick={() => setEditID(editID === user.cc ? 0 : user.cc)}
