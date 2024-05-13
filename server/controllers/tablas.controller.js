@@ -66,6 +66,7 @@ export const tablasController = {
         cantidaddinero,
         numerotransaccion,
       } = req.body;
+      console.log("si entre aqui compa");
 
       let idcliente = 0;
       let isInserted = false;
@@ -89,7 +90,6 @@ export const tablasController = {
           isInserted = true;
         }
       } while (!isInserted);
-      console.log();
 
       let verif1 = true,
         verif2 = true;
@@ -250,7 +250,6 @@ export const tablasController = {
               cadenaparatablarapida = cadenaparatablarapida + "," + cadenaNumeros;
             }
           }
-
           // return res.status(200).json({ ok: true });
         } catch (error) {
           console.log("Error1");
