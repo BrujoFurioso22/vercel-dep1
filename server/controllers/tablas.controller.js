@@ -191,7 +191,21 @@ export const tablasController = {
               }
               return Array.from(numeros);
             };
-
+            let banderin = false;
+            let hexvalidador;
+            
+            
+            do {
+              hexvalidador = generarCodigoHexadecimallargo();
+              const { rows: hexrows } = await pool.query(
+                "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
+                [hexvalidador]
+              );
+              if (hexrows.length === 0) {
+                banderin = true;
+              }
+            } while (!banderin);
+            const cadenaparalatabla="";
             for (let i = 0; i < cantidadrapida * 6; i++) {
               // Generar números aleatorios para diferentes rangos
               const numerosRango1 = generarNumerosAleatorios(1, 25, 3);
@@ -210,31 +224,34 @@ export const tablasController = {
               const numerosAsignados = todosLosNumeros.slice(0, 7);
 
               // console.log(numerosAsignados);
+              console.log(numerosAsignados);
+         
+
               let isInserted = false;
               do {
-                const codigorapido = "R" + generarCodigoHexadecimal();
-                const { rows } = await pool.query(
-                  `SELECT * FROM tablarapida WHERE codigo = $1`,
-                  [codigorapido]
+                const codigonormal = "R" + generarCodigoHexadecimal();
+                const { rows: tablasnormales } = await pool.query(
+                  `SELECT tablas_rapida FROM venta`,
                 );
-
-                if (rows.length === 0) {
-                  const datosparainserta = [];
-                  datosparainserta.push(idventa);
-                  datosparainserta.push(codigorapido);
-                  for (let m = 0; m < numerosAsignados.length; m++) {
-                    datosparainserta.push(numerosAsignados[m]);
+                let banderadecodigo = false
+                if (tablasnormales.length > 0) {
+                  for (let i = 0; i < tablasnormales.length; i++) {
+                    if (tablasnormales[i].tablas_normal.includes(codigonormal)) {
+                      banderadecodigo = true;
+                      break;
+                    }
                   }
-
-                  // Insertar datos en la tabla
-                  await insertarDatosEnLotes(pool, "INSERT INTO tablarapida(id_venta,codigo,num1,num3,num4,num6,num7,num8,num9) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", datosparainserta);
-
                   isInserted = true; // Inserción exitosa, salir del bucle
                 }
-              } while (!isInserted); // Bucle mientras no se haya insertado correctamente
-              // Enviar respuesta parcial al frontend indicando el progreso
-
+              } while (!isInserted && !banderadecodigo); // Bucle mientras no se haya insertado correctamente
+              numerosAsignados.push(codigonormal);
+              if(i===0){
+                cadenaparalatabla =  numerosAsignados;
+              }else{
+                cadenaparalatabla = cadenaparalatabla + ","+ numerosAsignados;
+              }
             }
+            console.log(cadenaparalatabla);
             // return res.status(200).json({ ok: true });
           } catch (error) {
             console.log("Error");
@@ -243,20 +260,6 @@ export const tablasController = {
           }
         }
       }
-
-      const tempor = await pool.query(
-        "INSERT INTO venta(id_vendedor, id_cliente, fecha, cantidad_normal, cantidad_rapida, cantidad_dinero, numero_transaccion, hex_validador,tablas) VALUES ($1, $2, CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $3, $4, $5, $6, $7, $8);",
-        [
-          idvendedor,
-          idcliente,
-          cantidadnormal,
-          cantidadrapida,
-          cantidaddinero,
-          numerotransaccion,
-          hexvalidador,
-          cadena
-        ]
-      );
 
       // console.log(rows);
 
