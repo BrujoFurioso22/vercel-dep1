@@ -66,7 +66,6 @@ export const tablasController = {
         cantidaddinero,
         numerotransaccion,
       } = req.body;
-      console.log("si entre aqui compa");
 
       let idcliente = 0;
       let isInserted = false;
@@ -90,10 +89,22 @@ export const tablasController = {
           isInserted = true;
         }
       } while (!isInserted);
-
+      let banderin = false;
+      let hexvalidador;
+      do {
+        hexvalidador = generarCodigoHexadecimallargo();
+        const { rows: hexrows } = await pool.query(
+          "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
+          [hexvalidador]
+        );
+        if (hexrows.length === 0) {
+          banderin = true;
+        }
+      } while (!banderin);
       let verif1 = true,
         verif2 = true;
-
+      let cadenaparalatabla = "";
+      let cadenaparatablarapida = "";
       if (cantidadnormal > 0) {
         try {
           // Función para generar números aleatorios sin repetición en un rango específico
@@ -105,19 +116,7 @@ export const tablasController = {
             }
             return Array.from(numeros);
           };
-          let banderin = false;
-          let hexvalidador;
-          do {
-            hexvalidador = generarCodigoHexadecimallargo();
-            const { rows: hexrows } = await pool.query(
-              "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
-              [hexvalidador]
-            );
-            if (hexrows.length === 0) {
-              banderin = true;
-            }
-          } while (!banderin);
-          let cadenaparalatabla = ""; // Cambiar de const a let
+
           for (let i = 0; i < cantidadnormal * 4; i++) {
 
             // Generar números aleatorios para diferentes rangos
@@ -140,12 +139,10 @@ export const tablasController = {
             // Asignar números a las variables n1, n2, ..., n25
             const numerosAsignados = todosLosNumeros.slice(0, 24);
 
-            console.log(numerosAsignados);
             let banderadecodigo = false
             let codigonormal = "";
             do {
               codigonormal = "N" + generarCodigoHexadecimal();
-              console.log(codigonormal);
               const { rows: tablasnormales } = await pool.query(
                 "SELECT tablas_normal FROM venta"
               );
@@ -170,6 +167,7 @@ export const tablasController = {
               cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
             }
           }
+          console.log(cadenaparalatabla);
           // return res.status(200).json({ ok: true });
         } catch (error) {
           console.log("Error1");
@@ -189,19 +187,7 @@ export const tablasController = {
             }
             return Array.from(numeros);
           };
-          let banderin = false;
-          let hexvalidador;
-          do {
-            hexvalidador = generarCodigoHexadecimallargo();
-            const { rows: hexrows } = await pool.query(
-              "SELECT hex_validador FROM venta WHERE hex_validador=$1;",
-              [hexvalidador]
-            );
-            if (hexrows.length === 0) {
-              banderin = true;
-            }
-          } while (!banderin);
-          let cadenaparatablarapida = ""; // Cambiar de const a let
+
           for (let i = 0; i < cantidadrapida * 6; i++) {
 
             // Generar números aleatorios para diferentes rangos
@@ -219,19 +205,16 @@ export const tablasController = {
 
             // Asignar números a las variables n1, n2, ..., n25
             const numerosAsignados = todosLosNumeros.slice(0, 7);
-
-            console.log(numerosAsignados);
             let banderadecodigo = false
             let codigorapido = "";
             do {
               codigorapido = "R" + generarCodigoHexadecimal();
-              console.log(codigorapido);
               const { rows: tablasrapidas } = await pool.query(
                 "SELECT tablas_rapida FROM venta"
               );
               if (tablasrapidas.length > 0) {
                 for (let i = 0; i < tablasrapidas.length; i++) {
-                  if (tablasrapidas[i].tablas_normal.includes(codigorapido)) {
+                  if (tablasrapidas[i].tablas_rapida.includes(codigorapido)) {
                     banderadecodigo = true;
                     console.log(banderadecodigo);
                     break;
@@ -250,6 +233,8 @@ export const tablasController = {
               cadenaparatablarapida = cadenaparatablarapida + "," + cadenaNumeros;
             }
           }
+          console.log(cadenaparatablarapida);
+
           // return res.status(200).json({ ok: true });
         } catch (error) {
           console.log("Error1");
@@ -288,113 +273,84 @@ export const tablasController = {
       const { codigotabla } = req.body;
 
       const { rows: rows1 } = await pool.query(
-        "SELECT tablas_normal FROM venta WHERE tablas_normal LIKE '%$1%';",
-        [codigotabla]
+        "SELECT tablas_normal FROM venta WHERE tablas_normal LIKE $1;",
+        ['%' + codigotabla + '%']
       );
-
       const { rows: rows2 } = await pool.query(
-        "SELECT tablas_rapida FROM venta WHERE tablas_rapida LIKE '%$1%';",
-        [codigotabla]
+        "SELECT tablas_rapida FROM venta WHERE tablas_rapida LIKE $1;",
+        ['%' + codigotabla + '%']
       );
       // console.log(rows2);
-
       if (rows1.length > 0) {
 
         // Divide la cadena en cada coma para obtener los elementos individuales
-        const elementos = rows1[0].tablas_normal.split(",");
-        // Inicializa una variable para almacenar el conjunto de números que contiene "cod3"
-        let conjuntoCod3;
+        const arregloTodo = rows1[0].tablas_normal.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
 
-        // Itera sobre los elementos para encontrar el conjunto que contiene "cod3"
-        elementos.forEach(elemento => {
+        const nuevoArreglo = [];
+
+        for (const elemento of arregloTodo) {
           if (elemento.includes(codigotabla)) {
-            conjuntoCod3 = elemento;
+            nuevoArreglo.push(elemento);
           }
-        });
-
-        // Elimina los corchetes y las comillas de los extremos y convierte la cadena en un arreglo
-        const arregloCod = conjuntoCod3.slice(1, -1).split(",").map(elemento => {
-          // Convierte los elementos numéricos a números
-          if (!isNaN(elemento)) {
-            return parseInt(elemento);
-          } else {
-            // Mantén las comillas para el código
-            return elemento;
-          }
-        });
-
-        console.log(arregloCod);
-
+        }
+        const FnuevoArreglo = nuevoArreglo[0].split(',');
         const var1 = [
           {
-            numtabla: arregloCod[arregloCod.length],
+            numtabla: FnuevoArreglo[FnuevoArreglo.length-1],
             datos: {
-              1: arregloCod[0],
-              2: arregloCod[5],
-              3: arregloCod[10],
-              4: arregloCod[15],
-              5: arregloCod[20],
-              6: arregloCod[1],
-              7: arregloCod[6],
-              8: arregloCod[11],
-              9: arregloCod[16],
-              10: arregloCod[21],
-              11: arregloCod[2],
-              12: arregloCod[7],
-              14: arregloCod[17],
-              15: arregloCod[22],
-              16: arregloCod[3],
-              17: arregloCod[8],
-              18: arregloCod[13],
-              19: arregloCod[18],
-              20: arregloCod[23],
-              21: arregloCod[4],
-              22: arregloCod[9],
-              23: arregloCod[14],
-              24: arregloCod[19],
-              25: arregloCod[24]
+              1: FnuevoArreglo[0],
+              2: FnuevoArreglo[5],
+              3: FnuevoArreglo[10],
+              4: FnuevoArreglo[14],
+              5: FnuevoArreglo[19],
+              6: FnuevoArreglo[1],
+              7: FnuevoArreglo[6],
+              8: FnuevoArreglo[11],
+              9: FnuevoArreglo[15],
+              10: FnuevoArreglo[20],
+              11: FnuevoArreglo[2],
+              12: FnuevoArreglo[7],
+              14: FnuevoArreglo[16],
+              15: FnuevoArreglo[21],
+              16: FnuevoArreglo[3],
+              17: FnuevoArreglo[8],
+              18: FnuevoArreglo[12],
+              19: FnuevoArreglo[17],
+              20: FnuevoArreglo[23],
+              21: FnuevoArreglo[4],
+              22: FnuevoArreglo[9],
+              23: FnuevoArreglo[13],
+              24: FnuevoArreglo[18],
+              25: FnuevoArreglo[23]
             },
           },
         ];
+        console.log(var1);
         return res.status(200).json({
           data: var1,
         });
       } else if (rows2.length > 0) {
         // Divide la cadena en cada coma para obtener los elementos individuales
-        const elementos = rows2[0].tablas_normal.split(",");
-        // Inicializa una variable para almacenar el conjunto de números que contiene "cod3"
-        let conjuntoCod3;
+        const arregloTodo = rows2[0].tablas_rapida.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
 
-        // Itera sobre los elementos para encontrar el conjunto que contiene "cod3"
-        elementos.forEach(elemento => {
+        const nuevoArreglo = [];
+        for (const elemento of arregloTodo) {
           if (elemento.includes(codigotabla)) {
-            conjuntoCod3 = elemento;
+            nuevoArreglo.push(elemento);
           }
-        });
-
-        // Elimina los corchetes y las comillas de los extremos y convierte la cadena en un arreglo
-        const arregloCod = conjuntoCod3.slice(1, -1).split(",").map(elemento => {
-          // Convierte los elementos numéricos a números
-          if (!isNaN(elemento)) {
-            return parseInt(elemento);
-          } else {
-            // Mantén las comillas para el código
-            return elemento;
-          }
-        });
-
-        console.log(arregloCod);
+        }
+        const FnuevoArreglo = nuevoArreglo[0].split(',');
         const var2 = [
           {
-            numtabla: arregloCod[arregloCod.length].codigo,
+            numtabla: FnuevoArreglo[FnuevoArreglo.length-1],
             datos: {
-              1: arregloCod[0],
-              3: arregloCod[4],
-              4: arregloCod[1],
-              6: arregloCod[5],
-              7: arregloCod[2],
-              8: arregloCod[3],
-              9: arregloCod[6],
+              1: FnuevoArreglo[0],
+              3: FnuevoArreglo[4],
+              4: FnuevoArreglo[1],
+              6: FnuevoArreglo[5],
+              7: FnuevoArreglo[2],
+              8: FnuevoArreglo[3],
+              9: FnuevoArreglo[6],
             },
           },
         ];
@@ -411,13 +367,16 @@ export const tablasController = {
     try {
       const { cccliente } = req.body;
       const { rows: rowsTablaNormal } = await pool.query(
-        "SELECT tablanormal.* FROM public.tablanormal, public.venta, public.users WHERE tablanormal.id_venta=venta.id and venta.id_cliente=users.id and users.cc =$1",
+        "SELECT tablas_normal FROM public.venta, public.users WHERE venta.id_cliente=users.id and users.cc =$1",
         [cccliente]
       );
       const { rows: rowsTablaRapida } = await pool.query(
-        "SELECT tablarapida.* FROM public.tablarapida, public.venta, public.users WHERE tablarapida.id_venta=venta.id and venta.id_cliente=users.id and users.cc =$1",
+        "SELECT tablas_rapida FROM public.venta, public.users WHERE venta.id_cliente=users.id and users.cc =$1",
         [cccliente]
       );
+
+
+
       let var1 = [],
         var2 = [];
       if (rowsTablaNormal.length > 0) {
