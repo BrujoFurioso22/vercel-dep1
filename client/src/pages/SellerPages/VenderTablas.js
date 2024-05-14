@@ -192,7 +192,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
         ? 0
         : parseInt(datos.cantidades["Juego 2"]),
       datos.cantidadTransferencia === ""
-        ? null
+        ? 0
         : parseFloat(datos.cantidadTransferencia),
       datos.numeroTransferencia
     );
