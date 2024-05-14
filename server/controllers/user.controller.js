@@ -166,7 +166,7 @@ export const userController = {
         "SELECT estado FROM public.users WHERE cc=$1;",
         [cedulacelular]
       );
-      const estadonuevo=false;
+      let estadonuevo=false;
       if(rowsconsulta[0].estado === true){
         estadonuevo=false
       }else{
@@ -176,7 +176,7 @@ export const userController = {
         "UPDATE public.users SET estado=$1 WHERE cc=$2;",
         [estadonuevo, cedulacelular]
       );
-      if (rows) {
+      if (rowsactualizarestado) {
         return res.status(200).json({ ok: true })
       } else {
         return res.status(404).json({ ok: false });
