@@ -20,7 +20,7 @@ export const userController = {
       // console.log(req);
       const { cedulacelular, password } = req.body;
       const { rows } = await pool.query(
-        "SELECT password, rol, name FROM users WHERE cc = $1",
+        "SELECT password, rol, name FROM users WHERE cc = $1 and estado = false",
         [cedulacelular]
       );
 
