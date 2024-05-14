@@ -6,7 +6,7 @@ export const tablasRouter = Router();
 tablasRouter.post("/insertarventa", tablasController.insertarVenta);
 tablasRouter.post("/buscartabla", tablasController.obtenerDatosDeTabla);
 tablasRouter.post("/obtenertablascliente", tablasController.obtenerTablasCliente);
-tablasRouter.get("/obtenertablasventa", tablasController.obtenerTablasVenta);
+tablasRouter.post("/obtenertablasventa", tablasController.obtenerTablasVenta);
 tablasRouter.get("/probarcosas", tablasController.probarInsercionNueva);
 
 
