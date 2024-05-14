@@ -6,7 +6,11 @@ import { ConsultarTablasSegunIDTabla } from "../../consultasBE/Tablas";
 import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
 import { EstructuraTabla2 } from "../UserPages/EstructuraTabla2";
 import { ObtenerUsuarioPorCC } from "../../consultasBE/User";
-import { ActualizarBloqueoUsuario, ConsultarUserVendedores } from "../../consultasBE/Admin";
+import {
+  ActualizarBloqueoUsuario,
+  ActualizarDatosUsuarioVendedor,
+  ConsultarUserVendedores,
+} from "../../consultasBE/Admin";
 
 const ContenedorPagina = styled.div`
   position: relative;
@@ -52,7 +56,7 @@ const GridItem = styled.div`
   align-items: center;
   justify-content: center;
 
-  &.editando{
+  &.editando {
     background-color: #b7dfed;
   }
 
@@ -93,6 +97,11 @@ const GridHeader = styled.div`
   /* border: 1px solid #ccc; */
 `;
 function UserGrid({ users, toggleBlock, editID, setEditID }) {
+  const sortedUsers = users.sort((a, b) => {
+    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+    return 0;
+  });
   return (
     <GridContainer>
       {/* Encabezados de la tabla */}
@@ -104,18 +113,32 @@ function UserGrid({ users, toggleBlock, editID, setEditID }) {
       <GridHeader className="grid-header-edit">Editar</GridHeader>
 
       {/* Datos de los usuarios */}
-      {users.map((user, index) => (
+      {sortedUsers.map((user, index) => (
         <React.Fragment key={index}>
-          <GridItem className={`${user.cc === editID && "editando"} user-cc`}>{user.cc}</GridItem>
-          <GridItem className={`${user.cc === editID && "editando"} user-alias`}>{user.alias}</GridItem>
-          <GridItem className={`${user.cc === editID && "editando"} user-name`}>{user.name}</GridItem>
-          <GridItem className={`${user.cc === editID && "editando"} user-password`}>{user.password}</GridItem>
-          <GridItem className= {`${user.cc === editID && "editando"} user-action`}>
+          <GridItem className={`${user.cc === editID && "editando"} user-cc`}>
+            {user.cc}
+          </GridItem>
+          <GridItem
+            className={`${user.cc === editID && "editando"} user-alias`}
+          >
+            {user.alias}
+          </GridItem>
+          <GridItem className={`${user.cc === editID && "editando"} user-name`}>
+            {user.name}
+          </GridItem>
+          <GridItem
+            className={`${user.cc === editID && "editando"} user-password`}
+          >
+            {user.password}
+          </GridItem>
+          <GridItem
+            className={`${user.cc === editID && "editando"} user-action`}
+          >
             <button
-              className={user.bloq && "bloqueado"}
+              className={user.estado && "bloqueado"}
               onClick={() => toggleBlock(user.cc)}
             >
-              {user.bloq ? "Desbloquear" : "Bloquear"}
+              {user.estado ? "Desbloquear" : "Bloquear"}
             </button>
           </GridItem>
           <GridItem className={`${user.cc === editID && "editando"} user-edit`}>
@@ -138,6 +161,7 @@ function UserGrid({ users, toggleBlock, editID, setEditID }) {
 const FormContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
+  align-items: center;
   gap: 10px;
   padding: 15px;
   border-radius: 10px;
@@ -147,10 +171,12 @@ const FormContainer = styled.div`
 
 const Label = styled.label`
   font-weight: bold;
+  text-align: right;
 `;
 
 const Input = styled.input`
   padding: 8px;
+  border-radius: 5px;
   border: 1px solid #ccc;
 `;
 
@@ -165,7 +191,7 @@ const BotonSubmit = styled.button`
     background-color: #45a049;
   }
 `;
-function UserForm({ users, cc }) {
+function UserForm({ users, cc ,consultar}) {
   const [userData, setUserData] = useState({
     cc: "",
     nombre: "",
@@ -199,16 +225,25 @@ function UserForm({ users, cc }) {
   }, [userData, originalData]);
 
   // Función para guardar los datos
-  const handleSave = () => {
+  const handleSave = async () => {
     // Aquí se podría implementar la lógica para guardar los datos modificados
-    console.log("Datos guardados:", userData);
-    setOriginalData(userData);
-    setShowSaveButton(false);
+    // console.log("Datos guardados:", userData);
+    const res = await ActualizarDatosUsuarioVendedor({
+      cedulacelular: userData.cc,
+      nombre: userData.name,
+      alias: userData.alias,
+      passwd: userData.password,
+    });
+    if (res) {
+      setOriginalData(userData);
+      setShowSaveButton(false);
+      consultar();
+    }
   };
 
   return (
     <FormContainer>
-      <Label>CC:</Label>
+      <Label>Cédula/Teléfono:</Label>
       <Input name="cc" value={userData.cc} onChange={handleChange} disabled />
 
       <Label>Alias:</Label>
@@ -216,8 +251,7 @@ function UserForm({ users, cc }) {
       <Label>Nombre:</Label>
       <Input name="nombre" value={userData.name} onChange={handleChange} />
 
-
-      <Label>Password:</Label>
+      <Label>Contraseña:</Label>
       <Input
         name="password"
         value={userData.password}
@@ -276,7 +310,7 @@ const ManageUsersVend = () => {
     ConsultarUsuarios();
   }, []);
   const ActualizarBloqueo = async (userID) => {
-    await ActualizarBloqueoUsuario({cedulacelular:userID});
+    await ActualizarBloqueoUsuario({ cedulacelular: userID });
   };
   const toggleBloq = async (userID) => {
     await ActualizarBloqueo(userID);
@@ -300,7 +334,7 @@ const ManageUsersVend = () => {
           </Contenedor1>
           {editID !== 0 && (
             <Contenedor1>
-              <UserForm users={usuariosVend} cc={editID} />
+              <UserForm users={usuariosVend} cc={editID} consultar={ConsultarUsuarios}/>
             </Contenedor1>
           )}
         </div>
