@@ -296,7 +296,7 @@ export const tablasController = {
         const FnuevoArreglo = nuevoArreglo[0].split(',');
         const var1 = [
           {
-            numtabla: FnuevoArreglo[FnuevoArreglo.length-1],
+            numtabla: FnuevoArreglo[FnuevoArreglo.length - 1],
             datos: {
               1: FnuevoArreglo[0],
               2: FnuevoArreglo[5],
@@ -342,7 +342,7 @@ export const tablasController = {
         const FnuevoArreglo = nuevoArreglo[0].split(',');
         const var2 = [
           {
-            numtabla: FnuevoArreglo[FnuevoArreglo.length-1],
+            numtabla: FnuevoArreglo[FnuevoArreglo.length - 1],
             datos: {
               1: FnuevoArreglo[0],
               3: FnuevoArreglo[4],
@@ -375,65 +375,99 @@ export const tablasController = {
         [cccliente]
       );
 
-
-
       let var1 = [],
         var2 = [];
+
       if (rowsTablaNormal.length > 0) {
-        var1 = rowsTablaNormal.map((rowsTablaNormal) => ({
-          numtabla: rowsTablaNormal.codigo,
-          datos: {
-            1: rowsTablaNormal.num1,
-            2: rowsTablaNormal.num6,
-            3: rowsTablaNormal.num11,
-            4: rowsTablaNormal.num16,
-            5: rowsTablaNormal.num21,
-            6: rowsTablaNormal.num2,
-            7: rowsTablaNormal.num7,
-            8: rowsTablaNormal.num12,
-            9: rowsTablaNormal.num17,
-            10: rowsTablaNormal.num22,
-            11: rowsTablaNormal.num3,
-            12: rowsTablaNormal.num8,
-            14: rowsTablaNormal.num18,
-            15: rowsTablaNormal.num23,
-            16: rowsTablaNormal.num4,
-            17: rowsTablaNormal.num9,
-            18: rowsTablaNormal.num14,
-            19: rowsTablaNormal.num19,
-            20: rowsTablaNormal.num24,
-            21: rowsTablaNormal.num5,
-            22: rowsTablaNormal.num10,
-            23: rowsTablaNormal.num15,
-            24: rowsTablaNormal.num20,
-            25: rowsTablaNormal.num25,
-          },
-        }));
+        const arregloTodo = rowsTablaNormal[0].tablas_normal.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+        const tempo = [];
+        for (const elemento of arregloTodo) {
+          tempo.push(elemento);
+        }
+        tempo.splice(0, 1);
+        tempo.splice(tempo.length - 1,);
+        const FnuevoArreglo = [];
+        for (let i = 0; i < tempo.length; i++) {
+          FnuevoArreglo.push(tempo[i].split(','));
+        }
+        for (let k = 0; k < FnuevoArreglo.length; k++) {
+          var1.push({
+            numtabla: FnuevoArreglo[k][24],
+            datos: {
+              1: FnuevoArreglo[k][0],
+              2: FnuevoArreglo[k][5],
+              3: FnuevoArreglo[k][10],
+              4: FnuevoArreglo[k][14],
+              5: FnuevoArreglo[k][19],
+              6: FnuevoArreglo[k][1],
+              7: FnuevoArreglo[k][6],
+              8: FnuevoArreglo[k][11],
+              9: FnuevoArreglo[k][15],
+              10: FnuevoArreglo[k][20],
+              11: FnuevoArreglo[k][2],
+              12: FnuevoArreglo[k][7],
+              14: FnuevoArreglo[k][16],
+              15: FnuevoArreglo[k][21],
+              16: FnuevoArreglo[k][3],
+              17: FnuevoArreglo[k][8],
+              18: FnuevoArreglo[k][12],
+              19: FnuevoArreglo[k][17],
+              20: FnuevoArreglo[k][23],
+              21: FnuevoArreglo[k][4],
+              22: FnuevoArreglo[k][9],
+              23: FnuevoArreglo[k][13],
+              24: FnuevoArreglo[k][18],
+              25: FnuevoArreglo[k][23]
+            },
+          });
+        }
       }
+
       if (rowsTablaRapida.length > 0) {
-        var2 = rowsTablaRapida.map((rowsTablaRapida) => ({
-          numtabla: rowsTablaRapida.codigo,
-          datos: {
-            1: rowsTablaRapida.num1,
-            3: rowsTablaRapida.num7,
-            4: rowsTablaRapida.num3,
-            6: rowsTablaRapida.num8,
-            7: rowsTablaRapida.num4,
-            8: rowsTablaRapida.num6,
-            9: rowsTablaRapida.num9,
-          },
-        }));
+        const arregloTodo = rowsTablaRapida[0].tablas_rapida.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+        const tempo = [];
+        for (const elemento of arregloTodo) {
+          tempo.push(elemento);
+        }
+        tempo.splice(0, 1);
+        tempo.splice(tempo.length - 1,);
+        const FnuevoArreglo = [];
+        for (let i = 0; i < tempo.length; i++) {
+          FnuevoArreglo.push(tempo[i].split(','));
+        }
+        for (let k = 0; k < FnuevoArreglo.length; k++) {
+          var2.push({
+            numtabla: FnuevoArreglo[k][7],
+            datos: {
+              1: FnuevoArreglo[k][0],
+              3: FnuevoArreglo[k][4],
+              4: FnuevoArreglo[k][1],
+              6: FnuevoArreglo[k][5],
+              7: FnuevoArreglo[k][2],
+              8: FnuevoArreglo[k][3],
+              9: FnuevoArreglo[k][6],
+            },
+          });
+        }
       }
       return res.status(200).json({
         ok: true,
         data1: var1,
         data2: var2,
+        
       });
     } catch (error) {
       res.status(500).json({ msg: error.msg });
     }
   },
   obtenerTablasVenta: async (req, res) => {
+    //////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
     try {
       const { idventa } = req.body;
       const { rows: rowsTablaNormal } = await pool.query(
