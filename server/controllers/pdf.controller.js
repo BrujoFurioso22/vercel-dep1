@@ -96,6 +96,8 @@ export const pdfController = {
           // console.log(htmlMinify);
         }
       }
+      console.log(dataJuego1);
+      console.log(dataJuego2);
       if (dataJuego1.length === 0 && dataJuego2.length === 0) {
         return res.status(205).json({});
       } else {

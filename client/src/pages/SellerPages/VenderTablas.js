@@ -198,7 +198,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
     );
     console.log(resp);
     if (resp) {
-      if(resp.ok){
+      if (resp.ok) {
         setVentaCorrecta(1);
       } else {
         setVentaCorrecta(2);
@@ -363,6 +363,13 @@ const FormularioVenta = () => {
   useEffect(() => {
     Limpiar();
   }, [tipoIdentificacion]);
+
+  const ConsultarNombreCliente = async (ident) => {
+    const res =await ObtenerIDUsuario(ident);
+    if(res.status===200){
+      return res.data.nombre
+    }
+  };
   useEffect(() => {
     let valid = false;
     if (tipoIdentificacion === "telefono") {
@@ -373,6 +380,20 @@ const FormularioVenta = () => {
       const regex = /^\d{10}$/;
       valid = regex.test(identificacion);
     }
+    if(identificacion!==""){
+      const strSinEspacios = identificacion.replace(/\s+/g, "");
+      let nombreCl = "";
+      const fetch= async()=>{
+        nombreCl = await ConsultarNombreCliente(strSinEspacios);
+        if(nombreCl !== undefined){
+          console.log(nombreCl);
+          setNombreComprador(nombreCl)
+        }
+      }
+      fetch()
+      
+    }
+
     if (valid) {
       setEtapa(2);
     } else {
