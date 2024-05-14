@@ -23,6 +23,7 @@ export const EstructuraTabla1 = ({ dataTables }) => {
           ">BINGO</span>
           ${GridH({ data: dataTables })}
         </div>
+        <span style="font-size:8px;">Vend:${dataTables.alias}</span>
       </div>
     </div>`;
 };

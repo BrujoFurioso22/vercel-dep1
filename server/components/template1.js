@@ -41,6 +41,7 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
             <div class="bingo-table">${EstructuraTabla1({
               dataTables: data,
             })}</div>
+            <span></span>
           </div>
         </div>
   `

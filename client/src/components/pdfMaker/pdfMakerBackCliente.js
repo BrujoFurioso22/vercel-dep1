@@ -39,7 +39,7 @@ const Boton = styled.div`
   }
 `;
 
-const GenerarPDFs1 = ({ idventa }) => {
+const GenerarPDFsCliente = ({ idventa }) => {
   const [bloq, setBloq] = useState(false);
   const [error, setError] = useState(false);
 
@@ -156,4 +156,4 @@ const GenerarPDFs1 = ({ idventa }) => {
   );
 };
 
-export default GenerarPDFs1;
+export default GenerarPDFsCliente;

@@ -8,11 +8,12 @@ import { PDFDocument } from "pdf-lib";
 
 export const pdfController = {
   generatePDF: async (req, res) => {
+    let browser, page;
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2, nombreRes } =
         req.body;
-      const browser = await puppeteer.launch({ headless: true });
-      const page = await browser.newPage();
+      browser = await puppeteer.launch({ headless: true });
+      page = await browser.newPage();
       const pdfs = [];
       let inicioHTML = ` <!DOCTYPE html>
       <html lang="en">
@@ -95,37 +96,40 @@ export const pdfController = {
           // console.log(htmlMinify);
         }
       }
-      await generatePdfFromChunk(dataJuego1, dataInfo1, htmlTemplate1);
-      await generatePdfFromChunk(dataJuego2, dataInfo2, htmlTemplate2);
-      htmls = htmls + `</body></html>`;
-      // pdfs.push(pdfBuffer);
-      console.log(htmls);
+      if (dataJuego1.length === 0 && dataJuego2.length === 0) {
+        return res.status(205).json({});
+      } else {
+        await generatePdfFromChunk(dataJuego1, dataInfo1, htmlTemplate1);
+        await generatePdfFromChunk(dataJuego2, dataInfo2, htmlTemplate2);
+        htmls = htmls + `</body></html>`;
+        // pdfs.push(pdfBuffer);
 
-      await page.setContent(htmls, { waitUntil: "networkidle0" });
-      const pdfBuffer = await page.pdf({
-        format: "A4",
-        printBackground: true,
-      });
-      // const finalPdf = await combinePdfs(pdfs);
-      // const finalPdf = Buffer.concat(pdfs);
-      // console.log(finalPdf);
-      // await browser.close();
-      res.contentType("application/pdf");
+        await page.setContent(htmls, { waitUntil: "networkidle0" });
+        const pdfBuffer = await page.pdf({
+          format: "A4",
+          printBackground: true,
+        });
+        // const finalPdf = await combinePdfs(pdfs);
+        // const finalPdf = Buffer.concat(pdfs);
+        // console.log(finalPdf);
+        // await browser.close();
+        res.contentType("application/pdf");
 
-      // res.setHeader("Content-Type", "application/pdf");
-      // res.setHeader(
-      //   "Content-Disposition",
-      //   'attachment; filename="combined.pdf"'
-      // );
-      console.log(pdfBuffer);
-      return res.status(200).json(pdfBuffer);
+        // res.setHeader("Content-Type", "application/pdf");
+        // res.setHeader(
+        //   "Content-Disposition",
+        //   'attachment; filename="combined.pdf"'
+        // );
+        return res.status(200).json(pdfBuffer);
+      }
+
       // res.send(pdfBuffer);
     } catch (error) {
       console.error("Error generating PDF", error);
       res.status(500).send("Error generating PDF");
     } finally {
-      await page.close();
-      await browser.close();
+      if (page) await page.close();
+      if (browser) await browser.close();
     }
   },
 };

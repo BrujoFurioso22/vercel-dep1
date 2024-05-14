@@ -177,6 +177,25 @@ const TablaCard = styled.div`
     margin-right: 10px;
   }
 `;
+
+const ContenedorBotones = styled.div`
+  display: flex;
+  padding: 8px;
+  gap: 10px;
+  & > span {
+    padding: 4px 10px;
+    border: solid 1px var(--color-2);
+    color: var(--color-2);
+    border-radius: 5px;
+    user-select: none;
+    cursor: pointer;
+    &.selected {
+      background-color: var(--color-2);
+      color: white;
+    }
+  }
+`;
+
 function formatDate(dateString) {
   const date = new Date(dateString); // Parsear la fecha
   const day = String(date.getDate()).padStart(2, "0"); // Día en formato 2 dígitos
@@ -218,7 +237,6 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
           ))}
           {/* <GeneratePdfButton idventa={parseInt(fila.id)} /> */}
           <GenerarPDFs1 idventa={parseInt(fila.id)} />
-
         </div>
       ))}
     </TablaCard>
@@ -304,19 +322,28 @@ const TablasVendidas = () => {
   const [datosTabla, setDatosTabla] = useState([]);
   const [datosFiltrados, setDatosFiltrados] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Nuevo estado para manejar la carga
-
+  const [menuSeleccionado, setMenuSeleccionado] = useState(0);
   const [busqueda, setBusqueda] = useState("");
   const [dataVentas, setDataVentas] = useState([]);
 
-  const ConsultarTablasVendedor = async () => {
+  const ConsultarTablasVendedor = async (menu) => {
     setIsLoading(true); // Inicia la carga
     try {
       const idVendedor = await ObtenerIDUsuario(idv);
-      if (idVendedor.data.id) {
-        const res = await ConsultarVentas(idVendedor.data.id);
-        // console.log(res);
-        setDatosTabla(res.data.data || []);
+      if(menu===0){
+        if (idVendedor.data.id) {
+          const res = await ConsultarVentas(idVendedor.data.id);
+          // console.log(res);
+          setDatosTabla(res.data.data || []);
+        }
+      }else{
+        if (idVendedor.data.id) {
+          const res = await ConsultarVentas(idVendedor.data.id);
+          // console.log(res);
+          setDatosTabla(res.data.data || []);
+        }
       }
+     
     } catch (error) {
       console.error("Error al consultar las ventas:", error);
       setDatosTabla([]);
@@ -337,9 +364,9 @@ const TablasVendidas = () => {
   };
 
   useEffect(() => {
-    ConsultarTablasVendedor();
+    ConsultarTablasVendedor(menuSeleccionado);
     ConsultarTablasTotalesVendidas();
-  }, []);
+  }, [menuSeleccionado]);
 
   useEffect(() => {
     if (datosTabla.length > 0) {
@@ -364,6 +391,20 @@ const TablasVendidas = () => {
       <Header />
       <ContenedorPagina>
         <h1>Tus tablas vendidas</h1>
+        <ContenedorBotones>
+          <span
+            className={`${menuSeleccionado === 0 && "selected"}`}
+            onClick={() => setMenuSeleccionado(0)}
+          >
+            Ventas
+          </span>
+          <span
+            className={`${menuSeleccionado === 1 && "selected"}`}
+            onClick={() => setMenuSeleccionado(1)}
+          >
+            Cliente
+          </span>
+        </ContenedorBotones>
         <ContenedorBuscar>
           <span>Buscar:</span>
           <input
