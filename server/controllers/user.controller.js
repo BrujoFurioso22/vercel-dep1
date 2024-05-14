@@ -20,7 +20,7 @@ export const userController = {
       // console.log(req);
       const { cedulacelular, password } = req.body;
       const { rows } = await pool.query(
-        "SELECT password, rol, name FROM users WHERE cc = $1 and estado = false",
+        "SELECT password, rol, name, intentos FROM users WHERE cc = $1 and estado = false",
         [cedulacelular]
       );
 
@@ -32,8 +32,30 @@ export const userController = {
         const secretKey = `${partes[1]}`;
         const contra = decryptText(encriptado, secretKey);
         rows[0].password = contra;
+        let intentos;
         if (rows[0].password === password) {
           validPassword = true;
+          intentos = 0;
+          const { rows } = await pool.query(
+            "UPDATE public.users SET intentos=$1 WHERE cc = $2;",
+            [intentos, cedulacelular]
+          );
+        }
+        else {
+          intentos = rows[0].intentos;
+          if (intentos < 3) {
+            intentos = intentos + 1;
+            const { rows } = await pool.query(
+              "UPDATE public.users SET intentos=$1 WHERE cc = $2;",
+              [intentos, cedulacelular]
+            );
+          } else {
+            const { rows } = await pool.query(
+              "UPDATE public.users SET estado = false WHERE cc = $1;",
+              [cedulacelular]
+            );
+          }
+
         }
         if (validPassword) {
           return res
@@ -162,18 +184,18 @@ export const userController = {
       // console.log(req);
       const { cedulacelular } = req.body;
 
-      const { rows:rowsconsulta } = await pool.query(
+      const { rows: rowsconsulta } = await pool.query(
         "SELECT estado FROM public.users WHERE cc=$1;",
         [cedulacelular]
       );
-      let estadonuevo=false;
-      if(rowsconsulta[0].estado === true){
-        estadonuevo=false
-      }else{
-        estadonuevo=true;
+      let estadonuevo = false;
+      if (rowsconsulta[0].estado === true) {
+        estadonuevo = false
+      } else {
+        estadonuevo = true;
       }
-      const { rows:rowsactualizarestado } = await pool.query(
-        "UPDATE public.users SET estado=$1 WHERE cc=$2;",
+      const { rows: rowsactualizarestado } = await pool.query(
+        "UPDATE public.users SET estado=$1, intentos=0 WHERE cc=$2;",
         [estadonuevo, cedulacelular]
       );
       if (rowsactualizarestado) {
