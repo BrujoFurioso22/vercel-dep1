@@ -69,13 +69,14 @@ export const tablasController = {
 
       let idcliente = 0;
       let isInserted = false;
-      const rowalias = await pool.query("SELECT alias FROM users WHERE id=$1;", 
+      const { rows: rowalias } = await pool.query("SELECT alias FROM users WHERE id=$1;",
         [idvendedor]);
       const alias = rowalias[0].alias;
+
       do {
-        const quse = await pool.query("SELECT * FROM users WHERE cc = $1;", 
-        [cccliente]
-      );
+        const quse = await pool.query("SELECT * FROM users WHERE cc = $1;",
+          [cccliente]
+        );
         const rowscliente = quse.rows;
 
         if (rowscliente.length === 0) {
@@ -92,6 +93,7 @@ export const tablasController = {
           isInserted = true;
         }
       } while (!isInserted);
+      
       let banderin = false;
       let hexvalidador;
       do {
@@ -142,7 +144,7 @@ export const tablasController = {
             // Asignar números a las variables n1, n2, ..., n25
             const numerosAsignados = todosLosNumeros.slice(0, 24);
 
-            let banderadecodigo = false
+            let banderadecodigo = true
             let codigonormal = "";
             do {
               codigonormal = "N" + generarCodigoHexadecimal();
@@ -155,15 +157,16 @@ export const tablasController = {
                     banderadecodigo = true;
                     console.log(banderadecodigo);
                     break;
+                  }else{
+                    banderadecodigo = false;
                   }
                 }
               } else {
                 banderadecodigo = true
               }
-            } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
+            } while (banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
 
             let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigonormal + "," + alias + "]";
-
             if (i === 0) {
               cadenaparalatabla = cadenaNumeros;
             } else {
@@ -208,7 +211,7 @@ export const tablasController = {
 
             // Asignar números a las variables n1, n2, ..., n25
             const numerosAsignados = todosLosNumeros.slice(0, 7);
-            let banderadecodigo = false
+            let banderadecodigo = true
             let codigorapido = "";
             do {
               codigorapido = "R" + generarCodigoHexadecimal();
@@ -222,11 +225,14 @@ export const tablasController = {
                     console.log(banderadecodigo);
                     break;
                   }
+                  else{
+                    banderadecodigo = false
+                  }
                 }
               } else {
                 banderadecodigo = true
               }
-            } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
+            } while (banderadecodigo); 
 
             let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigorapido + "," + alias + "]";
 
@@ -274,7 +280,6 @@ export const tablasController = {
   obtenerDatosDeTabla: async (req, res) => {
     try {
       const { codigotabla } = req.body;
-
       const { rows: rows1 } = await pool.query(
         "SELECT tablas_normal FROM venta WHERE tablas_normal LIKE $1;",
         ['%' + codigotabla + '%']
@@ -299,8 +304,8 @@ export const tablasController = {
         const FnuevoArreglo = nuevoArreglo[0].split(',');
         const var1 = [
           {
-            numtabla: FnuevoArreglo[FnuevoArreglo.length - 2],
-            alias: FnuevoArreglo[FnuevoArreglo - 1],
+            numtabla: FnuevoArreglo[24],
+            alias: FnuevoArreglo[25],
             datos: {
               1: FnuevoArreglo[0],
               2: FnuevoArreglo[5],
@@ -346,8 +351,8 @@ export const tablasController = {
         const FnuevoArreglo = nuevoArreglo[0].split(',');
         const var2 = [
           {
-            numtabla: FnuevoArreglo[FnuevoArreglo.length - 2],
-            alias: FnuevoArreglo[FnuevoArreglo - 1],
+            numtabla: FnuevoArreglo[7],
+            alias: FnuevoArreglo[8],
             datos: {
               1: FnuevoArreglo[0],
               3: FnuevoArreglo[4],
@@ -371,6 +376,7 @@ export const tablasController = {
   obtenerTablasCliente: async (req, res) => {
     try {
       const { cccliente } = req.body;
+      
       const { rows: rowsTablaNormal } = await pool.query(
         "SELECT tablas_normal FROM public.venta, public.users WHERE venta.id_cliente=users.id and users.cc =$1",
         [cccliente]
@@ -461,76 +467,100 @@ export const tablasController = {
         ok: true,
         data1: var1,
         data2: var2,
-        
+
       });
     } catch (error) {
       res.status(500).json({ msg: error.msg });
     }
   },
   obtenerTablasVenta: async (req, res) => {
-    //////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
     try {
-      const { idventa } = req.body;
+      //const { idventa } = req.body;
+      const idventa = 5;
       const { rows: rowsTablaNormal } = await pool.query(
-        "SELECT * FROM tablanormal WHERE tablanormal.id_venta = $1;",
+        "SELECT tablas_normal FROM venta WHERE id_venta = $1;",
         [idventa]
       );
       const { rows: rowsTablaRapida } = await pool.query(
-        "SELECT * FROM tablarapida WHERE tablarapida.id_venta = $1;",
+        "SELECT tablas_rapida FROM venta WHERE id_venta = $1;",
         [idventa]
       );
+
       let var1 = [],
         var2 = [];
       if (rowsTablaNormal.length > 0) {
-        var1 = rowsTablaNormal.map((row) => ({
-          numtabla: row.codigo,
-          datos: {
-            1: row.num1,
-            2: row.num6,
-            3: row.num11,
-            4: row.num16,
-            5: row.num21,
-            6: row.num2,
-            7: row.num7,
-            8: row.num12,
-            9: row.num17,
-            10: row.num22,
-            11: row.num3,
-            12: row.num8,
-            14: row.num18,
-            15: row.num23,
-            16: row.num4,
-            17: row.num9,
-            18: row.num14,
-            19: row.num19,
-            20: row.num24,
-            21: row.num5,
-            22: row.num10,
-            23: row.num15,
-            24: row.num20,
-            25: row.num25,
-          },
-        }));
+        const arregloTodo = rowsTablaNormal[0].tablas_normal.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+        const tempo = [];
+        for (const elemento of arregloTodo) {
+          tempo.push(elemento);
+        }
+        tempo.splice(0, 1);
+        tempo.splice(tempo.length - 1,);
+        const FnuevoArreglo = [];
+        for (let i = 0; i < tempo.length; i++) {
+          FnuevoArreglo.push(tempo[i].split(','));
+        }
+        for (let k = 0; k < FnuevoArreglo.length; k++) {
+          var1.push({
+            numtabla: FnuevoArreglo[k][24],
+            alias: FnuevoArreglo[k][25],
+            datos: {
+              1: FnuevoArreglo[k][0],
+              2: FnuevoArreglo[k][5],
+              3: FnuevoArreglo[k][10],
+              4: FnuevoArreglo[k][14],
+              5: FnuevoArreglo[k][19],
+              6: FnuevoArreglo[k][1],
+              7: FnuevoArreglo[k][6],
+              8: FnuevoArreglo[k][11],
+              9: FnuevoArreglo[k][15],
+              10: FnuevoArreglo[k][20],
+              11: FnuevoArreglo[k][2],
+              12: FnuevoArreglo[k][7],
+              14: FnuevoArreglo[k][16],
+              15: FnuevoArreglo[k][21],
+              16: FnuevoArreglo[k][3],
+              17: FnuevoArreglo[k][8],
+              18: FnuevoArreglo[k][12],
+              19: FnuevoArreglo[k][17],
+              20: FnuevoArreglo[k][23],
+              21: FnuevoArreglo[k][4],
+              22: FnuevoArreglo[k][9],
+              23: FnuevoArreglo[k][13],
+              24: FnuevoArreglo[k][18],
+              25: FnuevoArreglo[k][23]
+            },
+          });
+        }
       }
+
       if (rowsTablaRapida.length > 0) {
-        var2 = rowsTablaRapida.map((rowsTablaRapida) => ({
-          numtabla: rowsTablaRapida.codigo,
-          datos: {
-            1: rowsTablaRapida.num1,
-            3: rowsTablaRapida.num7,
-            4: rowsTablaRapida.num3,
-            6: rowsTablaRapida.num8,
-            7: rowsTablaRapida.num4,
-            8: rowsTablaRapida.num6,
-            9: rowsTablaRapida.num9,
-          },
-        }));
+        const arregloTodo = rowsTablaRapida[0].tablas_rapida.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+        const tempo = [];
+        for (const elemento of arregloTodo) {
+          tempo.push(elemento);
+        }
+        tempo.splice(0, 1);
+        tempo.splice(tempo.length - 1,);
+        const FnuevoArreglo = [];
+        for (let i = 0; i < tempo.length; i++) {
+          FnuevoArreglo.push(tempo[i].split(','));
+        }
+        for (let k = 0; k < FnuevoArreglo.length; k++) {
+          var2.push({
+            numtabla: FnuevoArreglo[k][7],
+            alias: FnuevoArreglo[k][8],
+            datos: {
+              1: FnuevoArreglo[k][0],
+              3: FnuevoArreglo[k][4],
+              4: FnuevoArreglo[k][1],
+              6: FnuevoArreglo[k][5],
+              7: FnuevoArreglo[k][2],
+              8: FnuevoArreglo[k][3],
+              9: FnuevoArreglo[k][6],
+            },
+          });
+        }
       }
       return res.status(200).json({
         data1: var1,
