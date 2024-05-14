@@ -69,10 +69,13 @@ export const tablasController = {
 
       let idcliente = 0;
       let isInserted = false;
+      const rowalias = await pool.query("SELECT alias FROM users WHERE id=$1;", 
+        [idvendedor]);
+      const alias = rowalias[0].alias;
       do {
-        const quse = await pool.query("SELECT * FROM users WHERE cc = $1;", [
-          cccliente,
-        ]);
+        const quse = await pool.query("SELECT * FROM users WHERE cc = $1;", 
+        [cccliente]
+      );
         const rowscliente = quse.rows;
 
         if (rowscliente.length === 0) {
@@ -159,7 +162,7 @@ export const tablasController = {
               }
             } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
 
-            let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigonormal + "]";
+            let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigonormal + "," + alias + "]";
 
             if (i === 0) {
               cadenaparalatabla = cadenaNumeros;
@@ -225,7 +228,7 @@ export const tablasController = {
               }
             } while (!banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
 
-            let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigorapido + "]";
+            let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigorapido + "," + alias + "]";
 
             if (i === 0) {
               cadenaparatablarapida = cadenaNumeros;
@@ -296,7 +299,8 @@ export const tablasController = {
         const FnuevoArreglo = nuevoArreglo[0].split(',');
         const var1 = [
           {
-            numtabla: FnuevoArreglo[FnuevoArreglo.length - 1],
+            numtabla: FnuevoArreglo[FnuevoArreglo.length - 2],
+            alias: FnuevoArreglo[FnuevoArreglo - 1],
             datos: {
               1: FnuevoArreglo[0],
               2: FnuevoArreglo[5],
@@ -342,7 +346,8 @@ export const tablasController = {
         const FnuevoArreglo = nuevoArreglo[0].split(',');
         const var2 = [
           {
-            numtabla: FnuevoArreglo[FnuevoArreglo.length - 1],
+            numtabla: FnuevoArreglo[FnuevoArreglo.length - 2],
+            alias: FnuevoArreglo[FnuevoArreglo - 1],
             datos: {
               1: FnuevoArreglo[0],
               3: FnuevoArreglo[4],
@@ -393,6 +398,7 @@ export const tablasController = {
         for (let k = 0; k < FnuevoArreglo.length; k++) {
           var1.push({
             numtabla: FnuevoArreglo[k][24],
+            alias: FnuevoArreglo[k][25],
             datos: {
               1: FnuevoArreglo[k][0],
               2: FnuevoArreglo[k][5],
@@ -438,6 +444,7 @@ export const tablasController = {
         for (let k = 0; k < FnuevoArreglo.length; k++) {
           var2.push({
             numtabla: FnuevoArreglo[k][7],
+            alias: FnuevoArreglo[k][8],
             datos: {
               1: FnuevoArreglo[k][0],
               3: FnuevoArreglo[k][4],
