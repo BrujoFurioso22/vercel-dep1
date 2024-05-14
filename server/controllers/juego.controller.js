@@ -19,10 +19,10 @@ export const juegoController = {
   },
   nuevoJuego: async (req, res) => {
     try {
-      const { data } = req.body;
+      const { data, tipojuego, historial } = req.body;
       const { rows: rowsinsert } = await pool.query(
-        "INSERT INTO public.juegos(fecha_hora, data, estado) VALUES (CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $1, 'I');",
-        [data]
+        "INSERT INTO public.juegos(fecha_hora, data, estado, tipo_juego, historial) VALUES (CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil', $1, 'I', $2, $3);",
+        [data, tipojuego, historial]
       );
       const { rows: rowsID } = await pool.query(
         "SELECT * FROM public.juegos WHERE estado='I';"
@@ -300,12 +300,12 @@ export const juegoController = {
           if (totalCoincidencias >= 8) {
             cod.push(arreglonumeros[arreglonumeros.length - 1]);
           }
-          }
+        }
         guardardata.push(cod);
       }
       console.log(guardardata);
-      let varinfo={};
-      for(let f=0;f<letras.length;f++){
+      let varinfo = {};
+      for (let f = 0; f < letras.length; f++) {
         varinfo[letras[f]] = { tablas: guardardata[f] };
       }
       return res.status(200).json({
