@@ -109,6 +109,7 @@ const TablaPersonalizada = styled.table`
 const headerNames = {
   id: "ID Venta",
   idcliente: "ID Cli.",
+  cc: "Cédula/Teléfono",
   nombre: "Cliente",
   fecha: "Fecha",
   cantidadnormal: "# 1",
@@ -120,6 +121,7 @@ const headerNames = {
 const visibleColumns = {
   id: false,
   idcliente: true,
+  cc:true,
   nombre: true,
   fecha: true,
   numerotransaccion: true,
@@ -421,7 +423,7 @@ const TablasVendidas = () => {
         ) : datosFiltrados.length === 0 ? (
           <div>No existen datos según filtro</div>
         ) : (
-          <Tablas datos={datosFiltrados} datosVentas={dataVentas} />
+          <Tablas datos={datosFiltrados.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))} datosVentas={dataVentas} />
         )}
       </ContenedorPagina>
     </ContenedorPadre>

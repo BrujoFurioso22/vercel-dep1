@@ -33,7 +33,7 @@ const SellerRoutes = () => {
         <Route path="jugadas" element={<Jugadas />} />
         <Route path="tablasenvivo" element={<ConsultarTablasEnVivo />} />
         <Route path="infoClientes" element={<ConsultarDatosCliente />} />
-        <Route path="preview" element={<Preview />} />
+        {/* <Route path="preview" element={<Preview />} /> */}
         <Route path="editarInfo" element={<EditInfoTemplates />} />
       </Routes>
     </ContenedorPadre>

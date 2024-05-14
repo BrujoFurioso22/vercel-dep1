@@ -374,8 +374,8 @@ const Header = ({ oculta }) => {
           Consultar Tablas
         </CustomNavLink>
         <CustomNavLink to="/seller/infoClientes">Info Cliente</CustomNavLink>
-        <CustomNavLink to="/seller/editarInfo">Editar PDFs</CustomNavLink>
-        <CustomNavLink to="/seller/preview">PR</CustomNavLink>
+        <CustomNavLink to="/seller/editarInfo">Editar Info</CustomNavLink>
+        {/* <CustomNavLink to="/seller/preview">PR</CustomNavLink> */}
       </MenuD>
     );
   };

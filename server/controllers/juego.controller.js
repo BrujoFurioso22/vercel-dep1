@@ -39,10 +39,10 @@ export const juegoController = {
   actualizarData: async (req, res) => {
     try {
       // console.log(req);
-      const { id, data } = req.body;
+      const { id, data, historial } = req.body;
       const { rows } = await pool.query(
-        "UPDATE public.juegos SET data=$1 WHERE id = $2 and estado='I';",
-        [data, id]
+        "UPDATE public.juegos SET data=$1 ,historial=$2 WHERE id = $3 and estado='I';",
+        [data, historial, id]
       );
       if (rows) {
         return res.status(200).json({ ok: true });
@@ -113,77 +113,54 @@ export const juegoController = {
           console.log(contador);
           if (contador === 25) {
             codigostablas25.push(linea.codigo);
-          }
-          else if (contador === 24) {
+          } else if (contador === 24) {
             codigostablas24.push(linea.codigo);
-          }
-          else if (contador === 23) {
+          } else if (contador === 23) {
             codigostablas23.push(linea.codigo);
-          }
-          else if (contador === 22) {
+          } else if (contador === 22) {
             codigostablas22.push(linea.codigo);
-          }
-          else if (contador === 21) {
+          } else if (contador === 21) {
             codigostablas21.push(linea.codigo);
-          }
-          else if (contador === 20) {
+          } else if (contador === 20) {
             codigostablas20.push(linea.codigo);
-          }
-          else if (contador === 19) {
+          } else if (contador === 19) {
             codigostablas19.push(linea.codigo);
-          }
-          else if (contador === 18) {
+          } else if (contador === 18) {
             codigostablas18.push(linea.codigo);
           }
         }
-        const tempo18 =
-        {
+        const tempo18 = {
           numeral: 18,
-          datos: codigostablas18
-        }
-          ;
-        const tempo19 =
-        {
+          datos: codigostablas18,
+        };
+        const tempo19 = {
           numeral: 19,
-          datos: codigostablas19
-        }
-          ;
-        const tempo20 =
-        {
+          datos: codigostablas19,
+        };
+        const tempo20 = {
           numeral: 20,
-          datos: codigostablas20
-        }
-          ;
-        const tempo21 =
-        {
+          datos: codigostablas20,
+        };
+        const tempo21 = {
           numeral: 21,
-          datos: codigostablas21
-        }
-          ;
-        const tempo22 =
-        {
+          datos: codigostablas21,
+        };
+        const tempo22 = {
           numeral: 22,
-          datos: codigostablas22
-        }
-          ;
-        const tempo23 =
-        {
+          datos: codigostablas22,
+        };
+        const tempo23 = {
           numeral: 23,
-          datos: codigostablas23
-        }
-          ;
-        const tempo24 =
-        {
+          datos: codigostablas23,
+        };
+        const tempo24 = {
           numeral: 24,
-          datos: codigostablas24
-        }
-          ;
-        const tempo25 =
-        {
+          datos: codigostablas24,
+        };
+        const tempo25 = {
           numeral: 25,
-          datos: codigostablas25
-        }
-          ;
+          datos: codigostablas25,
+        };
         info.push(tempo18);
         info.push(tempo19);
         info.push(tempo20);
@@ -208,7 +185,9 @@ export const juegoController = {
   },
   obtenerPosiblesLetras: async (req, res) => {
     try {
-      const { rows: rowsletras } = await pool.query("SELECT * FROM descripcionnormal;");
+      const { rows: rowsletras } = await pool.query(
+        "SELECT * FROM descripcionnormal;"
+      );
       const letras = rowsletras[0].letras.split(",");
 
       const data = {
@@ -237,11 +216,13 @@ export const juegoController = {
         W: [1, 2, 3, 4, 5, 9, 12, 19, 21, 22, 23, 24, 25],
         X: [1, 5, 7, 9, 17, 19, 21, 25],
         Y: [1, 7, 14, 15, 17, 21],
-        Z: [1, 5, 6, 9, 10, 11, 16, 17, 20, 21, 25]
+        Z: [1, 5, 6, 9, 10, 11, 16, 17, 20, 21, 25],
       };
-      const arraysSeleccionados = letras.map(letra => data[letra]);
+      const arraysSeleccionados = letras.map((letra) => data[letra]);
       console.log(arraysSeleccionados.length);
-      const { rows: rowstablas } = await pool.query("SELECT * FROM tablanormal;");
+      const { rows: rowstablas } = await pool.query(
+        "SELECT * FROM tablanormal;"
+      );
 
       console.log(rowstablas.length);
       const valoresSeleccionados = [];
@@ -255,7 +236,12 @@ export const juegoController = {
           // Recorremos todas las propiedades (columnas) de la fila
           for (const columna in fila) {
             if (Object.hasOwnProperty.call(fila, columna)) {
-              if (columnasSeleccionadas.includes(parseInt(columna.replace('num', '')))) { // Verificamos si la columna actual está en columnasSeleccionadas
+              if (
+                columnasSeleccionadas.includes(
+                  parseInt(columna.replace("num", ""))
+                )
+              ) {
+                // Verificamos si la columna actual está en columnasSeleccionadas
                 const valor = fila[columna]; // Obtenemos el valor de la columna actual
                 valoresFila.push(valor); // Guardamos el valor en el objeto de valores de fila
               }

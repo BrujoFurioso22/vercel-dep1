@@ -151,7 +151,6 @@ const ContenedorJugadas = ({
 }) => {
   const [seguro, setSeguro] = useState(0);
   const [numero, setNumero] = useState("");
-  const [cadena, setCadena] = useState("");
   let posiciones = [];
 
   if (data !== null) {
@@ -163,19 +162,17 @@ const ContenedorJugadas = ({
   const handleClick = async (event) => {
     event.preventDefault();
     if (posiciones) {
-      if(numero <= 75 && numero >= 1){
+      if (numero <= 75 && numero >= 1) {
+        let nnumero = numero - 1;
+        // Copiar el arreglo actual de posiciones
+        const newPositions = [...posiciones];
+        // Cambiar el estado del círculo clicado
+        newPositions[nnumero] = !newPositions[nnumero];
+        let data1 = JSON.stringify(newPositions);
 
-      
-      let nnumero = numero - 1;
-      // Copiar el arreglo actual de posiciones
-      const newPositions = [...posiciones];
-      // Cambiar el estado del círculo clicado
-      newPositions[nnumero] = !newPositions[nnumero];
-      let data1 = JSON.stringify(newPositions);
-
-      const res = await UpdateJugada({ id: data.id, data: data1 });
-      if (res) {
-        let numbers = cadena ? cadena.split(",").map((num) => num.trim()):[];
+        let numbers = data.historial
+          ? data.historial.split(",").map((num) => num.trim())
+          : [];
         const index = numbers.indexOf(numero.toString());
         if (index === -1) {
           // Si el número no está en la cadena, añadirlo
@@ -186,11 +183,18 @@ const ContenedorJugadas = ({
         }
         // Convertir el array de vuelta a una cadena
         const updatedCadena = numbers.join(", ").trim();
-        setCadena(updatedCadena);
-        setNumero("");
-        await consulta();
+
+        const res = await UpdateJugada({
+          id: data.id,
+          data: data1,
+          historial: updatedCadena,
+        });
+        if (res) {
+          // setCadena(updatedCadena);
+          setNumero("");
+          await consulta();
+        }
       }
-    }
     }
   };
   const handleClick1 = async (posicion) => {
@@ -201,22 +205,28 @@ const ContenedorJugadas = ({
       newPositions[posicion] = !newPositions[posicion];
       let data1 = JSON.stringify(newPositions);
 
-      const res = await UpdateJugada({ id: data.id, data: data1 });
-      if (res) {
-        let num = parseInt(posicion) + 1;
+      let num = parseInt(posicion) + 1;
 
-        let numbers = cadena ? cadena.split(",").map((num1) => num1.trim()):[];
-        const index = numbers.indexOf(num.toString());
-        if (index === -1) {
-          // Si el número no está en la cadena, añadirlo
-          numbers.push(num.toString());
-        } else {
-          // Si el número ya está, quitarlo
-          numbers.splice(index, 1);
-        }
-        // Convertir el array de vuelta a una cadena
-        const updatedCadena = numbers.join(", ").trim();
-        setCadena(updatedCadena);
+      let numbers = data.historial
+        ? data.historial.split(",").map((num1) => num1.trim())
+        : [];
+      const index = numbers.indexOf(num.toString());
+      if (index === -1) {
+        // Si el número no está en la cadena, añadirlo
+        numbers.push(num.toString());
+      } else {
+        // Si el número ya está, quitarlo
+        numbers.splice(index, 1);
+      }
+      // Convertir el array de vuelta a una cadena
+      const updatedCadena = numbers.join(", ").trim();
+      const res = await UpdateJugada({
+        id: data.id,
+        data: data1,
+        historial: updatedCadena,
+      });
+      if (res) {
+        // setCadena(updatedCadena);
         setNumero("");
         await consulta();
       }
@@ -231,7 +241,11 @@ const ContenedorJugadas = ({
     let data = JSON.stringify(dataA);
     // console.log(data);
 
-    const res = await CrearNuevaJugada({ data });
+    const res = await CrearNuevaJugada({
+      data,
+      tipojuego: parseInt(TP),
+      historial: "",
+    });
     if (res) {
       setMostrarTJ(false);
       setData(res);
@@ -289,7 +303,7 @@ const ContenedorJugadas = ({
               </form>
             </div>
             <div style={{ overflow: "auto", maxWidth: "500px" }}>
-              <span>{cadena}</span>
+              <span>{data.historial}</span>
             </div>
           </div>
 
@@ -420,21 +434,23 @@ const Jugadas = () => {
       setData(null);
     } else {
       setData(res[0]);
+      setTipodeJuego(res[0].tipo_juego);
+      setMostrarTipoJuego(false);
     }
-    const resTablaLlena = await ObtenerTablasGanadoras();
-    if (resTablaLlena.length > 0) {
-      const hasNonEmptyDatos = resTablaLlena.some(
-        (item) => item.datos.length > 0
-      );
-      if (hasNonEmptyDatos) {
-        setDataTotales(resTablaLlena);
-      }
-    }
+    // const resTablaLlena = await ObtenerTablasGanadoras();
+    // if (resTablaLlena.length > 0) {
+    //   const hasNonEmptyDatos = resTablaLlena.some(
+    //     (item) => item.datos.length > 0
+    //   );
+    //   if (hasNonEmptyDatos) {
+    //     setDataTotales(resTablaLlena);
+    //   }
+    // }
 
-    const resTablaLetras = await ObtenerTablasLetrasGanadoras();
-    if (resTablaLetras.length > 0) {
-      setTablasLetra(resTablaLetras);
-    }
+    // const resTablaLetras = await ObtenerTablasLetrasGanadoras();
+    // if (resTablaLetras.length > 0) {
+    //   setTablasLetra(resTablaLetras);
+    // }
     // console.log(res);
   };
   useEffect(() => {
