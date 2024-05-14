@@ -19,7 +19,7 @@ const ContenedorPadre = styled.div`
   width: 100%;
   /* background-image: url("/back1.webp"), rgba(255, 255, 255, 0.1); */
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.2)),
-    url("/bingobg1.webp");
+    url("/BGBINGO.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -62,6 +62,8 @@ const BingoText = styled.h1`
   font-size: 9rem;
   margin: 0;
   margin-top: -50px;
+  line-height: 90%;
+  -webkit-text-stroke: 2px black;
   /* margin-top: calc(var(--altura-mensaje)); */
   color: var(--color-blanco);
   text-shadow: var(--sombra-intensa);
@@ -283,9 +285,7 @@ function LandingPage() {
           </ContenedorVerMas>
         </ContenedorPP>
         <ContenedorElemento1 id="elemento1">
-          <h2>
-            Ven, disfruta y gana...
-          </h2>
+          <h2>Ven, disfruta y gana...</h2>
           <div className="contenedor1">
             <div className="d1">
               <h2>Tablón</h2>
