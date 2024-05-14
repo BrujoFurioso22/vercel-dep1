@@ -475,14 +475,13 @@ export const tablasController = {
   },
   obtenerTablasVenta: async (req, res) => {
     try {
-      //const { idventa } = req.body;
-      const idventa = 5;
+      const { idventa } = req.body;
       const { rows: rowsTablaNormal } = await pool.query(
-        "SELECT tablas_normal FROM venta WHERE id_venta = $1;",
+        "SELECT tablas_normal FROM venta WHERE id = $1;",
         [idventa]
       );
       const { rows: rowsTablaRapida } = await pool.query(
-        "SELECT tablas_rapida FROM venta WHERE id_venta = $1;",
+        "SELECT tablas_rapida FROM venta WHERE id = $1;",
         [idventa]
       );
 
@@ -533,7 +532,6 @@ export const tablasController = {
           });
         }
       }
-
       if (rowsTablaRapida.length > 0) {
         const arregloTodo = rowsTablaRapida[0].tablas_rapida.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
         const tempo = [];
@@ -562,6 +560,7 @@ export const tablasController = {
           });
         }
       }
+      
       return res.status(200).json({
         data1: var1,
         data2: var2,
