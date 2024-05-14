@@ -93,7 +93,7 @@ export const tablasController = {
           isInserted = true;
         }
       } while (!isInserted);
-      
+
       let banderin = false;
       let hexvalidador;
       do {
@@ -157,7 +157,7 @@ export const tablasController = {
                     banderadecodigo = true;
                     console.log(banderadecodigo);
                     break;
-                  }else{
+                  } else {
                     banderadecodigo = false;
                   }
                 }
@@ -225,14 +225,14 @@ export const tablasController = {
                     console.log(banderadecodigo);
                     break;
                   }
-                  else{
+                  else {
                     banderadecodigo = false
                   }
                 }
               } else {
                 banderadecodigo = true
               }
-            } while (banderadecodigo); 
+            } while (banderadecodigo);
 
             let cadenaNumeros = "[" + numerosAsignados.join(",") + "," + codigorapido + "," + alias + "]";
 
@@ -376,11 +376,11 @@ export const tablasController = {
   obtenerTablasCliente: async (req, res) => {
     try {
       const { cccliente } = req.body;
-      
       const { rows: rowsTablaNormal } = await pool.query(
         "SELECT tablas_normal FROM public.venta, public.users WHERE venta.id_cliente=users.id and users.cc =$1",
         [cccliente]
       );
+      //console.log(rowsTablaNormal[0].tablas_normal);
       const { rows: rowsTablaRapida } = await pool.query(
         "SELECT tablas_rapida FROM public.venta, public.users WHERE venta.id_cliente=users.id and users.cc =$1",
         [cccliente]
@@ -390,7 +390,15 @@ export const tablasController = {
         var2 = [];
 
       if (rowsTablaNormal.length > 0) {
-        const arregloTodo = rowsTablaNormal[0].tablas_normal.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+        let cadena = ""
+        for (let l = 0; l < rowsTablaNormal.length; l++) {
+          if (l === 0) {
+            cadena = rowsTablaNormal[l].tablas_normal;
+          } else {
+            cadena = cadena + "," + rowsTablaNormal[l].tablas_normal;
+          }
+        }
+        const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
         const tempo = [];
         for (const elemento of arregloTodo) {
           tempo.push(elemento);
@@ -436,7 +444,15 @@ export const tablasController = {
       }
 
       if (rowsTablaRapida.length > 0) {
-        const arregloTodo = rowsTablaRapida[0].tablas_rapida.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+        let cadena = ""
+        for (let l = 0; l < rowsTablaRapida.length; l++) {
+          if (l === 0) {
+            cadena = rowsTablaRapida[l].tablas_rapida;
+          } else {
+            cadena = cadena + "," + rowsTablaRapida[l].tablas_rapida;
+          }
+        }
+        const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
         const tempo = [];
         for (const elemento of arregloTodo) {
           tempo.push(elemento);
@@ -560,7 +576,7 @@ export const tablasController = {
           });
         }
       }
-      
+
       return res.status(200).json({
         data1: var1,
         data2: var2,
