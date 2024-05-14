@@ -1,7 +1,7 @@
 import { EstructuraTabla1 } from "./EstructuraTabla1.js";
 import LetrasGrid from "./LetrasGrid.js";
 
-export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
+export const htmlTemplate1 = ({ dataJuego, dataInfo }) => {
   function formatearFechaConHora(fechaISO) {
     const opciones = {
       day: "numeric",
@@ -123,10 +123,10 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
           align-items: center;
           justify-content: center;
           flex-direction: column;" class="c3-header">
-            <h3>1era Tabla Llena: $${dataInfo[0].premio1}</h3>
+            <h3 style="margin:1mm;">1era Tabla Llena: $${dataInfo[0].premio1}</h3>
             <span>2da Tabla Llena: $${dataInfo[0].premio2}</span>
             <span>3ra Tabla Llena: $${dataInfo[0].premio3}</span>
-            <span>Se jugará el: <br></br>${formatearFechaConHora(
+            <span>Se jugará el: <br/>${formatearFechaConHora(
               dataInfo[0].fecha_hora
             )}</span>
           </div>
@@ -151,7 +151,7 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo, nombreRes }) => {
       text-align: center;
       border: solid 1px black;
       border-radius: 10px;
-      bottom: 0;" class="footer">---------- Vendida por: ${nombreRes} ----------</div>
+      bottom: 0;" class="footer">---------- | ----------</div>
     </div>
   `;
 };

@@ -6,6 +6,7 @@ import { EstructuraTabla1 } from "./EstructuraTabla1";
 import { dataTabla, dataTabla2 } from "./data";
 import { EstructuraTabla2 } from "./EstructuraTabla2";
 import { ConsultarTablasdelCliente } from "../../consultasBE/Tablas";
+import GenerarPDFs1 from "../../components/pdfMaker/pdfMakerBack";
 
 // const ContenedorPadre = styled.div`
 //   display: flex;
@@ -49,6 +50,7 @@ const Tablas = () => {
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
+        <GenerarPDFs1 tipo={2} />
         {d1.length > 0 && (
           <div>
             <h3>Tablas Normales</h3>

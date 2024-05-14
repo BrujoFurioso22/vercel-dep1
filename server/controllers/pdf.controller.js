@@ -8,12 +8,11 @@ import { PDFDocument } from "pdf-lib";
 
 export const pdfController = {
   generatePDF: async (req, res) => {
-    let browser, page;
     try {
-      const { dataJuego1, dataJuego2, dataInfo1, dataInfo2, nombreRes } =
+      const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } =
         req.body;
-      browser = await puppeteer.launch({ headless: true });
-      page = await browser.newPage();
+      const browser = await puppeteer.launch({ headless: true });
+      const page = await browser.newPage();
       const pdfs = [];
       let inicioHTML = ` <!DOCTYPE html>
       <html lang="en">
@@ -83,7 +82,6 @@ export const pdfController = {
             const htmlOrig = htmlTemplateFunc({
               dataJuego: chunk,
               dataInfo,
-              nombreRes,
             });
             const htmlMinify = minify(htmlOrig, {
               removeComments: true,
@@ -96,8 +94,8 @@ export const pdfController = {
           // console.log(htmlMinify);
         }
       }
-      console.log(dataJuego1);
-      console.log(dataJuego2);
+      // console.log(dataJuego1);
+      // console.log(dataJuego2);
       if (dataJuego1.length === 0 && dataJuego2.length === 0) {
         return res.status(205).json({});
       } else {
@@ -122,7 +120,8 @@ export const pdfController = {
         //   "Content-Disposition",
         //   'attachment; filename="combined.pdf"'
         // );
-        return res.status(200).json(pdfBuffer);
+        // console.log(htmls);
+        return res.status(200).send(pdfBuffer);
       }
 
       // res.send(pdfBuffer);
@@ -130,8 +129,8 @@ export const pdfController = {
       console.error("Error generating PDF", error);
       res.status(500).send("Error generating PDF");
     } finally {
-      if (page) await page.close();
-      if (browser) await browser.close();
+      // if (page) await page.close();
+      // if (browser) await browser.close();
     }
   },
 };

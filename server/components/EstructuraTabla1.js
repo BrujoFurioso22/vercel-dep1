@@ -3,7 +3,7 @@ import React from "react";
 export const EstructuraTabla1 = ({ dataTables }) => {
   return `
     <div style="width: fit-content;
-    padding: 10px;" className="tabla-bingo">
+    padding: 1px;" className="tabla-bingo">
       <div>
         <span>#${dataTables.numtabla}</span>
         <div style="display: flex;

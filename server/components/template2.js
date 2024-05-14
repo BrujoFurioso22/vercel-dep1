@@ -1,6 +1,6 @@
 import { EstructuraTabla2 } from "./EstructuraTabla2.js";
 
-export const htmlTemplate2 = ({ dataJuego, dataInfo, nombreRes }) => {
+export const htmlTemplate2 = ({ dataJuego, dataInfo }) => {
   function formatearFechaConHora(fechaISO) {
     const opciones = {
       day: "numeric",
@@ -93,7 +93,7 @@ export const htmlTemplate2 = ({ dataJuego, dataInfo, nombreRes }) => {
           flex-direction: column;
           align-items: center;
           gap: 2mm;" class="c2-header">
-              <p>Se jugará el: <br></br> ${formatearFechaConHora(
+              <p>Se jugará el: <br/> ${formatearFechaConHora(
                 dataInfo[0].fecha_hora
               )}</p>
           </div>
@@ -125,7 +125,7 @@ export const htmlTemplate2 = ({ dataJuego, dataInfo, nombreRes }) => {
       text-align: center;
       border: solid 1px black;
       border-radius: 10px;
-      bottom: 0;" class="footer">---------- Vendida por: ${nombreRes} ----------</div>
+      bottom: 0;" class="footer">---------- | ----------</div>
     </div>
   `;
 };

@@ -6,6 +6,7 @@ import { HtmlTemplate1 } from "./Juego1Template";
 import { HtmlTemplate2 } from "./Juego2Template";
 import {
   ConsultarTablasSegunIDVenta,
+  ConsultarTablasdelCliente,
   ObtenerDesNormal,
   ObtenerDesRapida,
 } from "../../consultasBE/Tablas";
@@ -39,17 +40,39 @@ const Boton = styled.div`
   }
 `;
 
-const GenerarPDFs1 = ({ idventa }) => {
+const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
   const [bloq, setBloq] = useState(false);
   const [error, setError] = useState(false);
+  const ConsultarTablasCliente = async () => {
+    const cccliente = localStorage.getItem("id");
+    const res = await ConsultarTablasdelCliente({ cccliente: cccliente });
+    if (!res) {
+    } else {
+      return { data: { data1: res[0], data2: res[1] } };
+    }
+  };
+  const ConsultarTablasClienteMandandoCC = async ({idventa}) => {
+    const res = await ConsultarTablasdelCliente({ cccliente: idventa });
+    if (!res) {
+    } else {
+      return { data: { data1: res[0], data2: res[1] } };
+    }
+  };
 
   const ConsultarDatos = async () => {
-    setError(false)
+    setError(false);
     if (bloq) return;
     setBloq(true);
 
     try {
-      const res = await ConsultarTablasSegunIDVenta(idventa);
+      let res;
+      if (tipo === 0) {
+        res = await ConsultarTablasSegunIDVenta(idventa);
+      } else if (tipo === 1) {
+        res = await ConsultarTablasClienteMandandoCC({idventa});
+      } else {
+        res = await ConsultarTablasCliente();
+      }
       if (res) {
         const dataTabla = res.data.data1;
         const dataTabla2 = res.data.data2;
@@ -58,20 +81,20 @@ const GenerarPDFs1 = ({ idventa }) => {
         const data1 = await obtenerDatosAdicionales(ObtenerDesNormal);
         const data2 = await obtenerDatosAdicionales(ObtenerDesRapida);
 
-        const vendidoPor = await ObtenerIDUsuario(localStorage.getItem("id"));
-        let nombreVend = "";
-        console.log(vendidoPor);
-        if (vendidoPor.status === 200) {
-          nombreVend = vendidoPor.data.nombre;
-        }
-        console.log(nombreVend);
+        // const vendidoPor = await ObtenerIDUsuario(localStorage.getItem("id"));
+        // let nombreVend = "";
+        // console.log(vendidoPor);
+        // if (vendidoPor.status === 200) {
+        //   nombreVend = vendidoPor.data.nombre;
+        // }
+        // console.log(nombreVend);
 
         if (data1.length === 0 && data2.length === 0) {
           setError(true);
         } else {
           if (typeof window !== "undefined") {
             // Asegura que esto se ejecute solo en el lado del cliente
-            await generatePdf(dataTabla, dataTabla2, data1, data2, nombreVend);
+            await generatePdf(dataTabla, dataTabla2, data1, data2);
           }
         }
       }
@@ -99,13 +122,7 @@ const GenerarPDFs1 = ({ idventa }) => {
     return arreglo.filter((item) => item.trim() !== "");
   };
 
-  const generatePdf = async (
-    dataTabla,
-    dataTabla2,
-    data1,
-    data2,
-    nombreVend
-  ) => {
+  const generatePdf = async (dataTabla, dataTabla2, data1, data2) => {
     // if (data.length === 0) return;
 
     const dataChunks1 = chunkData(dataTabla, 4);
@@ -118,12 +135,11 @@ const GenerarPDFs1 = ({ idventa }) => {
       dataJuego2: dataChunks2,
       dataInfo1: data1,
       dataInfo2: data2,
-      nombreRes: nombreVend,
     });
     if (result) {
       console.log("PDF downloaded successfully!");
     } else {
-      setError(true)
+      setError(true);
     }
   };
 
