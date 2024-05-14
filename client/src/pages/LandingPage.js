@@ -15,14 +15,9 @@ const ContenedorPadre = styled.div`
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  height: calc(100dvh);
+  /* height: calc(100dvh); */
   width: 100%;
   /* background-image: url("/back1.webp"), rgba(255, 255, 255, 0.1); */
-  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.2)),
-    url("/BGBINGO.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
 `;
 const ContenedorRevisarTablas = styled.div`
   display: flex;
@@ -58,10 +53,9 @@ const BingoText = styled.h1`
   font-family: "Chewy", system-ui;
   font-weight: 500;
   font-style: normal;
-  position: relative;
   font-size: 9rem;
   margin: 0;
-  margin-top: -50px;
+  /* margin-top: -50px; */
   line-height: 90%;
   -webkit-text-stroke: 2px black;
   /* margin-top: calc(var(--altura-mensaje)); */
@@ -78,12 +72,17 @@ const ContenidoPagina = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  height: auto;
-  width: 100%;
+  position: relative;
 `;
 
 const ContenedorPP = styled.div`
-  height: calc(100dvh - var(--altura-header));
+  /* height: calc(100dvh - var(--altura-header)); */
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.2)),
+    url("/BGBINGO.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-height: calc(100dvh - var(--altura-header));
   position: relative;
   display: flex;
   flex-direction: column;
@@ -138,9 +137,9 @@ const ContenedorElemento1 = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: fit-content;
+  height: auto;
   .imgTabla {
-    width: 80%;
+    width: 70%;
     height: fit-content;
     background: var(--color-5);
     display: flex;
@@ -161,7 +160,7 @@ const ContenedorElemento1 = styled.div`
     width: 100%;
     @media ${device.mobile} {
       flex-direction: column;
-      height: 80dvh;
+      /* height: 80dvh;/ */
     }
     & > div {
       display: flex;
@@ -262,6 +261,7 @@ function LandingPage() {
   return (
     <ContenedorPadre>
       <Header />
+
       {usu !== null && rol === "0" && (
         <ContenedorRevisarTablas>
           <div className="texto">Revisa tus tablas aqui {">"}</div>

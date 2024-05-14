@@ -427,6 +427,7 @@ const Jugadas = () => {
   const [dataTotales, setDataTotales] = useState([]);
   const [dataTablasLetas, setTablasLetra] = useState({});
   const [mostrarTipoJuego, setMostrarTipoJuego] = useState(true);
+  const [consultaRealizada, setConsultaRealizada] = useState(false);
 
   const ConsultarJugadas = async () => {
     const res = await ObtenerJugadas();
@@ -436,6 +437,7 @@ const Jugadas = () => {
       setData(res[0]);
       setTipodeJuego(res[0].tipo_juego);
       setMostrarTipoJuego(false);
+      setConsultaRealizada(true)
     }
     // const resTablaLlena = await ObtenerTablasGanadoras();
     // if (resTablaLlena.length > 0) {
@@ -466,6 +468,7 @@ const Jugadas = () => {
       <Header />
       <ContenedorPagina>
         <h1>Juegos Actuales</h1>
+        {consultaRealizada ? (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "15px" }}>
           {mostrarTipoJuego && (
             <Contenedor1 style={{ minWidth: "fit-content" }}>
@@ -508,7 +511,7 @@ const Jugadas = () => {
               </Contenedor1>
             )}
           </div>
-        </div>
+        </div>):(<span>Cargando Datos...</span>)}
       </ContenedorPagina>
     </ContenedorPadre>
   );

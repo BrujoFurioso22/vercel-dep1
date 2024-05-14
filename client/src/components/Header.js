@@ -29,7 +29,7 @@ const ContenedorHeader = styled.div`
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
   z-index: 100;
   &.home {
-    background: rgba(255, 255, 255, 0.1);
+    background: #00002d
   }
 `;
 
@@ -91,7 +91,8 @@ const ContenedorMenu = styled.div`
   }
   &.home {
     & a {
-      background-color: var(--color-7);
+      background-color: var(--color-2);
+      color: white;
       box-shadow: var(--sombra-intensa);
     }
   }
@@ -289,6 +290,11 @@ const ContenedorMenuLateral = styled.div`
 `;
 const MenuD = styled.div`
   /* display: none; */
+  &>a{
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
   @media ${device.mobile1} {
     display: flex;
     justify-content: flex-start;

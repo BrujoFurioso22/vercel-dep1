@@ -316,6 +316,11 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
           <div className="cont1">
             <span className="titulo">Generando tablas...</span>
             <span>Por favor, espere.</span>
+            <img
+              style={{ width: "30px" }}
+              src={`${process.env.REACT_APP_URL_CLIENT}/Blocks.svg`}
+              alt=""
+            />
           </div>
         )}
       </div>
@@ -365,9 +370,9 @@ const FormularioVenta = () => {
   }, [tipoIdentificacion]);
 
   const ConsultarNombreCliente = async (ident) => {
-    const res =await ObtenerIDUsuario(ident);
-    if(res.status===200){
-      return res.data.nombre
+    const res = await ObtenerIDUsuario(ident);
+    if (res.status === 200) {
+      return res.data.nombre;
     }
   };
   useEffect(() => {
@@ -380,18 +385,17 @@ const FormularioVenta = () => {
       const regex = /^\d{10}$/;
       valid = regex.test(identificacion);
     }
-    if(identificacion!==""){
+    if (identificacion !== "") {
       const strSinEspacios = identificacion.replace(/\s+/g, "");
       let nombreCl = "";
-      const fetch= async()=>{
+      const fetch = async () => {
         nombreCl = await ConsultarNombreCliente(strSinEspacios);
-        if(nombreCl !== undefined){
+        if (nombreCl !== undefined) {
           console.log(nombreCl);
-          setNombreComprador(nombreCl)
+          setNombreComprador(nombreCl);
         }
-      }
-      fetch()
-      
+      };
+      fetch();
     }
 
     if (valid) {
