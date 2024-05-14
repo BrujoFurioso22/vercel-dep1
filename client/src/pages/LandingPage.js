@@ -68,7 +68,7 @@ const BingoText = styled.h1`
   color: var(--color-blanco);
   text-shadow: var(--sombra-intensa);
   @media screen and (max-width: 480px) {
-    font-size: 4rem;
+    font-size: 6rem;
   }
   @media screen and (min-width: 481px) and (max-width: 1024px) {
     font-size: 7rem;
@@ -140,8 +140,8 @@ const ContenedorElemento1 = styled.div`
   width: 100%;
   height: fit-content;
   .imgTabla {
-    width: 50%;
-    height: 500px;
+    width: 80%;
+    height: fit-content;
     background: var(--color-5);
     display: flex;
     justify-content: center;
@@ -172,7 +172,7 @@ const ContenedorElemento1 = styled.div`
       flex-direction: column;
       padding: 20px;
       @media ${device.mobile} {
-        height: 45dvh;
+        height: auto;
       }
     }
 

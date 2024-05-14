@@ -272,6 +272,18 @@ const ContenedorMenuLateral = styled.div`
         border-radius: 5px;
         cursor: pointer;
       }
+      & > .botonIniciar {
+        border: none;
+        background-color: var(--color-2);
+        color: white;
+        padding: 5px 10px;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
     }
   }
 `;
@@ -331,6 +343,11 @@ const Header = ({ oculta }) => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
 
+  const CerrarSesion = () => {
+    logout();
+    toggleMenu(setDisplayMenu, setMenuVisible, menuVisible);
+  };
+
   const toggleMenu = (setDisplay, setVisible, visible) => {
     if (visible) {
       setVisible(false); // Inicia la transición de cierre
@@ -365,7 +382,9 @@ const Header = ({ oculta }) => {
   const MenuADM = () => {
     return (
       <MenuD>
-        <CustomNavLink to="/adm/manageUsers">Administrar Usuarios</CustomNavLink>
+        <CustomNavLink to="/adm/manageUsers">
+          Administrar Usuarios
+        </CustomNavLink>
       </MenuD>
     );
   };
@@ -444,13 +463,21 @@ const Header = ({ oculta }) => {
           )}
         </div>
         <hr style={{ width: "85%" }} />
-        <div className="ContenedorLogL">
-          <span>{localStorage.getItem("nombre")}</span>
-          {"|"}
-          <button className="botonSalir" onClick={logout}>
-            Cerrar Sesión <i className="bi bi-box-arrow-right"></i>
-          </button>
-        </div>
+        {localStorage.getItem("id") ? (
+          <div className="ContenedorLogL">
+            <span>{localStorage.getItem("nombre")}</span>
+            {"|"}
+            <button className="botonSalir" onClick={() => CerrarSesion()}>
+              Cerrar Sesión <i className="bi bi-box-arrow-right"></i>
+            </button>
+          </div>
+        ) : (
+          <div className="ContenedorLogL">
+            <Link className="botonIniciar" to="/login">
+              Iniciar Sesión
+            </Link>
+          </div>
+        )}
       </ContenedorMenuLateral>
     </ContenedorHeader>
   );

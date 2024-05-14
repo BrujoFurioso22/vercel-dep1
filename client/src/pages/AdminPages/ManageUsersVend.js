@@ -16,6 +16,7 @@ const ContenedorPagina = styled.div`
   position: relative;
   height: 100%;
   padding: 20px 2vw;
+  overflow: auto;
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
 `;
@@ -43,6 +44,7 @@ const GridContainer = styled.div`
   grid-template-columns: repeat(6, auto);
   gap: 1px;
   padding: 10px;
+  overflow: auto;
   border-radius: 5px;
   background-color: #f3f3f3;
 `;
