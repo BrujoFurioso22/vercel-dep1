@@ -20,7 +20,7 @@ export const userController = {
       // console.log(req);
       const { cedulacelular, password } = req.body;
       const { rows } = await pool.query(
-        "SELECT password, rol, name, intentos FROM users WHERE cc = $1 and estado = false",
+        "SELECT password, rol, name, intentos, estado FROM users WHERE cc = $1 and estado = false",
         [cedulacelular]
       );
 
@@ -51,16 +51,15 @@ export const userController = {
             );
           } else {
             const { rows } = await pool.query(
-              "UPDATE public.users SET estado = false WHERE cc = $1;",
+              "UPDATE public.users SET estado = true WHERE cc = $1;",
               [cedulacelular]
             );
           }
-
         }
         if (validPassword) {
           return res
             .status(200)
-            .json({ exists: true, rol: rows[0].rol, nombre: rows[0].name });
+            .json({ exists: true, rol: rows[0].rol, nombre: rows[0].name, intentos:intentos, estado: rows[0].estado});
         }
       }
       return res.status(404).json({ exists: false });
