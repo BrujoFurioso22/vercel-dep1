@@ -439,21 +439,21 @@ const Jugadas = () => {
       setMostrarTipoJuego(false);
       setConsultaRealizada(true)
     }
-    // const resTablaLlena = await ObtenerTablasGanadoras();
-    // if (resTablaLlena.length > 0) {
-    //   const hasNonEmptyDatos = resTablaLlena.some(
-    //     (item) => item.datos.length > 0
-    //   );
-    //   if (hasNonEmptyDatos) {
-    //     setDataTotales(resTablaLlena);
-    //   }
-    // }
+    const resTablaLlena = await ObtenerTablasGanadoras();
+    if (resTablaLlena.length > 0) {
+      const hasNonEmptyDatos = resTablaLlena.some(
+        (item) => item.datos.length > 0
+      );
+      if (hasNonEmptyDatos) {
+        setDataTotales(resTablaLlena);
+      }
+    }
 
-    // const resTablaLetras = await ObtenerTablasLetrasGanadoras();
-    // if (resTablaLetras.length > 0) {
-    //   setTablasLetra(resTablaLetras);
-    // }
-    // console.log(res);
+    const resTablaLetras = await ObtenerTablasLetrasGanadoras();
+    if (resTablaLetras.length > 0) {
+      setTablasLetra(resTablaLetras);
+    }
+    console.log(res);
   };
   useEffect(() => {
     ConsultarJugadas();
