@@ -73,7 +73,7 @@ export const juegoController = {
   obtenerPosiblesCompletos: async (req, res) => {
     try {
       const { rows: rowstablas } = await pool.query(
-        "SELECT * FROM tablanormal;"
+        "SELECT tablas_normal FROM venta;"
       );
       const { rows: datosjuegos } = await pool.query(
         "SELECT * FROM juegos WHERE estado = 'I';"
@@ -88,7 +88,30 @@ export const juegoController = {
           numerosActivados.push(i + 1);
         }
       }
-      //console.log(numerosActivados)
+      let cadena = ""
+      for (let l = 0; l < rowsTablaRapida.length; l++) {
+        if (l === 0) {
+          cadena = rowsTablaRapida[l].tablas_rapida;
+        } else {
+          cadena = cadena + "," + rowsTablaRapida[l].tablas_rapida;
+        }
+      }
+      const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+      const tempo = [];
+      for (const elemento of arregloTodo) {
+        tempo.push(elemento);
+      }
+      tempo.splice(0, 1);
+      tempo.splice(tempo.length - 1,);
+      const FnuevoArreglo = [];
+      for (let i = 0; i < tempo.length; i++) {
+        FnuevoArreglo.push(tempo[i].split(','));
+      }
+      console.log(FnuevoArreglo);
+
+
+
+
       let info = [];
       if (numerosActivados.length > 0) {
         const codigostablas18 = [];
