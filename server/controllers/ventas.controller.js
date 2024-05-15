@@ -5,7 +5,7 @@ export const ventasController = {
     try {
       const { idvendedor } = req.body;
       const { rows: rowsVentas } = await pool.query("SELECT venta.id, venta.id_cliente, users.name, users.cc, venta.fecha, venta.cantidad_normal, venta.cantidad_rapida, venta.cantidad_dinero, venta.numero_transaccion FROM public.venta, public.users WHERE users.id = venta.id_cliente and venta.id_vendedor = $1",
-      [idvendedor]
+        [idvendedor]
       );
       let var1 = {}
       if (rowsVentas.length > 0) {
@@ -22,41 +22,45 @@ export const ventasController = {
             numerotransaccion: dato.numero_transaccion
           },
         ]);
-        return res.status(200).json({exists:true,
+        return res.status(200).json({
+          exists: true,
           data: var1,
         });
       }
-      return res.status(404).json( {exists:false})
+      return res.status(404).json({ exists: false })
     } catch (error) {
       res.status(500).json({ msg: error.msg });
     }
   },
   obtenerventasporcliente: async (req, res) => {
     try {
-      const { cc } = req.body;
-      const { rows: rowsVentas } = await pool.query("SELECT venta.id, venta.id_cliente, users.name, users.cc, venta.fecha, venta.cantidad_normal, venta.cantidad_rapida, venta.cantidad_dinero, venta.numero_transaccion FROM public.venta, public.users WHERE users.id = venta.id_cliente and users.cc = $1",
-      [cc]
+      const { idvendedor } = req.body;
+      const { rows: rowsPrimera } = await pool.query("SELECT venta.id_cliente, sum(cantidad_normal) AS total_normal, sum(cantidad_rapida) AS total_rapida, sum(cantidad_dinero) AS total_dinero FROM venta WHERE id_vendedor = $1 GROUP BY id_cliente;",
+        [idvendedor]
       );
-      let var1 = {}
-      if (rowsVentas.length > 0) {
-        var1 = rowsVentas.map(dato => [
-          {
-            id: dato.id,
-            idcliente: dato.id_cliente,
-            nombre: dato.name,
-            cc: dato.cc,
-            fecha: dato.fecha,
-            cantidadnormal: dato.cantidad_normal,
-            cantidadrapida: dato.cantidad_rapida,
-            cantidadinero: dato.cantidad_dinero,
-            numerotransaccion: dato.numero_transaccion
-          },
-        ]);
-        return res.status(200).json({exists:true,
+      if (rowsPrimera.length > 0) {
+        let var1 = {}
+        var1 = rowsPrimera.map(async dato => {
+          const { rows: rowsSegunda } = await pool.query("SELECT users.name, users.cc FROM users WHERE id=$1;",
+            [dato.id_cliente]
+          );
+          return [
+            {
+              idcliente: dato.id_cliente,
+              nombre: rowsSegunda[0].name,
+              cc: rowsSegunda[0].cc,
+              cantidadnormal: dato.total_normal,
+              cantidadrapida: dato.total_rapida,
+              cantidadinero: dato.total_dinero
+            },
+          ]
+        });
+        return res.status(200).json({
+          exists: true,
           data: var1,
         });
       }
-      return res.status(404).json( {exists:false})
+      return res.status(404).json({ exists: false })
     } catch (error) {
       res.status(500).json({ msg: error.msg });
     }
