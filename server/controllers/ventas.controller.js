@@ -40,21 +40,23 @@ export const ventasController = {
       );
       if (rowsPrimera.length > 0) {
         let var1 = {}
-        var1 = rowsPrimera.map(async dato => {
-          const { rows: rowsSegunda } = await pool.query("SELECT users.name, users.cc FROM users WHERE id=$1;",
-            [dato.id_cliente]
-          );
-          return [
-            {
+        const resultados = [];
+        for (let i = 0; i < rowsPrimera.length; i++) {
+          const dato = rowsPrimera[i];
+          const { rows: rowsSegunda } = await pool.query("SELECT users.name, users.cc FROM users WHERE id=$1;", [dato.id_cliente]);
+
+          if (rowsSegunda.length > 0) {
+            resultados.push({
               idcliente: dato.id_cliente,
               nombre: rowsSegunda[0].name,
               cc: rowsSegunda[0].cc,
               cantidadnormal: dato.total_normal,
               cantidadrapida: dato.total_rapida,
               cantidadinero: dato.total_dinero
-            },
-          ]
-        });
+            });
+          }
+        }
+        var1 = resultados;
         return res.status(200).json({
           exists: true,
           data: var1,
