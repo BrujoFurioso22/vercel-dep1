@@ -5,6 +5,7 @@ import { ContenedorPadre } from "../../components/styled-componets/ComponentsPri
 import GeneratePdfButton from "../../components/pdfMaker/pdfMaker";
 import {
   ConsultarVentas,
+  ConsultarVentasCliente,
   ConsultarVentasTotales,
 } from "../../consultasBE/Tablas";
 import { ObtenerIDUsuario } from "../../consultasBE/User";
@@ -117,14 +118,30 @@ const headerNames = {
   numerotransaccion: "Num Tr",
   cantidadinero: "$ Tr.",
 };
+const headerNamesClientes = {
+  idcliente: "ID Cli.",
+  nombre: "Cliente",
+  cc: "Cédula/Teléfono",
+  cantidadnormal: "# 1",
+  cantidadrapida: "# 2",
+  cantidadinero: "$ Tr.",
+};
 
 const visibleColumns = {
   id: false,
   idcliente: true,
-  cc:true,
+  cc: true,
   nombre: true,
   fecha: true,
   numerotransaccion: true,
+  cantidadinero: true,
+};
+const visibleColumnsClientes = {
+  idcliente: true,
+  nombre: true,
+  cc: true,
+  cantidadnormal: true,
+  cantidadrapida: true,
   cantidadinero: true,
 };
 const ContenedorBuscar = styled.div`
@@ -206,12 +223,11 @@ function formatDate(dateString) {
 
   return `${day}/${month}/${year}`; // Devolver en formato dd/mm/yyyy
 }
-const CardTable = ({ datos, headerNames, visibleColumns }) => {
+const CardTable = ({ datos, headerNames, visibleColumns, NM }) => {
   // Filtrar las cabeceras que están marcadas como visibles
   const flatDatos = datos.flat();
 
-  const headers = Object.keys(flatDatos[0]).filter(
-    (header) => visibleColumns[header] !== false
+  const headers = Object.keys(flatDatos[0]).filter((header) => visibleColumns[header] !== false
   );
 
   return (
@@ -222,7 +238,8 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
             <div
               key={header}
               className="celda"
-              data-label={headerNames[header] || header}
+              data-label={ headerNames[header] || header
+              }
             >
               {header === "fecha"
                 ? formatDate(fila[header])
@@ -245,11 +262,13 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
   );
 };
 
-const Tablas = ({ datos, datosVentas }) => {
+const Tablas = ({ datos, datosVentas, NM }) => {
   // console.log(datos);
   const flatDatos = datos.flat();
-  const headers = Object.keys(flatDatos[0]).filter(
-    (header) => visibleColumns[header] !== false
+  const headers = Object.keys(flatDatos[0]).filter((header) =>
+    NM === 0
+      ? visibleColumns[header] !== false
+      : visibleColumnsClientes[header] !== false
   );
 
   return (
@@ -259,7 +278,11 @@ const Tablas = ({ datos, datosVentas }) => {
           <thead>
             <tr>
               {headers.map((header) => (
-                <th key={header}>{headerNames[header] || header}</th>
+                <th key={header}>
+                  {NM === 0
+                    ? headerNames[header] || header
+                    : headerNamesClientes[header] || header}
+                </th>
               ))}
               <th></th>
             </tr>
@@ -269,7 +292,11 @@ const Tablas = ({ datos, datosVentas }) => {
               <tr key={index}>
                 {headers.map((header) => (
                   <td
-                    data-label={headerNames[header]}
+                    data-label={
+                      NM === 0
+                        ? headerNames[header]
+                        : headerNamesClientes[header]
+                    }
                     key={`${venta.idVenta}-${header}`}
                   >
                     {header === "fecha"
@@ -295,8 +322,9 @@ const Tablas = ({ datos, datosVentas }) => {
         </TablaPersonalizada>
         <CardTable
           datos={flatDatos}
-          headerNames={headerNames}
-          visibleColumns={visibleColumns}
+          headerNames={NM === 0 ? headerNames: headerNamesClientes}
+          visibleColumns={NM === 0 ? visibleColumns: visibleColumnsClientes}
+          NM={NM}
         />
       </Contenedor1>
       <Contenedor2>
@@ -332,20 +360,19 @@ const TablasVendidas = () => {
     setIsLoading(true); // Inicia la carga
     try {
       const idVendedor = await ObtenerIDUsuario(idv);
-      if(menu===0){
+      if (menu === 0) {
         if (idVendedor.data.id) {
           const res = await ConsultarVentas(idVendedor.data.id);
           console.log(res.data.data);
           setDatosTabla(res.data.data || []);
         }
-      }else{
+      } else {
         if (idVendedor.data.id) {
-          const res = await ConsultarVentas(idVendedor.data.id);
-          // console.log(res);
-          setDatosTabla(res.data.data || []);
+          const res = await ConsultarVentasCliente(idVendedor.data.id);
+          console.log(res);
+          // setDatosTabla(res.data.data || []);
         }
       }
-     
     } catch (error) {
       console.error("Error al consultar las ventas:", error);
       setDatosTabla([]);
@@ -423,7 +450,17 @@ const TablasVendidas = () => {
         ) : datosFiltrados.length === 0 ? (
           <div>No existen datos según filtro</div>
         ) : (
-          <Tablas datos={datosFiltrados.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))} datosVentas={dataVentas} />
+          <Tablas
+            datos={
+              menuSeleccionado === 0
+                ? datosFiltrados.sort(
+                    (a, b) => new Date(b.fecha) - new Date(a.fecha)
+                  )
+                : datosFiltrados
+            }
+            datosVentas={dataVentas}
+            NM={menuSeleccionado}
+          />
         )}
       </ContenedorPagina>
     </ContenedorPadre>
