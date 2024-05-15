@@ -10,7 +10,7 @@
     "bootstrap-icons": "^1.11.3",
     "html2pdf": "^0.0.11",
     "html2pdf.js": "^0.10.1",
-    "libphonenumber-js": "^1.10.60",
+    "libphonenumber-js": "^1.11.1",
     "pdfmake": "^0.2.10",
     "puppeteer": "^22.8.0",
     "react": "^18.2.0",
