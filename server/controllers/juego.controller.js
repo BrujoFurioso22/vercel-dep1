@@ -72,7 +72,6 @@ export const juegoController = {
   },
   obtenerPosiblesCompletos: async (req, res) => {
     try {
-      console.log("si entre");
       const { rows: rowstablas } = await pool.query(
         "SELECT tablas_normal FROM venta;"
       );
@@ -107,12 +106,8 @@ export const juegoController = {
       for (let i = 0; i < tempo.length; i++) {
         FnuevoArreglo.push(tempo[i].split(','));
       }
-      console.log(FnuevoArreglo);
       let info = [];
       if (numerosActivados.length > 0) {
-        const codigostablas18 = [];
-        const codigostablas19 = [];
-        const codigostablas20 = [];
         const codigostablas21 = [];
         const codigostablas22 = [];
         const codigostablas23 = [];
@@ -123,39 +118,21 @@ export const juegoController = {
           for (const numeroAsignado of numerosActivados) {
             // Verificar si el número asignado está presente en el subarreglo
             if (subarreglo.includes(numeroAsignado.toString())) {
-               contador = contador + 1;
+              contador = contador + 1;
             }
           }
           if (contador === 25) {
-            codigostablas25.push(subarreglo[subarreglo.length-2]);
+            codigostablas25.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 24) {
-            codigostablas24.push(subarreglo[subarreglo.length-2]);
+            codigostablas24.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 23) {
-            codigostablas23.push(subarreglo[subarreglo.length-2]);
+            codigostablas23.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 22) {
-            codigostablas22.push(subarreglo[subarreglo.length-2]);
+            codigostablas22.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 21) {
-            codigostablas21.push(subarreglo[subarreglo.length-2]);
-          } else if (contador === 20) {
-            codigostablas20.push(subarreglo[subarreglo.length-2]);
-          } else if (contador === 19) {
-            codigostablas19.push(subarreglo[subarreglo.length-2]);
-          } else if (contador === 18) {
-            codigostablas18.push(subarreglo[subarreglo.length-2]);
+            codigostablas21.push(subarreglo[subarreglo.length - 2]);
           }
         }
-        const tempo18 = {
-          numeral: 18,
-          datos: codigostablas18,
-        };
-        const tempo19 = {
-          numeral: 19,
-          datos: codigostablas19,
-        };
-        const tempo20 = {
-          numeral: 20,
-          datos: codigostablas20,
-        };
         const tempo21 = {
           numeral: 21,
           datos: codigostablas21,
@@ -176,9 +153,6 @@ export const juegoController = {
           numeral: "GANADORAS",
           datos: codigostablas25,
         };
-        info.push(tempo18);
-        info.push(tempo19);
-        info.push(tempo20);
         info.push(tempo21);
         info.push(tempo22);
         info.push(tempo23);
@@ -234,47 +208,51 @@ export const juegoController = {
         Z: [1, 5, 6, 9, 10, 11, 16, 17, 20, 21, 25],
       };
       const arraysSeleccionados = letras.map((letra) => data[letra]);
-      console.log(arraysSeleccionados.length);
+      console.log(arraysSeleccionados);
       const { rows: rowstablas } = await pool.query(
-        "SELECT * FROM tablanormal;"
+        "SELECT tablas_normal FROM venta;"
       );
-
-      console.log(rowstablas.length);
-      const valoresSeleccionados = [];
-
-      for (let i = 0; i < arraysSeleccionados.length; i++) {
-        const columnasSeleccionadas = arraysSeleccionados[i];
-        const filaValores = []; // Arreglo para almacenar los valores de las columnas seleccionadas para esta fila
-        for (let j = 0; j < rowstablas.length; j++) {
-          const fila = rowstablas[j]; // Obtenemos la fila actual
-          const valoresFila = []; // Objeto para almacenar los valores de las columnas seleccionadas para esta fila
-          // Recorremos todas las propiedades (columnas) de la fila
-          for (const columna in fila) {
-            if (Object.hasOwnProperty.call(fila, columna)) {
-              if (
-                columnasSeleccionadas.includes(
-                  parseInt(columna.replace("num", ""))
-                )
-              ) {
-                // Verificamos si la columna actual está en columnasSeleccionadas
-                const valor = fila[columna]; // Obtenemos el valor de la columna actual
-                valoresFila.push(valor); // Guardamos el valor en el objeto de valores de fila
-              }
-            }
-          }
-          valoresFila.push(rowstablas[j].codigo);
-          filaValores.push(valoresFila); // Agregamos el objeto de valores de fila al arreglo de valores de fila
+      let cadena = ""
+      for (let l = 0; l < rowstablas.length; l++) {
+        if (l === 0) {
+          cadena = rowstablas[l].tablas_normal;
+        } else {
+          cadena = cadena + "," + rowstablas[l].tablas_normal;
         }
-        valoresSeleccionados.push(filaValores); // Agregamos el arreglo de valores de fila al arreglo principal de valores seleccionados
       }
-      //console.log(valoresSeleccionados);
-
+      const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+      const tempo = [];
+      for (const elemento of arregloTodo) {
+        tempo.push(elemento);
+      }
+      tempo.splice(0, 1);
+      tempo.splice(tempo.length - 1,);
+      const FnuevoArreglo = [];
+      for (let i = 0; i < tempo.length; i++) {
+        FnuevoArreglo.push(tempo[i].split(','));
+      }
       const { rows: datosjuegos } = await pool.query(
         "SELECT * FROM juegos WHERE estado = 'I';"
       );
       const arrayjugados = JSON.parse(datosjuegos[0].data);
       //const datajugados = "[false,false,true,false,true,false,true,true,false,false,true,false,true,false,false,true,false,true,false,true,false,true,true,false,false,false,true,false,false,true,true,true,false,true,false,true,true,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,true,false,false,true,true,true,false,true,false,true,true,true,false,false,true]"
       //const arrayjugados = JSON.parse(datajugados);
+
+      const elementosSeleccionados = [];
+
+      // Iterar sobre cada subarreglo en FnuevoArreglo
+      for (let i = 0; i < FnuevoArreglo.length; i++) {
+        const subarreglo = FnuevoArreglo[i];
+        const posicionesSeleccionadas = arraysSeleccionados[i];
+
+        // Obtener los elementos en las posiciones seleccionadas para este subarreglo
+        const elementosSubarreglo = posicionesSeleccionadas.map(posicion => subarreglo[posicion - 1]);
+
+        elementosSeleccionados.push(elementosSubarreglo);
+      }
+      console.log(elementosSeleccionados);
+
+
       const numerosActivados = [];
       let totalCoincidencias = 0; // Contador para las coincidencias
 
@@ -304,7 +282,7 @@ export const juegoController = {
         }
         guardardata.push(cod);
       }
-      console.log(guardardata);
+      //console.log(guardardata);
       let varinfo = {};
       for (let f = 0; f < letras.length; f++) {
         varinfo[letras[f]] = { tablas: guardardata[f] };
