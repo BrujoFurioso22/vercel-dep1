@@ -1,11 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import html2canvas from "html2canvas";
 import ReactDOMServer from "react-dom/server";
 import { jsPDF } from "jspdf";
 import { HtmlTemplate1 } from "./Juego1Template";
 import { HtmlTemplate2 } from "./Juego2Template";
-import { dataTabla } from "../../pages/UserPages/data";
-import { dataTabla2 } from "../../pages/UserPages/data";
 import {
   ConsultarTablasSegunIDVenta,
   ObtenerDesNormal,

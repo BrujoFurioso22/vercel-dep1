@@ -196,7 +196,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
         : parseFloat(datos.cantidadTransferencia),
       datos.numeroTransferencia
     );
-    console.log(resp);
+    // console.log(resp);
     if (resp) {
       if (resp.ok) {
         setVentaCorrecta(1);
@@ -391,7 +391,7 @@ const FormularioVenta = () => {
       const fetch = async () => {
         nombreCl = await ConsultarNombreCliente(strSinEspacios);
         if (nombreCl !== undefined) {
-          console.log(nombreCl);
+          // console.log(nombreCl);
           setNombreComprador(nombreCl);
         }
       };

@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
 import { EstructuraTabla1 } from "./EstructuraTabla1";
-import { dataTabla, dataTabla2 } from "./data";
 import { EstructuraTabla2 } from "./EstructuraTabla2";
 import { ConsultarTablasdelCliente } from "../../consultasBE/Tablas";
 import GenerarPDFs1 from "../../components/pdfMaker/pdfMakerBack";

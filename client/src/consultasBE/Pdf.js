@@ -16,7 +16,7 @@ export async function CrearPdf({
       { dataJuego1, dataJuego2, dataInfo1, dataInfo2 },
       { responseType: "blob" }
     );
-    console.log(res);
+    // console.log(res);
     // Comprobar el código de estado de la respuesta
     if (res.status === 205) {
       return false;

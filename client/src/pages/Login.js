@@ -115,9 +115,6 @@ function Login() {
     <ContenedorPadre>
       <Header oculta={true} />
       <ContenedorPagina>
-        {/* <BotonRegreso>
-          <Link to="/">{"<"} Regresar</Link>
-        </BotonRegreso> */}
         <ContenedorLogin>
           <Formulario onSubmit={handleLogin}>
             <span>Bienvenido</span>

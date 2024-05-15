@@ -369,13 +369,13 @@ const TablasVendidas = () => {
       if (menu === 0) {
         if (idVendedor.data.id) {
           const res = await ConsultarVentas(idVendedor.data.id);
-          console.log(res.data.data);
+          // console.log(res.data.data);
           setDatosTabla(res.data.data || []);
         }
       } else {
         if (idVendedor.data.id) {
           const res = await ConsultarVentasCliente(idVendedor.data.id);
-          console.log(res);
+          // console.log(res);
           if (res.length > 0) {
             setDatosTabla(res || []);
           }

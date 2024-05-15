@@ -70,7 +70,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
       if (dat.length > 0) {
         setData(dat);
         setLetraTabla(dat[0].numtabla.charAt(0));
-        console.log(dat);
+        // console.log(dat);
       }
     }
 

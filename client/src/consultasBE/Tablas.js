@@ -32,21 +32,7 @@ export async function IngresarVenta(
     const res = await axios.post(`${url}/api/tablas/insertarventa`, data, {
       timeout: 100000,
     });
-    console.log(res);
-    return { ok: true, data: res.data };
-  } catch (error) {
-    console.error("Error al realizar la solicitud:", error);
-    return { ok: false, error: error.message };
-  }
-}
-export async function IngresarTablasNormalesNormal({ idventa }) {
-  try {
-    const data = { idventa };
-
-    const res = await axios.post(`${url}/api/tablas/insertarventa`, data, {
-      timeout: 15000,
-    });
-    console.log(res);
+    // console.log(res);
     return { ok: true, data: res.data };
   } catch (error) {
     console.error("Error al realizar la solicitud:", error);
