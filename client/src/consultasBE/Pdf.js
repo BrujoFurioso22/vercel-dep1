@@ -1,6 +1,5 @@
 import axios from "axios";
 import url from "./config/Url";
-
 export async function CrearPdf({
   dataJuego1,
   dataJuego2,

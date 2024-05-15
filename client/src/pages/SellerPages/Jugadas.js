@@ -351,7 +351,8 @@ const GridContainerTab1 = styled.div`
   display: grid;
   grid-template-columns: auto;
   width: fit-content;
-  max-width: 250px;
+  max-width: 350px;
+  
   gap: 6px;
   padding: 5px;
   .gridItem {
@@ -359,6 +360,8 @@ const GridContainerTab1 = styled.div`
     border-radius: 8px;
     padding: 10px;
     background-color: #f9f9f9;
+    max-height: 150px;
+  overflow: auto;
   }
 
   .title {

@@ -208,6 +208,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
 
   const handleCerrarDespuesdeGuardar = () => {
     limpiar();
+    setVentaCorrecta(0)
     onClose();
   };
 
