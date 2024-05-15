@@ -227,7 +227,8 @@ const CardTable = ({ datos, headerNames, visibleColumns, NM }) => {
   // Filtrar las cabeceras que están marcadas como visibles
   const flatDatos = datos.flat();
 
-  const headers = Object.keys(flatDatos[0]).filter((header) => visibleColumns[header] !== false
+  const headers = Object.keys(flatDatos[0]).filter(
+    (header) => visibleColumns[header] !== false
   );
 
   return (
@@ -238,8 +239,7 @@ const CardTable = ({ datos, headerNames, visibleColumns, NM }) => {
             <div
               key={header}
               className="celda"
-              data-label={ headerNames[header] || header
-              }
+              data-label={headerNames[header] || header}
             >
               {header === "fecha"
                 ? formatDate(fila[header])
@@ -255,7 +255,7 @@ const CardTable = ({ datos, headerNames, visibleColumns, NM }) => {
             </div>
           ))}
           {/* <GeneratePdfButton idventa={parseInt(fila.id)} /> */}
-          <GenerarPDFs1 idventa={parseInt(fila.id)} />
+          <GenerarPDFs1 idventa={parseInt(fila.id)} tipo={NM} />
         </div>
       ))}
     </TablaCard>
@@ -314,7 +314,7 @@ const Tablas = ({ datos, datosVentas, NM }) => {
                 ))}
                 <td>
                   {/* <GeneratePdfButton idventa={parseInt(venta.id)} /> */}
-                  <GenerarPDFs1 idventa={parseInt(venta.id)} />
+                  <GenerarPDFs1 idventa={parseInt(venta.id)} tipo={NM} />
                 </td>
               </tr>
             ))}
@@ -322,8 +322,8 @@ const Tablas = ({ datos, datosVentas, NM }) => {
         </TablaPersonalizada>
         <CardTable
           datos={flatDatos}
-          headerNames={NM === 0 ? headerNames: headerNamesClientes}
-          visibleColumns={NM === 0 ? visibleColumns: visibleColumnsClientes}
+          headerNames={NM === 0 ? headerNames : headerNamesClientes}
+          visibleColumns={NM === 0 ? visibleColumns : visibleColumnsClientes}
           NM={NM}
         />
       </Contenedor1>
@@ -370,6 +370,9 @@ const TablasVendidas = () => {
         if (idVendedor.data.id) {
           const res = await ConsultarVentasCliente(idVendedor.data.id);
           console.log(res);
+          if (res.length > 0) {
+            setDatosTabla(res || []);
+          }
           // setDatosTabla(res.data.data || []);
         }
       }
