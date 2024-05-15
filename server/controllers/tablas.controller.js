@@ -117,13 +117,14 @@ export const tablasController = {
             let numeros = new Set();
             while (numeros.size < cantidad) {
               let num = Math.floor(Math.random() * (max - min + 1)) + min;
+              if (!numeros.has(num)) {
               numeros.add(num);
+              }
             }
             return Array.from(numeros);
           };
 
           for (let i = 0; i < cantidadnormal * 4; i++) {
-
             // Generar números aleatorios para diferentes rangos
             const numerosRango1 = generarNumerosAleatorios(1, 15, 5);
             const numerosRango2 = generarNumerosAleatorios(16, 30, 5);
@@ -143,7 +144,7 @@ export const tablasController = {
 
             // Asignar números a las variables n1, n2, ..., n25
             const numerosAsignados = todosLosNumeros.slice(0, 24);
-
+            console.log("sefesfesf");
             let banderadecodigo = true
             let codigonormal = "";
             do {
@@ -162,7 +163,7 @@ export const tablasController = {
                   }
                 }
               } else {
-                banderadecodigo = true
+                banderadecodigo = false
               }
             } while (banderadecodigo); // Bucle mientras no se haya encontrado en ninguna correctamente
 
@@ -189,7 +190,9 @@ export const tablasController = {
             let numeros = new Set();
             while (numeros.size < cantidad) {
               let num = Math.floor(Math.random() * (max - min + 1)) + min;
+              if (!numeros.has(num)) {
               numeros.add(num);
+              }
             }
             return Array.from(numeros);
           };
@@ -230,7 +233,7 @@ export const tablasController = {
                   }
                 }
               } else {
-                banderadecodigo = true
+                banderadecodigo = false
               }
             } while (banderadecodigo);
 
