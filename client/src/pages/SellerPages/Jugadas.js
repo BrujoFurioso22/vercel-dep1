@@ -3,7 +3,6 @@ import styled, { css, keyframes } from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
 import {
-  ConsultarTablasSegunIDTabla,
   CrearNuevaJugada,
   FinalizarJugada,
   ObtenerJugadas,
@@ -11,9 +10,6 @@ import {
   ObtenerTablasLetrasGanadoras,
   UpdateJugada,
 } from "../../consultasBE/Tablas";
-import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
-import { EstructuraTabla2 } from "../UserPages/EstructuraTabla2";
-import { ObtenerUsuarioPorCC } from "../../consultasBE/User";
 
 const ContenedorPagina = styled.div`
   position: relative;

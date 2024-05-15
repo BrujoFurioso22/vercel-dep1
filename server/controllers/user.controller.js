@@ -62,7 +62,7 @@ export const userController = {
             .json({ exists: true, rol: rows[0].rol, nombre: rows[0].name, intentos:intentos, estado: rows[0].estado});
         }
       }
-      return res.status(404).json({ exists: false });
+      return res.status(404).json({ exists: false, intentos:intentos, estado: rows[0].estado});
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "An error occurred" });

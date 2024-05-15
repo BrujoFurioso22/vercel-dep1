@@ -83,6 +83,7 @@ function Login() {
   const [cedulacelular, setCedulaCelular] = useState("");
   const [password, setPassword] = useState("");
   const [verificacion, setVerificacion] = useState(true);
+  const [intentos, setIntentos] = useState(3);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -94,19 +95,19 @@ function Login() {
     event.preventDefault();
     const users = await VerificarUsuario(cedulacelular, password);
     // console.log(users);
-    if (users.data) {
+    if (users.status===200) {
       if (users.data.exists === true) {
         const rol = users.data.rol;
         const nombre = users.data.nombre;
         console.log("Ingresado Correctamente");
-        login(cedulacelular, rol , nombre);
+        login(cedulacelular, rol, nombre);
         navigate("/");
       }
     } else {
       setVerificacion(false);
       setTimeout(() => {
         setVerificacion(true);
-      }, 10000);
+      }, 5000);
       console.log("Error de ingreso");
     }
   };
@@ -120,7 +121,7 @@ function Login() {
             <span>Bienvenido</span>
             <hr />
             {!verificacion && (
-              <label className="msgError">* Credenciales no validas</label>
+              <label className="msgError">* Credenciales no validas o usuario bloqueado</label>
             )}
             <InputFieldCustom
               onChange={setCedulaCelular}
