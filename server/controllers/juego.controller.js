@@ -72,6 +72,7 @@ export const juegoController = {
   },
   obtenerPosiblesCompletos: async (req, res) => {
     try {
+      console.log("si entre");
       const { rows: rowstablas } = await pool.query(
         "SELECT tablas_normal FROM venta;"
       );
@@ -81,7 +82,6 @@ export const juegoController = {
       const array = JSON.parse(datosjuegos[0].data);
       //const data = "[false,false,true,false,true,false,true,true,false,false,true,false,true,false,false,true,false,true,false,true,false,true,true,false,false,false,true,false,false,true,true,true,false,true,false,true,true,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,true,false,false,true,true,true,false,true,false,true,true,true,false,false,true]"
       //const array = JSON.parse(data);
-      console.log(array);
       const numerosActivados = [];
       for (let i = 0; i < array.length; i++) {
         if (array[i]) {
@@ -89,11 +89,11 @@ export const juegoController = {
         }
       }
       let cadena = ""
-      for (let l = 0; l < rowsTablaRapida.length; l++) {
+      for (let l = 0; l < rowstablas.length; l++) {
         if (l === 0) {
-          cadena = rowsTablaRapida[l].tablas_rapida;
+          cadena = rowstablas[l].tablas_normal;
         } else {
-          cadena = cadena + "," + rowsTablaRapida[l].tablas_rapida;
+          cadena = cadena + "," + rowstablas[l].tablas_normal;
         }
       }
       const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
@@ -108,10 +108,6 @@ export const juegoController = {
         FnuevoArreglo.push(tempo[i].split(','));
       }
       console.log(FnuevoArreglo);
-
-
-
-
       let info = [];
       if (numerosActivados.length > 0) {
         const codigostablas18 = [];
@@ -122,34 +118,30 @@ export const juegoController = {
         const codigostablas23 = [];
         const codigostablas24 = [];
         const codigostablas25 = [];
-        for (const linea of rowstablas) {
+        for (const subarreglo of FnuevoArreglo) {
           let contador = 1;
-          for (const numero of numerosActivados) {
-            for (let i = 1; i <= 25; i++) {
-              const variable = linea[`num${i}`];
-              if (variable === numero) {
-                contador++; // Incrementa el contador si encuentra una coincidencia
-                break; // Sale del bucle interno una vez que se encuentra una coincidencia
-              }
+          for (const numeroAsignado of numerosActivados) {
+            // Verificar si el número asignado está presente en el subarreglo
+            if (subarreglo.includes(numeroAsignado.toString())) {
+               contador = contador + 1;
             }
           }
-          console.log(contador);
           if (contador === 25) {
-            codigostablas25.push(linea.codigo);
+            codigostablas25.push(subarreglo[subarreglo.length-2]);
           } else if (contador === 24) {
-            codigostablas24.push(linea.codigo);
+            codigostablas24.push(subarreglo[subarreglo.length-2]);
           } else if (contador === 23) {
-            codigostablas23.push(linea.codigo);
+            codigostablas23.push(subarreglo[subarreglo.length-2]);
           } else if (contador === 22) {
-            codigostablas22.push(linea.codigo);
+            codigostablas22.push(subarreglo[subarreglo.length-2]);
           } else if (contador === 21) {
-            codigostablas21.push(linea.codigo);
+            codigostablas21.push(subarreglo[subarreglo.length-2]);
           } else if (contador === 20) {
-            codigostablas20.push(linea.codigo);
+            codigostablas20.push(subarreglo[subarreglo.length-2]);
           } else if (contador === 19) {
-            codigostablas19.push(linea.codigo);
+            codigostablas19.push(subarreglo[subarreglo.length-2]);
           } else if (contador === 18) {
-            codigostablas18.push(linea.codigo);
+            codigostablas18.push(subarreglo[subarreglo.length-2]);
           }
         }
         const tempo18 = {
@@ -181,7 +173,7 @@ export const juegoController = {
           datos: codigostablas24,
         };
         const tempo25 = {
-          numeral: 25,
+          numeral: "GANADORAS",
           datos: codigostablas25,
         };
         info.push(tempo18);
