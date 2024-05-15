@@ -19,7 +19,7 @@ app.disable('x-powered-by');
 
 app.use(express.static('public'));
 
-app.use(timeout('30s'));  // 30 segundos de tiempo de espera
+app.use(timeout('100s'));  // 30 segundos de tiempo de espera
 
 
 // Utilizar el enrutador de usuarios

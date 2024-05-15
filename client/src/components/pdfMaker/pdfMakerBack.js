@@ -69,6 +69,8 @@ const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
       if (tipo === 0) {
         res = await ConsultarTablasSegunIDVenta(idventa);
       } else if (tipo === 1) {
+        // let strCC="+"+idventa;
+        // console.log(strCC);
         res = await ConsultarTablasClienteMandandoCC({idventa});
       } else {
         res = await ConsultarTablasCliente();

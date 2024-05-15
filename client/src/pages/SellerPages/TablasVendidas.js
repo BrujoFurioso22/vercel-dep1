@@ -255,7 +255,10 @@ const CardTable = ({ datos, headerNames, visibleColumns, NM }) => {
             </div>
           ))}
           {/* <GeneratePdfButton idventa={parseInt(fila.id)} /> */}
-          <GenerarPDFs1 idventa={parseInt(fila.id)} tipo={NM} />
+          <GenerarPDFs1
+            idventa={NM === 0 ? parseInt(fila.id) : fila.cc}
+            tipo={NM}
+          />
         </div>
       ))}
     </TablaCard>
@@ -314,7 +317,10 @@ const Tablas = ({ datos, datosVentas, NM }) => {
                 ))}
                 <td>
                   {/* <GeneratePdfButton idventa={parseInt(venta.id)} /> */}
-                  <GenerarPDFs1 idventa={parseInt(venta.id)} tipo={NM} />
+                  <GenerarPDFs1
+                    idventa={NM === 0 ? parseInt(venta.id) : venta.cc}
+                    tipo={NM}
+                  />
                 </td>
               </tr>
             ))}
@@ -459,7 +465,9 @@ const TablasVendidas = () => {
                 ? datosFiltrados.sort(
                     (a, b) => new Date(b.fecha) - new Date(a.fecha)
                   )
-                : datosFiltrados
+                : datosFiltrados.sort((a, b) =>
+                    a.nombre.localeCompare(b.nombre)
+                  )
             }
             datosVentas={dataVentas}
             NM={menuSeleccionado}
