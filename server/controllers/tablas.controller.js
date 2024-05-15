@@ -328,7 +328,7 @@ export const tablasController = {
               17: FnuevoArreglo[8],
               18: FnuevoArreglo[12],
               19: FnuevoArreglo[17],
-              20: FnuevoArreglo[23],
+              20: FnuevoArreglo[22],
               21: FnuevoArreglo[4],
               22: FnuevoArreglo[9],
               23: FnuevoArreglo[13],

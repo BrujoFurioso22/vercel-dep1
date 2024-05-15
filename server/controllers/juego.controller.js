@@ -121,8 +121,10 @@ export const juegoController = {
               contador = contador + 1;
             }
           }
-          if (contador === 25) {
+          let cadena;
+          if (contador === 25 || contador > 25) {
             codigostablas25.push(subarreglo[subarreglo.length - 2]);
+            cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
           } else if (contador === 24) {
             codigostablas24.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 23) {
@@ -133,6 +135,7 @@ export const juegoController = {
             codigostablas21.push(subarreglo[subarreglo.length - 2]);
           }
         }
+        
         const tempo21 = {
           numeral: 21,
           datos: codigostablas21,
@@ -180,35 +183,35 @@ export const juegoController = {
       const letras = rowsletras[0].letras.split(",");
 
       const data = {
-        A: [1, 2, 3, 4, 5, 6, 11, 16, 21, 22, 8, 18, 23, 24, 25],
-        B: [1, 2, 3, 4, 5, 6, 8, 10, 11, 15, 16, 18, 20, 22, 24],
-        C: [1, 2, 3, 4, 5, 6, 10, 11, 15, 16, 20, 21, 25],
-        D: [1, 2, 3, 4, 5, 6, 10, 11, 15, 16, 20, 22, 23, 24],
-        E: [1, 2, 3, 4, 5, 6, 8, 10, 11, 15, 16, 18, 20, 21, 23, 25],
-        F: [1, 2, 3, 4, 5, 6, 8, 11, 16, 18, 21, 23],
-        G: [1, 2, 3, 4, 5, 6, 10, 11, 15, 16, 18, 20, 21, 23, 24, 25],
-        H: [1, 2, 3, 4, 5, 8, 18, 21, 22, 23, 24, 25],
-        I: [1, 5, 6, 10, 11, 12, 14, 15, 16, 20, 21, 25],
-        J: [1, 5, 6, 10, 11, 12, 14, 15, 16, 21],
-        K: [1, 2, 3, 4, 5, 8, 17, 19, 21, 25],
-        L: [1, 2, 3, 4, 5, 10, 15, 20, 25],
-        M: [1, 2, 3, 4, 5, 7, 17, 21, 22, 23, 24, 25],
-        N: [1, 2, 3, 4, 5, 7, 19, 21, 22, 23, 24, 25],
-        O: [1, 2, 3, 4, 5, 6, 10, 11, 15, 16, 20, 21, 22, 23, 24, 25],
-        P: [1, 2, 3, 4, 5, 6, 8, 11, 16, 18, 21, 22, 23],
-        Q: [1, 2, 3, 4, 5, 6, 10, 11, 15, 16, 19, 20, 21, 22, 23, 24, 25],
-        R: [1, 2, 3, 4, 5, 6, 8, 11, 16, 18, 19, 21, 22, 23, 25],
-        S: [1, 2, 3, 5, 6, 8, 10, 11, 15, 16, 18, 20, 21, 23, 24, 25],
-        T: [1, 6, 11, 12, 14, 15, 16, 21],
-        U: [1, 2, 3, 4, 5, 10, 15, 20, 25, 21, 22, 23, 24, 25],
-        V: [1, 2, 8, 9, 15, 18, 19, 21, 22],
-        W: [1, 2, 3, 4, 5, 9, 12, 19, 21, 22, 23, 24, 25],
-        X: [1, 5, 7, 9, 17, 19, 21, 25],
-        Y: [1, 7, 14, 15, 17, 21],
-        Z: [1, 5, 6, 9, 10, 11, 16, 17, 20, 21, 25],
+        A: [1, 2, 3, 4, 5, 6, 8, 11, 15, 17, 20, 21, 22, 23, 24],
+        B: [1, 2, 3, 4, 5, 6, 8, 10, 11, 14, 15, 17, 19, 21, 23],
+        C: [1, 2, 3, 4, 5, 6, 10, 11, 14, 15, 19, 20, 24],
+        D: [1, 2, 3, 4, 5, 6, 10, 11, 14, 15, 19, 21, 22, 23],
+        E: [1, 2, 3, 4, 5, 6, 8, 10, 11, 14, 15, 17, 19, 20, 22, 24],
+        F: [1, 2, 3, 4, 5, 6, 8, 11, 15, 17, 20, 22],
+        G: [1, 2, 3, 4, 5, 6, 10, 11, 14, 15, 17, 19, 20, 22, 23, 24],
+        H: [1, 2, 3, 4, 5, 8, 17, 20, 21, 22, 23, 24],
+        I: [1, 5, 6, 10, 11, 12, 13, 14, 15, 19, 20, 24],
+        J: [1, 5, 6, 10, 11, 12, 13, 14, 15, 20],
+        K: [1, 2, 3, 4, 5, 8, 16, 18, 20, 24],
+        L: [1, 2, 3, 4, 5, 10, 14, 19, 24],
+        M: [1, 2, 3, 4, 5, 7, 16, 20, 21, 22, 23, 24],
+        N: [1, 2, 3, 4, 5, 7, 18, 20, 21, 22, 23, 24],
+        O: [1, 2, 3, 4, 5, 6, 10, 11, 14, 15, 19, 20, 21, 22, 23, 24],
+        P: [1, 2, 3, 4, 5, 6, 8, 11, 15, 17, 20, 21, 22],
+        Q: [1, 2, 3, 4, 5, 6, 10, 11, 14, 15, 18, 19, 20, 21, 22, 23, 24],
+        R: [1, 2, 3, 4, 5, 6, 8, 11, 16, 17, 18, 20, 21, 22, 24],
+        S: [1, 2, 3, 5, 6, 8, 10, 11, 14, 15, 17, 19, 20, 22, 23, 24],
+        T: [1, 6, 11, 12, 13, 14, 15, 20],
+        U: [1, 2, 3, 4, 5, 10, 14, 19, 20, 21, 22, 23, 24],
+        V: [1, 2, 8, 9, 14, 17, 18, 20, 21],
+        W: [1, 2, 3, 4, 5, 9, 12, 18, 20, 21, 22, 23, 24],
+        X: [1, 5, 7, 9, 16, 18, 20, 24],
+        Y: [1, 7, 13, 14, 16, 20],
+        Z: [1, 5, 6, 9, 10, 11, 15, 16, 19, 20, 24],
       };
       const arraysSeleccionados = letras.map((letra) => data[letra]);
-      console.log(arraysSeleccionados);
+      //console.log(arraysSeleccionados);
       const { rows: rowstablas } = await pool.query(
         "SELECT tablas_normal FROM venta;"
       );
@@ -235,61 +238,63 @@ export const juegoController = {
         "SELECT * FROM juegos WHERE estado = 'I';"
       );
       const arrayjugados = JSON.parse(datosjuegos[0].data);
-      //const datajugados = "[false,false,true,false,true,false,true,true,false,false,true,false,true,false,false,true,false,true,false,true,false,true,true,false,false,false,true,false,false,true,true,true,false,true,false,true,true,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,true,false,false,true,true,true,false,true,false,true,true,true,false,false,true]"
-      //const arrayjugados = JSON.parse(datajugados);
-
-      const elementosSeleccionados = [];
-
-      // Iterar sobre cada subarreglo en FnuevoArreglo
-      for (let i = 0; i < FnuevoArreglo.length; i++) {
-        const subarreglo = FnuevoArreglo[i];
-        const posicionesSeleccionadas = arraysSeleccionados[i];
-
-        // Obtener los elementos en las posiciones seleccionadas para este subarreglo
-        const elementosSubarreglo = posicionesSeleccionadas.map(posicion => subarreglo[posicion - 1]);
-
-        elementosSeleccionados.push(elementosSubarreglo);
-      }
-      console.log(elementosSeleccionados);
-
-
       const numerosActivados = [];
-      let totalCoincidencias = 0; // Contador para las coincidencias
-
       for (let i = 0; i < arrayjugados.length; i++) {
         if (arrayjugados[i]) {
-          numerosActivados.push(i + 1); //NUMEROS QUE SE HAN JUGADO
+          numerosActivados.push(i + 1);
         }
       }
-      const guardardata = [];
-      console.log(numerosActivados);
+      console.log("Aqui empiezo");
+      const arregloCompleto = [];
+      for (let i = 0; i < arraysSeleccionados.length; i++) {
 
-      for (let k = 0; k < valoresSeleccionados.length; k++) {
-        const filadelarreglo = valoresSeleccionados[k]; //PARA EL GRUPO DE LA LETRA
-        let cod = [];
-        for (let h = 0; h < filadelarreglo.length; h++) {
-          const arreglonumeros = filadelarreglo[h]; //EN ARREGLONUMEROS ESTAN LOS NUMEROS DE CADA FILA PERTINENTES
-          // Comparar los números en arreglonumeros con los números en numerosActivados
-          totalCoincidencias = 0;
-          for (let j = 0; j < arreglonumeros.length; j++) {
-            if (numerosActivados.includes(arreglonumeros[j])) {
-              totalCoincidencias++; // Incrementar el contador de coincidencias
+        const posicionesletra = arraysSeleccionados[i];
+        const arregloletra = [];
+        arregloletra.push(letras[i]);
+        for (let j = 0; j < FnuevoArreglo.length; j++) {
+          let subarreglo = FnuevoArreglo[j];
+          const pasar = [];
+          const valores = posicionesletra.map(posicion => subarreglo[posicion - 1]);
+          const arregloNumerico = valores.map(numero => parseInt(numero));
+          pasar.push(subarreglo[subarreglo.length - 2]);
+
+          let contador = 0;
+          for (let z = 0; z < numerosActivados.length; z++) {
+            if (arregloNumerico.includes(numerosActivados[z])) {
+              contador++;
             }
           }
-          if (totalCoincidencias >= 8) {
-            cod.push(arreglonumeros[arreglonumeros.length - 1]);
+          pasar.push(contador);
+          arregloletra.push(pasar);
+        }
+        arregloCompleto.push(arregloletra);
+      }
+      //ASIGNAR VALORES PARA EL JSON
+      const varinfo = [];
+      const ganadas = [];
+      for (let i = 0; i < arregloCompleto.length; i++) {
+        const arregloleta = arregloCompleto[i];
+        const mediano = [];
+        const medianog = [];
+        const letrado = [];
+        mediano.push(arregloleta[0]);
+        medianog.push(arregloleta[0])
+        for (let j = 1; j < arregloleta.length; j++) { // Empezamos en 1 para evitar el primer elemento 'C'          
+          const valor = arregloleta[j][1]; // Accedemos al segundo elemento de cada subarreglo
+          if (valor === arraysSeleccionados[i].length) {
+            medianog.push(arregloleta[j][0]);
+          } else if (valor > 8) {
+            letrado.push(arregloleta[j][0]);
           }
         }
-        guardardata.push(cod);
-      }
-      //console.log(guardardata);
-      let varinfo = {};
-      for (let f = 0; f < letras.length; f++) {
-        varinfo[letras[f]] = { tablas: guardardata[f] };
+        mediano.push(letrado);
+        varinfo.push(mediano);
+        ganadas.push(medianog);
       }
       return res.status(200).json({
         exists: true,
         data1: varinfo,
+        ganadas: ganadas
       });
     } catch (error) {
       console.error(error);
