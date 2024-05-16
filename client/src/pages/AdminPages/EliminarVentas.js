@@ -13,6 +13,9 @@ const ContenedorPagina = styled.div`
   padding: 20px 2vw;
   overflow: auto;
   backdrop-filter: blur(7px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   -webkit-backdrop-filter: blur(7px);
 `;
 
@@ -24,6 +27,10 @@ const Contenedor1 = styled.div`
   padding: 25px;
   box-shadow: var(--sombra-ligera);
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const EliminarVentas = () => {
