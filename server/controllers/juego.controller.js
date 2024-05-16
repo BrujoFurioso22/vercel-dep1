@@ -230,7 +230,7 @@ export const juegoController = {
         const codigostablas5 = [];
         const codigostablas6 = [];
         const codigostablas7 = [];
-        let cadenosa;
+        let cadenosa = "";
         for (const subarreglo of FnuevoArreglo) {
           console.log(subarreglo);
           let contador = 1;
@@ -246,12 +246,12 @@ export const juegoController = {
           if (contador2 > 0) {
             cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
             const { rows: updatepasadas } = await pool.query(
-              "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
+              "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
               [cadenosa]
             );
           } else {
             const { rows: updatepasadas } = await pool.query(
-              "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
+              "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
               [cadenosa]
             );
           }
