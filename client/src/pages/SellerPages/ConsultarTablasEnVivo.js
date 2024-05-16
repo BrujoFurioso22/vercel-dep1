@@ -139,13 +139,13 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
         if (jugada.estado === "I") {
           let res = [];
           // console.log(lT);
-          if (tdeJ === 0) {
+          if (tdeJ === 0 && lT === "N") {
             res = await ObtenerTablasGanadoras();
             if (res) {
               const encontro = findNumeralByCode(codigo, res);
               setNumerosLlenados(encontro);
             }
-          } else if (tdeJ === 1) {
+          } else if (tdeJ === 1 && lT==="R") {
             res = await ObtenerTablasGanadorasRapida();
             if (res) {
               const encontro = findNumeralByCode(codigo, res);
@@ -153,7 +153,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
             }
           }
 
-          if (tdeJ===0) {
+          if (tdeJ===0 && lT==="N") {
             const res1 = await ObtenerTablasLetrasGanadoras();
             if (res1.data1.length > 0) {
               const cadena = findPositionsByCode(codigo, res1.ganadas);
