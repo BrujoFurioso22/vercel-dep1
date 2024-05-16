@@ -248,9 +248,11 @@ export async function ObtenerTablasGanadoras() {
 export async function ObtenerTablasLetrasGanadoras() {
   try {
     const res = await axios.get(`${url}/api/juegos/consultarletrasaganar`);
+    console.log(res);
+
     if (res) {
       if (res.data.exists) {
-        return res.data.data1;
+        return res.data;
       } else {
         return false;
       }

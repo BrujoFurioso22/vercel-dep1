@@ -5,6 +5,7 @@ export async function CrearPdf({
   dataJuego2,
   dataInfo1,
   dataInfo2,
+  dato1
 }) {
   try {
     // console.log(dataJuego);
@@ -26,9 +27,10 @@ export async function CrearPdf({
       const urll = window.URL.createObjectURL(blob);
       // console.log(urll);
 
+      let nombreArchivo = `BINGO CHABELITA_${dato1}-${dataJuego1.length}-${dataJuego2.length}.pdf`
       const link = document.createElement("a");
       link.setAttribute("href", urll); // o cualquier otro nombre de archivo
-      link.setAttribute("download", "bingo.pdf"); // o cualquier otro nombre de archivo
+      link.setAttribute("download", nombreArchivo); // o cualquier otro nombre de archivo
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

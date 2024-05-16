@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import logo from "../../imgs/FondoTabla1.png";
 
+const logo1 = `${process.env.REACT_APP_URL_CLIENT}/LogoChabelita1.ico`
 const TablaBingo = styled.div`
   width: fit-content;
   padding: 10px;
@@ -9,18 +10,20 @@ const TablaBingo = styled.div`
 const ContenedorGrid = styled.div`
   display: flex;
   flex-direction: column;
+  
   /* gap: 10px; */
   /* padding: 20px; */
 
-  & > span {
+  & > .title {
     border: solid 1px #000000;
     border-bottom: none;
     padding: 10px;
+    font-weight: 800;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 15px 15px 0 0;
-    background-color: var(--color-4);
+    background-color: rgba(255, 255, 255, 0.85);
     letter-spacing: 10px;
     text-align: center;
     &::after {
@@ -38,7 +41,7 @@ const Grid = styled.div`
   border-radius: 0 0 15px 15px;
   overflow: hidden;
   border: solid 1px #000000;
-  background: linear-gradient(#edededa9, #edededa9), url(${logo});
+  background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('${logo1}');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -84,8 +87,10 @@ export const EstructuraTabla1 = ({ dataTables }) => {
       <div>
         <span>#{dataTables.numtabla}</span>
         <ContenedorGrid>
-          <span>BINGO</span>
+          <span className="title">BINGO</span>
           <GridH data={dataTables} />
+          <span style={{fontSize:"10px"}}>Vend:{dataTables.alias}</span>
+
         </ContenedorGrid>
       </div>
     </TablaBingo>

@@ -352,7 +352,7 @@ const GridContainerTab1 = styled.div`
   grid-template-columns: auto;
   width: fit-content;
   max-width: 350px;
-  
+
   gap: 6px;
   padding: 5px;
   .gridItem {
@@ -361,12 +361,15 @@ const GridContainerTab1 = styled.div`
     padding: 10px;
     background-color: #f9f9f9;
     max-height: 150px;
-  overflow: auto;
+    overflow: auto;
   }
 
   .title {
     color: #333;
     margin: 0;
+  }
+  .ganadas {
+    background-color: var(--color-1);
   }
   .DataList {
     padding-left: 5px;
@@ -384,11 +387,25 @@ const GridComponent1 = ({ items }) => {
       {items
         .filter((item) => item.datos.length > 0)
         .map((item) => (
-          <div className="gridItem" key={item.numeral}>
+          <div
+            className={`gridItem ${item.numeral === "GANADORAS" && "ganadas"}`}
+            key={item.numeral}
+          >
             <div className="DataList">
-              {"["}
-              {item.numeral}
-              {"]: "}
+              {item.numeral === "GANADORAS" && item.datos.length > 0 ? (
+                <span style={{ fontWeight: "800" }}>
+                  {"["}
+                  {item.numeral}
+                  {"]: "}
+                </span>
+              ) : (
+                <span>
+                  {"["}
+                  {item.numeral}
+                  {"]: "}
+                </span>
+              )}
+
               {item.datos.join(", ")}
             </div>
           </div>
@@ -412,10 +429,26 @@ const GridComponent2 = ({ data }) => {
             </span>
           </div>
         ))}
+      {Object.entries(data)
+        .filter(([, value]) => value.ganadas && value.ganadas.length > 0)
+        .map(([key, value]) => (
+          <div className="gridItem ganadas" key={key}>
+            <span className="title">
+              <span className="ganadas">
+                <span style={{ fontWeight: "800" }}>
+                  {" [Formó "}
+                  {key}
+                  {"]: "}
+                </span>
+
+                {value.ganadas.join(", ")}
+              </span>
+            </span>
+          </div>
+        ))}
     </GridContainerTab1>
   );
 };
-
 const Jugadas = () => {
   const initialPositions = {};
   for (let i = 1; i <= 75; i++) {
@@ -428,6 +461,22 @@ const Jugadas = () => {
   const [mostrarTipoJuego, setMostrarTipoJuego] = useState(true);
   const [consultaRealizada, setConsultaRealizada] = useState(false);
 
+  const transformData = (data) => {
+    const result = {};
+
+    data.data1.forEach(([key, value]) => {
+      result[key] = { tablas: value, ganadas: [] };
+    });
+
+    data.ganadas.forEach(([key, ...values]) => {
+      if (result[key]) {
+        result[key].ganadas = values;
+      }
+    });
+
+    return result;
+  };
+
   const ConsultarJugadas = async () => {
     const res = await ObtenerJugadas();
     if (!res) {
@@ -436,7 +485,7 @@ const Jugadas = () => {
       setData(res[0]);
       setTipodeJuego(res[0].tipo_juego);
       setMostrarTipoJuego(false);
-      setConsultaRealizada(true)
+      setConsultaRealizada(true);
     }
     const resTablaLlena = await ObtenerTablasGanadoras();
     if (resTablaLlena.length > 0) {
@@ -449,10 +498,12 @@ const Jugadas = () => {
     }
 
     const resTablaLetras = await ObtenerTablasLetrasGanadoras();
-    if (resTablaLetras.length > 0) {
-      setTablasLetra(resTablaLetras);
+    if (resTablaLetras.data1.length > 0) {
+      // console.log(resTablaLetras);
+
+      setTablasLetra(transformData(resTablaLetras));
     }
-    console.log(res);
+    // console.log(res);
   };
   useEffect(() => {
     ConsultarJugadas();
@@ -461,6 +512,9 @@ const Jugadas = () => {
   const handleOptions = (value) => {
     setTipodeJuego(value);
   };
+  const hasNonEmptyTablas = (data) => {
+    return Object.values(data).some((entry) => entry.tablas.length > 0);
+  };
 
   return (
     <ContenedorPadre>
@@ -468,49 +522,52 @@ const Jugadas = () => {
       <ContenedorPagina>
         <h1>Juegos Actuales</h1>
         {consultaRealizada ? (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "15px" }}>
-          {mostrarTipoJuego && (
-            <Contenedor1 style={{ minWidth: "fit-content" }}>
-              <SelectField
-                onChange={(e) => handleOptions(e.target.value)}
-                style={{ width: "fit-content" }}
-                name=""
-                id=""
-              >
-                <option value="">Seleccione un juego</option>
-                <option value="0">Tabla Llena</option>
-                <option value="1">La única</option>
-              </SelectField>
-            </Contenedor1>
-          )}
-          {tipodeJuego !== "" && (
-            <ContenedorJugadas
-              data={data}
-              setData={setData}
-              consulta={ConsultarJugadas}
-              setTablaLlena={setDataTotales}
-              setLetrasTabla={setTablasLetra}
-              setMostrarTJ={setMostrarTipoJuego}
-              setJuego={setTipodeJuego}
-              TP={tipodeJuego}
-            ></ContenedorJugadas>
-          )}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "15px" }}>
+            {mostrarTipoJuego && (
+              <Contenedor1 style={{ minWidth: "fit-content" }}>
+                <SelectField
+                  onChange={(e) => handleOptions(e.target.value)}
+                  style={{ width: "fit-content" }}
+                  name=""
+                  id=""
+                >
+                  <option value="">Seleccione un juego</option>
+                  <option value="0">Tabla Llena</option>
+                  <option value="1">La única</option>
+                </SelectField>
+              </Contenedor1>
+            )}
+            {tipodeJuego !== "" && (
+              <ContenedorJugadas
+                data={data}
+                setData={setData}
+                consulta={ConsultarJugadas}
+                setTablaLlena={setDataTotales}
+                setLetrasTabla={setTablasLetra}
+                setMostrarTJ={setMostrarTipoJuego}
+                setJuego={setTipodeJuego}
+                TP={tipodeJuego}
+              ></ContenedorJugadas>
+            )}
 
-          <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
-            {dataTotales.length > 0 && (
-              <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
-                <span>Números en Tabla</span>
-                <GridComponent1 items={dataTotales} />
-              </Contenedor1>
-            )}
-            {Object.keys(dataTablasLetas).length > 0 && (
-              <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
-                <span>Letras en Tabla</span>
-                <GridComponent2 data={dataTablasLetas} />
-              </Contenedor1>
-            )}
+            <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
+              {dataTotales.length > 0 && (
+                <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
+                  <span>Números en Tabla</span>
+                  <GridComponent1 items={dataTotales} />
+                </Contenedor1>
+              )}
+              {hasNonEmptyTablas(dataTablasLetas) && (
+                <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
+                  <span>Letras en Tabla</span>
+                  <GridComponent2 data={dataTablasLetas} />
+                </Contenedor1>
+              )}
+            </div>
           </div>
-        </div>):(<span>Cargando Datos...</span>)}
+        ) : (
+          <span>Cargando Datos...</span>
+        )}
       </ContenedorPagina>
     </ContenedorPadre>
   );

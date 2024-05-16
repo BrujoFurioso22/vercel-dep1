@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import { ConsultarTablasSegunIDTabla } from "../../consultasBE/Tablas";
+import {
+  ConsultarTablasSegunIDTabla,
+  ObtenerTablasGanadoras,
+  ObtenerTablasLetrasGanadoras,
+} from "../../consultasBE/Tablas";
 import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
 import { EstructuraTabla2 } from "../UserPages/EstructuraTabla2";
 
@@ -37,6 +41,26 @@ const Contenedor1 = styled.div`
     align-items: center;
   }
 `;
+const Contenedor2 = styled.div`
+  width: fit-content;
+  height: fit-content;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  & > .datos {
+    max-width: 200px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: var(--sombra-intensa);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+`;
 const InputField = styled.input`
   padding: 4px 5px;
   border: solid 1px var(--color-5);
@@ -60,8 +84,27 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   const [seConsulto, setSeConsulto] = useState(false);
   const [data, setData] = useState([]);
   const [letraTabla, setLetraTabla] = useState("");
+  const [numerosLlenados, setNumerosLlenados] = useState(0);
+  const [letrasFormadas, setLetrasFormadas] = useState("");
+  const findNumeralByCode = (code, data) => {
+    for (const item of data) {
+      if (item.datos.includes(code)) {
+        return item.numeral;
+      }
+    }
+    return 0; // Return null if the code is not found
+  };
+  const findPositionsByCode = (code, data) => {
+    const positions = data
+      .filter((array) => array.includes(code))
+      .map((array) => array[0]);
+
+    return positions.join(", ");
+  };
   const BuscarTabla = async () => {
     setVerif(true);
+    setNumerosLlenados(0)
+    setLetrasFormadas("")
     const resp = await ConsultarTablasSegunIDTabla(codigo);
     setSeConsulto(true);
 
@@ -69,7 +112,25 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
       let dat = resp.data.data;
       if (dat.length > 0) {
         setData(dat);
-        setLetraTabla(dat[0].numtabla.charAt(0));
+        let lT=dat[0].numtabla.charAt(0);
+        setLetraTabla(lT);
+        const res = await ObtenerTablasGanadoras();
+        if (res) {
+          const encontro = findNumeralByCode(codigo, res);
+          setNumerosLlenados(encontro);
+          console.log(encontro);
+        }
+        console.log(letraTabla);
+        if (lT === "N") {
+          const res1 = await ObtenerTablasLetrasGanadoras();
+          if (res1.data1.length > 0) {
+            console.log(res1.ganadas);
+            const cadena = findPositionsByCode(codigo, res1.ganadas);
+            setLetrasFormadas(cadena);
+            // setTablasLetra(transformData(resTablaLetras));
+          }
+        }
+
         // console.log(dat);
       }
     }
@@ -91,7 +152,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   };
 
   return (
-    <div style={{display:"flex",flexDirection:"column",gap:"15px"}}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
       <Contenedor1>
         <div className="buscarCodigo">
           Código:
@@ -111,13 +172,34 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
         data.length > 0 ? (
           <Contenedor1>
             Tabla Encontrada
-            <div>
-              {letraTabla === "N" ? (
-                <EstructuraTabla1 dataTables={data[0]} />
-              ) : (
-                <EstructuraTabla2 dataTables={data[0]} />
-              )}
-            </div>
+            <Contenedor2>
+              <div>
+                {letraTabla === "N" ? (
+                  <EstructuraTabla1 dataTables={data[0]} />
+                ) : (
+                  <EstructuraTabla2 dataTables={data[0]} />
+                )}
+              </div>
+              <div className="datos">
+                <span>
+                  {numerosLlenados === 0
+                    ? `${
+                        letraTabla === "N"
+                          ? "La tabla aun no llega a tener más de 20 números llenados"
+                          : "La tabla aun no llega a tener más de 5 números llenados"
+                      }`
+                    : numerosLlenados === "GANADORAS"
+                    ? "TABLA LLENA"
+                    : `${numerosLlenados} números en tabla`}
+                </span>
+                {letraTabla === "N" &&<span>
+                  {letrasFormadas === ""
+                    ? "No se han formado letras"
+                    : `Letras Formadas: ${letrasFormadas}`}
+                </span>}
+                
+              </div>
+            </Contenedor2>
           </Contenedor1>
         ) : (
           <Contenedor1>

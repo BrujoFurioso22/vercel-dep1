@@ -43,15 +43,16 @@ const Boton = styled.div`
 const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
   const [bloq, setBloq] = useState(false);
   const [error, setError] = useState(false);
+  const cccliente = localStorage.getItem("id");
+
   const ConsultarTablasCliente = async () => {
-    const cccliente = localStorage.getItem("id");
     const res = await ConsultarTablasdelCliente({ cccliente: cccliente });
     if (!res) {
     } else {
       return { data: { data1: res[0], data2: res[1] } };
     }
   };
-  const ConsultarTablasClienteMandandoCC = async ({idventa}) => {
+  const ConsultarTablasClienteMandandoCC = async ({ idventa }) => {
     const res = await ConsultarTablasdelCliente({ cccliente: idventa });
     if (!res) {
     } else {
@@ -69,9 +70,7 @@ const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
       if (tipo === 0) {
         res = await ConsultarTablasSegunIDVenta(idventa);
       } else if (tipo === 1) {
-        // let strCC="+"+idventa;
-        // console.log(strCC);
-        res = await ConsultarTablasClienteMandandoCC({idventa});
+        res = await ConsultarTablasClienteMandandoCC({ idventa });
       } else {
         res = await ConsultarTablasCliente();
       }
@@ -95,8 +94,9 @@ const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
           setError(true);
         } else {
           if (typeof window !== "undefined") {
+            let dato1 = tipo === 2 ? cccliente : idventa;
             // Asegura que esto se ejecute solo en el lado del cliente
-            await generatePdf(dataTabla, dataTabla2, data1, data2);
+            await generatePdf(dataTabla, dataTabla2, data1, data2, dato1);
           }
         }
       }
@@ -124,7 +124,7 @@ const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
     return arreglo.filter((item) => item.trim() !== "");
   };
 
-  const generatePdf = async (dataTabla, dataTabla2, data1, data2) => {
+  const generatePdf = async (dataTabla, dataTabla2, data1, data2, dato1) => {
     // if (data.length === 0) return;
 
     const dataChunks1 = chunkData(dataTabla, 4);
@@ -137,6 +137,7 @@ const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
       dataJuego2: dataChunks2,
       dataInfo1: data1,
       dataInfo2: data2,
+      dato1:dato1
     });
     if (result) {
       console.log("PDF downloaded successfully!");
