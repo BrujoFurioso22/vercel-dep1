@@ -119,16 +119,14 @@ export const juegoController = {
           let contador2 = 0;
           for (const numeroAsignado of numerosActivados) {
             // Verificar si el número asignado está presente en el subarreglo
-            if (subarreglo.includes(numeroAsignado.toString())) {
+            if (contador === 25) {
+              contador2 = contador2 + 1;
+            } else if (subarreglo.includes(numeroAsignado.toString())) {
               contador = contador + 1;
-            } else {
-              if (contador === 25) {
-                contador2 = contador2 + 1;
-              }
             }
           }
           if (contador2 > 0) {
-            cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
+            cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador2 + "]";
             const { rows: updatepasadas } = await pool.query(
               "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
               [cadenosa]
@@ -237,14 +235,14 @@ export const juegoController = {
           let contador2 = 0;
           for (const numeroAsignado of numerosActivados) {
             // Verificar si el número asignado está presente en el subarreglo
-            if (subarreglo.includes(numeroAsignado.toString())) {
-              contador = contador + 1;
-            } else {
+            if (contador === 25) {
               contador2 = contador2 + 1;
+            } else if (subarreglo.includes(numeroAsignado.toString())) {
+              contador = contador + 1;
             }
           }
           if (contador2 > 0) {
-            cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
+            cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador2 + "]";
             const { rows: updatepasadas } = await pool.query(
               "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
               [cadenosa]

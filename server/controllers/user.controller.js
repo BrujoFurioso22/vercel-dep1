@@ -207,6 +207,40 @@ export const userController = {
       res.status(500).json({ message: "An error occurred" });
     }
   },
+  CrearVendedor: async (req, res) => {
+    try {
+      // console.log(req);
+      const { nombrecliente, cccliente, alias, password } = req.body;
+
+      do {
+        const quse = await pool.query("SELECT * FROM users WHERE cc = $1;",
+          [cccliente]
+        );
+        const rowscliente = quse.rows;
+
+        if (rowscliente.length === 0) {
+          const encriptado = encryptText(password, secretKey);
+          const final = `${encriptado}${secretKey}`;
+          const rol = 23;
+          const { rows : rowsinsert } = await pool.query(
+            "INSERT INTO users(name, cc, password, rol, alias ) VALUES ($1, $2, $3, $4, $5);",
+            [nombrecliente, cccliente, final, rol, alias]
+          );
+        } else {
+          idcliente = rowscliente[0].id;
+          isInserted = true;
+        }
+      } while (!isInserted);
+      if (rowsinsert) {
+        return res.status(200).json({ ok: true })
+      } else {
+        return res.status(404).json({ ok: false });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
 
   // create: async(req, res) => {
   //     try {

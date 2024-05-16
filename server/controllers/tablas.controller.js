@@ -305,31 +305,39 @@ export const tablasController = {
           }
         }
         const FnuevoArreglo = nuevoArreglo[0].split(',');
+
         const { rows: pasadasnormal } = await pool.query(
-          "SELECT pasadas_normal FROM public.pasadas WHERE id = 1;",
+          "SELECT pasadas_normal FROM pasadas WHERE pasadas_normal LIKE $1;",
+          ['%' + codigotabla + '%']
         );
         let cadenaamostrar = "";
         if (pasadasnormal.length > 0 && (pasadasnormal[0].pasadas_normal !== null || pasadasnormal[0].pasadas_normal !== "")) {
           const cadeanacompleta = pasadasnormal[0].pasadas_normal;
-          const pares = cadeanacompleta.match(/\['[^']+', \d+\]/g);
+          const regex = /\[([^[\]]+)\]/g;
+          let match;
+          const pares = [];
+
+          while ((match = regex.exec(cadeanacompleta)) !== null) {
+            pares.push(match[1]);
+          }
           const obtenerValor = (codigo) => {
             // Buscar el par que contiene el código dado
             const par = pares.find(par => par.includes(codigo));
             if (par) {
               // Extraer el valor del par encontrado
-              const valor = par.match(/\d+/);
-              return valor ? parseInt(valor[0]) : null; // Convertir el valor a un número entero
+              const valores = par.split(",");
+              return valores ? parseInt(valores[1]) : null; // Convertir el valor a un número entero
             } else {
               return null; // Devolver null si no se encuentra el código dado
             }
           };
           const valorCorrespondiente = obtenerValor(codigotabla);
-          if(valorCorrespondiente !== null){
+          if (valorCorrespondiente !== null) {
             cadenaamostrar = "Esta tabla está pasada con " + valorCorrespondiente + " jugadas";
-          }else{
+          } else {
             cadenaamostrar = "";
           }
-        }else{
+        } else {
           cadenaamostrar = "";
         }
         const var1 = [
@@ -337,7 +345,7 @@ export const tablasController = {
             numtabla: FnuevoArreglo[24],
             alias: FnuevoArreglo[25],
             cadena: cadenaamostrar,
-              datos: {
+            datos: {
               1: FnuevoArreglo[0],
               2: FnuevoArreglo[5],
               3: FnuevoArreglo[10],
@@ -372,7 +380,6 @@ export const tablasController = {
       } else if (rows2.length > 0) {
         // Divide la cadena en cada coma para obtener los elementos individuales
         const arregloTodo = rows2[0].tablas_rapida.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
-
         const nuevoArreglo = [];
         for (const elemento of arregloTodo) {
           if (elemento.includes(codigotabla)) {
@@ -381,31 +388,38 @@ export const tablasController = {
         }
         const FnuevoArreglo = nuevoArreglo[0].split(',');
 
-        const { rows: pasadas_rapida } = await pool.query(
-          "SELECT pasadas_rapida FROM public.pasadas WHERE id = 1;",
+        const { rows: pasadasrapida } = await pool.query(
+          "SELECT pasadas_rapida FROM pasadas WHERE pasadas_rapida LIKE $1;",
+          ['%' + codigotabla + '%']
         );
         let cadenaamostrar = "";
-        if (pasadas_rapida.length > 0 && (pasadas_rapida[0].pasadas_rapida !== null || pasadas_rapida[0].pasadas_rapida !== "")) {
-          const cadeanacompleta = pasadas_rapida[0].pasadas_rapida;
-          const pares = cadeanacompleta.match(/\['[^']+', \d+\]/g);
+        if (pasadasrapida.length > 0 && (pasadasrapida[0].pasadas_rapida !== null || pasadasrapida[0].pasadas_rapida !== "")) {
+          const cadeanacompleta = pasadasrapida[0].pasadas_rapida;
+          const regex = /\[([^[\]]+)\]/g;
+          let match;
+          const pares = [];
+
+          while ((match = regex.exec(cadeanacompleta)) !== null) {
+            pares.push(match[1]);
+          }
           const obtenerValor = (codigo) => {
             // Buscar el par que contiene el código dado
             const par = pares.find(par => par.includes(codigo));
             if (par) {
               // Extraer el valor del par encontrado
-              const valor = par.match(/\d+/);
-              return valor ? parseInt(valor[0]) : null; // Convertir el valor a un número entero
+              const valores = par.split(",");
+              return valores ? parseInt(valores[1]) : null; // Convertir el valor a un número entero
             } else {
               return null; // Devolver null si no se encuentra el código dado
             }
           };
           const valorCorrespondiente = obtenerValor(codigotabla);
-          if(valorCorrespondiente !== null){
+          if (valorCorrespondiente !== null) {
             cadenaamostrar = "Esta tabla está pasada con " + valorCorrespondiente + " jugadas";
-          }else{
+          } else {
             cadenaamostrar = "";
           }
-        }else{
+        } else {
           cadenaamostrar = "";
         }
         const var2 = [
@@ -424,6 +438,7 @@ export const tablasController = {
             },
           },
         ];
+        console.log(var2);
         return res.status(200).json({
           data: var2,
         });
