@@ -308,6 +308,7 @@ export const tablasController = {
         const { rows: pasadasnormal } = await pool.query(
           "SELECT pasadas_normal FROM public.pasadas WHERE id = 1;",
         );
+        
         let cadenaamostrar = "";
         if (pasadasnormal.length > 0) {
           const cadeanacompleta = pasadasnormal[0].pasadasnormal;

@@ -232,7 +232,7 @@ export const juegoController = {
         const codigostablas7 = [];
         let cadenosa;
         for (const subarreglo of FnuevoArreglo) {
-          console.log(subarreglo);
+          // console.log(subarreglo);
           let contador = 1;
           let contador2 = 0;
           for (const numeroAsignado of numerosActivados) {
@@ -362,7 +362,7 @@ export const juegoController = {
           numerosActivados.push(i + 1);
         }
       }
-      console.log("Aqui empiezo");
+      // console.log("Aqui empiezo");
       const arregloCompleto = [];
       for (let i = 0; i < arraysSeleccionados.length; i++) {
 

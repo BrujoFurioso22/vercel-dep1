@@ -6,6 +6,7 @@ import {
   ConsultarTablasSegunIDTabla,
   ObtenerJugadas,
   ObtenerTablasGanadoras,
+  ObtenerTablasGanadorasRapida,
   ObtenerTablasLetrasGanadoras,
 } from "../../consultasBE/Tablas";
 import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
@@ -85,7 +86,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   const [seConsulto, setSeConsulto] = useState(false);
   const [data, setData] = useState([]);
   const [letraTabla, setLetraTabla] = useState("");
-  const [numerosLlenados, setNumerosLlenados] = useState(0);
+  const [numerosLlenados, setNumerosLlenados] = useState(null);
   const [letrasFormadas, setLetrasFormadas] = useState("");
   const [jugada, setJugada] = useState(null);
   // const [jugada,setJugada]=useState(null)
@@ -106,14 +107,14 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   };
   const BuscarTabla = async () => {
     setVerif(true);
-    setNumerosLlenados(0);
+    setNumerosLlenados(null);
     setLetrasFormadas("");
     const resp = await ConsultarTablasSegunIDTabla(codigo);
     setSeConsulto(true);
 
     const ConsultarJugadas = async () => {
       const res = await ObtenerJugadas();
-      console.log(res);
+      // console.log(res);
       if (!res) {
         return null;
       } else {
@@ -122,6 +123,8 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     };
 
     if (resp.data) {
+      console.log(resp);
+      
       let dat = resp.data.data;
       if (dat.length > 0) {
         setData(dat);
@@ -131,11 +134,21 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
         const jugada = await ConsultarJugadas();
         setJugada(jugada);
         if (jugada.estado === "I") {
-          const res = await ObtenerTablasGanadoras();
-          if (res) {
-            const encontro = findNumeralByCode(codigo, res);
-            setNumerosLlenados(encontro);
+          let res = [];
+          if (lT === "N") {
+            res = await ObtenerTablasGanadoras();
+            if (res) {
+              const encontro = findNumeralByCode(codigo, res);
+              setNumerosLlenados(encontro);
+            }
+          } else if (lT === "R") {
+            res = await ObtenerTablasGanadorasRapida();
+            if (res) {
+              const encontro = findNumeralByCode(codigo, res);
+              setNumerosLlenados(encontro);
+            }
           }
+
           if (lT === "N") {
             const res1 = await ObtenerTablasLetrasGanadoras();
             if (res1.data1.length > 0) {
@@ -161,6 +174,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     setVerif(false);
     setSeConsulto(false);
     setLetraTabla("");
+    setJugada(null);
     setData([]);
   };
 
@@ -181,8 +195,8 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
           )}
         </div>
       </Contenedor1>
-      {seConsulto ? (
-        data.length > 0 ? (
+      {seConsulto &&
+        (data.length > 0 ? (
           <Contenedor1>
             Tabla Encontrada
             <Contenedor2>
@@ -193,18 +207,18 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
                   <EstructuraTabla2 dataTables={data[0]} />
                 )}
               </div>
-              {jugada !== null && (
+              {jugada !== null && numerosLlenados !== null && (
                 <div className="datos">
                   <span>
-                    {numerosLlenados === 0
-                      ? `${
+                    {numerosLlenados !== 0
+                      ? `${numerosLlenados} números en tabla`
+                      : numerosLlenados === "GANADORAS"
+                      ? "TABLA LLENA"
+                      : `${
                           letraTabla === "N"
                             ? "La tabla aun no llega a tener más de 20 números llenados"
                             : "La tabla aun no llega a tener más de 5 números llenados"
-                        }`
-                      : numerosLlenados === "GANADORAS"
-                      ? "TABLA LLENA"
-                      : `${numerosLlenados} números en tabla`}
+                        }`}
                   </span>
                   {letraTabla === "N" && (
                     <span>
@@ -221,10 +235,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
           <Contenedor1>
             No se encontro una tabla con el codigo: {codigo}
           </Contenedor1>
-        )
-      ) : (
-        <></>
-      )}
+        ))}
     </div>
   );
 };
