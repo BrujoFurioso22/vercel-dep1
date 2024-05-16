@@ -110,6 +110,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     setNumerosLlenados(null);
     setLetrasFormadas("");
     const resp = await ConsultarTablasSegunIDTabla(codigo);
+    console.log(resp);
     setSeConsulto(true);
 
     const ConsultarJugadas = async () => {
@@ -126,7 +127,8 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
       // console.log(resp);
 
       let dat = resp.data.data;
-      // console.log(data.length);
+      
+      console.log(dat);
       if (dat.length > 0) {
         setData(dat);
         let lT = dat[0].numtabla.charAt(0);
@@ -145,7 +147,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
               const encontro = findNumeralByCode(codigo, res);
               setNumerosLlenados(encontro);
             }
-          } else if (tdeJ === 1 && lT==="R") {
+          } else if (tdeJ === 1 && lT === "R") {
             res = await ObtenerTablasGanadorasRapida();
             if (res) {
               const encontro = findNumeralByCode(codigo, res);
@@ -153,7 +155,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
             }
           }
 
-          if (tdeJ===0 && lT==="N") {
+          if (tdeJ === 0 && lT === "N") {
             const res1 = await ObtenerTablasLetrasGanadoras();
             if (res1.data1.length > 0) {
               const cadena = findPositionsByCode(codigo, res1.ganadas);
@@ -211,28 +213,37 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
                   <EstructuraTabla2 dataTables={data[0]} />
                 )}
               </div>
-              {jugada !== null && numerosLlenados !== null && (
-                <div className="datos">
-                  <span>
-                    {numerosLlenados !== 0
-                      ? `${numerosLlenados} números en tabla`
-                      : numerosLlenados === "GANADORAS"
-                      ? "TABLA LLENA"
-                      : `${
-                          letraTabla === "N"
-                            ? "La tabla aun no llega a tener más de 20 números llenados"
-                            : "La tabla aun no llega a tener más de 5 números llenados"
-                        }`}
-                  </span>
-                  {letraTabla === "N" && (
+
+              {((jugada !== null && letraTabla === "N" && jugada.tipo_juego === 0) ||
+                (jugada !== null && letraTabla === "R" && jugada.tipo_juego === 1)) &&
+                (numerosLlenados !== null ? (
+                  <div className="datos">
                     <span>
-                      {letrasFormadas === ""
-                        ? "No se han formado letras"
-                        : `Letras Formadas: ${letrasFormadas}`}
+                      {numerosLlenados !== 0
+                        ? `${numerosLlenados} números en tabla`
+                        : numerosLlenados === "GANADORAS"
+                        ? "TABLA LLENA"
+                        : `${
+                            letraTabla === "N"
+                              ? "La tabla aun no llega a tener más de 20 números llenados"
+                              : "La tabla aun no llega a tener más de 5 números llenados"
+                          }`}
                     </span>
-                  )}
-                </div>
-              )}
+                    {letraTabla === "N" && (
+                      <span>
+                        {letrasFormadas === ""
+                          ? "No se han formado letras"
+                          : `Letras Formadas: ${letrasFormadas}`}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <div style={{display:"flex",justifyContent:"center",alignItems:"center", gap:"2px",flexDirection:"column"}}><img
+                  style={{ width: "30px" }}
+                  src={`${process.env.REACT_APP_URL_CLIENT}/Blocks.svg`}
+                  alt=""
+                /><span>Cargando Análisis...</span></div>
+                ))}
             </Contenedor2>
           </Contenedor1>
         ) : (

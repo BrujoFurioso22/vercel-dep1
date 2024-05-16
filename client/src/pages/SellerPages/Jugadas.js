@@ -495,6 +495,7 @@ const Jugadas = () => {
     // console.log(tdJ);
     if (tdJ === 0) {
       resTablaLlena = await ObtenerTablasGanadoras();
+      console.log(resTablaLlena);
       if (resTablaLlena.length > 0) {
         const hasNonEmptyDatos = resTablaLlena.some(
           (item) => item.datos.length > 0
@@ -504,6 +505,8 @@ const Jugadas = () => {
         }
       }
       const resTablaLetras = await ObtenerTablasLetrasGanadoras();
+      console.log(resTablaLetras);
+
       if (resTablaLetras.data1.length > 0) {
         // console.log(resTablaLetras);
 
@@ -579,7 +582,7 @@ const Jugadas = () => {
               )}
               {hasNonEmptyTablas(dataTablasLetas) && (
                 <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
-                  <span>Letras en Tabla</span>
+                  <span>Posibles letras en Tabla</span>
                   <GridComponent2 data={dataTablasLetas} />
                 </Contenedor1>
               )}
