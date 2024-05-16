@@ -310,7 +310,7 @@ export const tablasController = {
         );
         
         let cadenaamostrar = "";
-        if (pasadasnormal.length > 0 && pasadasnormal[0].pasadasnormal !== "") {
+        if (pasadasnormal.length > 0 && pasadasnormal[0].pasadasnormal !== null) {
           const cadeanacompleta = pasadasnormal[0].pasadasnormal;
           const pares = cadeanacompleta.match(/\['[^']+', \d+\]/g);
           const obtenerValor = (codigo) => {
