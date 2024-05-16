@@ -123,9 +123,10 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     };
 
     if (resp.data) {
-      console.log(resp);
-      
+      // console.log(resp);
+
       let dat = resp.data.data;
+      // console.log(data.length);
       if (dat.length > 0) {
         setData(dat);
         let lT = dat[0].numtabla.charAt(0);
@@ -133,15 +134,18 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
 
         const jugada = await ConsultarJugadas();
         setJugada(jugada);
+        let tdeJ = jugada.tipo_juego;
+        // console.log(jugada);
         if (jugada.estado === "I") {
           let res = [];
-          if (lT === "N") {
+          // console.log(lT);
+          if (tdeJ === 0) {
             res = await ObtenerTablasGanadoras();
             if (res) {
               const encontro = findNumeralByCode(codigo, res);
               setNumerosLlenados(encontro);
             }
-          } else if (lT === "R") {
+          } else if (tdeJ === 1) {
             res = await ObtenerTablasGanadorasRapida();
             if (res) {
               const encontro = findNumeralByCode(codigo, res);
@@ -149,7 +153,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
             }
           }
 
-          if (lT === "N") {
+          if (tdeJ===0) {
             const res1 = await ObtenerTablasLetrasGanadoras();
             if (res1.data1.length > 0) {
               const cadena = findPositionsByCode(codigo, res1.ganadas);

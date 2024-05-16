@@ -308,10 +308,10 @@ export const tablasController = {
         const { rows: pasadasnormal } = await pool.query(
           "SELECT pasadas_normal FROM public.pasadas WHERE id = 1;",
         );
-        
+        console.log(pasadasnormal);
         let cadenaamostrar = "";
-        if (pasadasnormal.length > 0 && pasadasnormal[0].pasadasnormal !== null) {
-          const cadeanacompleta = pasadasnormal[0].pasadasnormal;
+        if (pasadasnormal.length > 0 && pasadasnormal[0].pasadas_normal !== null) {
+          const cadeanacompleta = pasadasnormal[0].pasadas_normal;
           const pares = cadeanacompleta.match(/\['[^']+', \d+\]/g);
           const obtenerValor = (codigo) => {
             // Buscar el par que contiene el código dado
