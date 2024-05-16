@@ -245,6 +245,21 @@ export async function ObtenerTablasGanadoras() {
     return err;
   }
 }
+export async function ObtenerTablasGanadorasRapida() {
+  try {
+    const res = await axios.get(`${url}/api/juegos/consultaraganarrapida`);
+    if (res) {
+      if (res.data.exists) {
+        return res.data.data1;
+      } else {
+        return false;
+      }
+    }
+    // return res;
+  } catch (err) {
+    return err;
+  }
+}
 export async function ObtenerTablasLetrasGanadoras() {
   try {
     const res = await axios.get(`${url}/api/juegos/consultarletrasaganar`);

@@ -7,6 +7,7 @@ import {
   FinalizarJugada,
   ObtenerJugadas,
   ObtenerTablasGanadoras,
+  ObtenerTablasGanadorasRapida,
   ObtenerTablasLetrasGanadoras,
   UpdateJugada,
 } from "../../consultasBE/Tablas";
@@ -282,7 +283,7 @@ const ContenedorJugadas = ({
               Fecha Jugada: <em> {formatearFechaLegible(data.fecha_hora)} </em>
             </span>
             <h3 style={{ margin: "0" }}>
-              {TP === "0" ? "JUEGO NORMAL" : "LA ÚNICA"}
+              {TP === 0 ? "JUEGO NORMAL" : "LA ÚNICA"}
             </h3>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -479,30 +480,47 @@ const Jugadas = () => {
 
   const ConsultarJugadas = async () => {
     const res = await ObtenerJugadas();
+    let tdJ = "";
     if (!res) {
       setData(null);
     } else {
       setData(res[0]);
-      setTipodeJuego(res[0].tipo_juego);
+      tdJ = res[0].tipo_juego;
+      setTipodeJuego(tdJ);
       setMostrarTipoJuego(false);
       setConsultaRealizada(true);
     }
-    const resTablaLlena = await ObtenerTablasGanadoras();
-    if (resTablaLlena.length > 0) {
-      const hasNonEmptyDatos = resTablaLlena.some(
-        (item) => item.datos.length > 0
-      );
-      if (hasNonEmptyDatos) {
-        setDataTotales(resTablaLlena);
+    let resTablaLlena = [];
+    console.log(tdJ);
+    if (tdJ === 0) {
+      resTablaLlena = await ObtenerTablasGanadoras();
+      if (resTablaLlena.length > 0) {
+        const hasNonEmptyDatos = resTablaLlena.some(
+          (item) => item.datos.length > 0
+        );
+        if (hasNonEmptyDatos) {
+          setDataTotales(resTablaLlena);
+        }
+      }
+      const resTablaLetras = await ObtenerTablasLetrasGanadoras();
+      if (resTablaLetras.data1.length > 0) {
+        // console.log(resTablaLetras);
+
+        setTablasLetra(transformData(resTablaLetras));
+      }
+    } else if (tdJ === 1) {
+      resTablaLlena = await ObtenerTablasGanadorasRapida();
+      console.log(resTablaLlena);
+      if (resTablaLlena.length > 0) {
+        const hasNonEmptyDatos = resTablaLlena.some(
+          (item) => item.datos.length > 0
+        );
+        if (hasNonEmptyDatos) {
+          setDataTotales(resTablaLlena);
+        }
       }
     }
 
-    const resTablaLetras = await ObtenerTablasLetrasGanadoras();
-    if (resTablaLetras.data1.length > 0) {
-      // console.log(resTablaLetras);
-
-      setTablasLetra(transformData(resTablaLetras));
-    }
     // console.log(res);
   };
   useEffect(() => {
