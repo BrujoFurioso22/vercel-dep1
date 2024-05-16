@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import ManageUsersVend from "../AdminPages/ManageUsersVend";
 import EliminarVentas from "../AdminPages/EliminarVentas";
+import CrearVendedor from "../AdminPages/Crear Vendedor";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -25,6 +26,7 @@ const AdminRoutes = () => {
       <Routes>
         <Route path="manageUsers" element={<ManageUsersVend />} />
         <Route path="delVentas" element={<EliminarVentas />} />
+        <Route path="crearVendedor" element={<CrearVendedor />} />
       </Routes>
     </ContenedorPadre>
   );

@@ -395,6 +395,9 @@ const Header = ({ oculta }) => {
         <CustomNavLink to="/adm/delVentas">
           Eliminar Ventas
         </CustomNavLink>
+        <CustomNavLink to="/adm/crearVendedor">
+          Crear Vendedor
+        </CustomNavLink>
       </MenuD>
     );
   };
