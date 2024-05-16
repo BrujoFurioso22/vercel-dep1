@@ -118,7 +118,7 @@ export const tablasController = {
             while (numeros.size < cantidad) {
               let num = Math.floor(Math.random() * (max - min + 1)) + min;
               if (!numeros.has(num)) {
-              numeros.add(num);
+                numeros.add(num);
               }
             }
             return Array.from(numeros);
@@ -191,7 +191,7 @@ export const tablasController = {
             while (numeros.size < cantidad) {
               let num = Math.floor(Math.random() * (max - min + 1)) + min;
               if (!numeros.has(num)) {
-              numeros.add(num);
+                numeros.add(num);
               }
             }
             return Array.from(numeros);
@@ -305,11 +305,37 @@ export const tablasController = {
           }
         }
         const FnuevoArreglo = nuevoArreglo[0].split(',');
+        const { rows: pasadasnormal } = await pool.query(
+          "SELECT pasadas_normal FROM public.pasadas WHERE id = 1;",
+        );
+        let cadenaamostrar = "";
+        if (pasadasnormal.length > 0) {
+          const cadeanacompleta = pasadasnormal[0].pasadasnormal;
+          const pares = cadeanacompleta.match(/\['[^']+', \d+\]/g);
+          const obtenerValor = (codigo) => {
+            // Buscar el par que contiene el código dado
+            const par = pares.find(par => par.includes(codigo));
+            if (par) {
+              // Extraer el valor del par encontrado
+              const valor = par.match(/\d+/);
+              return valor ? parseInt(valor[0]) : null; // Convertir el valor a un número entero
+            } else {
+              return null; // Devolver null si no se encuentra el código dado
+            }
+          };
+          const valorCorrespondiente = obtenerValor(codigotabla);
+          if(valorCorrespondiente !== null){
+            cadenaamostrar = "Esta tabla está pasada con " + valorCorrespondiente + " jugadas";
+          }else{
+            cadenaamostrar = "";
+          }
+        }
         const var1 = [
           {
             numtabla: FnuevoArreglo[24],
             alias: FnuevoArreglo[25],
-            datos: {
+            cadena: cadenaamostrar,
+              datos: {
               1: FnuevoArreglo[0],
               2: FnuevoArreglo[5],
               3: FnuevoArreglo[10],

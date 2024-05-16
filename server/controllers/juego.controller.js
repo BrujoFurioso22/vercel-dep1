@@ -76,7 +76,7 @@ export const juegoController = {
         "SELECT tablas_normal FROM venta;"
       );
       const { rows: datosjuegos } = await pool.query(
-        "SELECT * FROM juegos WHERE estado = 'I';"
+        "SELECT * FROM juegos WHERE estado = 'I' AND tipo_juego=0;"
       );
       const array = JSON.parse(datosjuegos[0].data);
       //const data = "[false,false,true,false,true,false,true,true,false,false,true,false,true,false,false,true,false,true,false,true,false,true,true,false,false,false,true,false,false,true,true,true,false,true,false,true,true,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,true,false,false,true,true,true,false,true,false,true,true,true,false,false,true]"
@@ -113,6 +113,7 @@ export const juegoController = {
         const codigostablas23 = [];
         const codigostablas24 = [];
         const codigostablas25 = [];
+        let cadena = "";
         for (const subarreglo of FnuevoArreglo) {
           let contador = 1;
           for (const numeroAsignado of numerosActivados) {
@@ -121,10 +122,19 @@ export const juegoController = {
               contador = contador + 1;
             }
           }
-          let cadena;
-          if (contador === 25 || contador > 25) {
-            codigostablas25.push(subarreglo[subarreglo.length - 2]);
+          if( contador > 25){
             cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
+            const { rows: updatepasadas } = await pool.query(
+              "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
+              [cadena]
+            );
+          }
+          else if (contador === 25) {
+            codigostablas25.push(subarreglo[subarreglo.length - 2]);
+            const { rows: updatepasadas } = await pool.query(
+              "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
+              [cadena]
+            );
           } else if (contador === 24) {
             codigostablas24.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 23) {
@@ -161,6 +171,104 @@ export const juegoController = {
         info.push(tempo23);
         info.push(tempo24);
         info.push(tempo25);
+
+        return res.status(200).json({
+          exists: true,
+          data1: info,
+        });
+      } else {
+        console.log("No se encontraron números activados.");
+        return res.status(404).json({ exists: false });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
+  obtenerPosiblesRapidas: async (req, res) => {
+    try {
+      const { rows: rowstablas } = await pool.query(
+        "SELECT tablas_rapida FROM venta;"
+      );
+      const { rows: datosjuegos } = await pool.query(
+        "SELECT * FROM juegos WHERE estado = 'I' AND tipo_juego=1;"
+      );
+      const array = JSON.parse(datosjuegos[0].data);
+      const numerosActivados = [];
+      for (let i = 0; i < array.length; i++) {
+        if (array[i]) {
+          numerosActivados.push(i + 1);
+        }
+      }
+      let cadena = ""
+      for (let l = 0; l < rowstablas.length; l++) {
+        if (l === 0) {
+          cadena = rowstablas[l].tablas_normal;
+        } else {
+          cadena = cadena + "," + rowstablas[l].tablas_normal;
+        }
+      }
+      const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+      const tempo = [];
+      for (const elemento of arregloTodo) {
+        tempo.push(elemento);
+      }
+      tempo.splice(0, 1);
+      tempo.splice(tempo.length - 1,);
+      const FnuevoArreglo = [];
+      for (let i = 0; i < tempo.length; i++) {
+        FnuevoArreglo.push(tempo[i].split(','));
+      }
+      let info = [];
+      if (numerosActivados.length > 0) {
+        const codigostablas5 = [];
+        const codigostablas6 = [];
+        const codigostablas7 = [];
+        let cadena;
+        for (const subarreglo of FnuevoArreglo) {
+          let contador = 1;
+          for (const numeroAsignado of numerosActivados) {
+            // Verificar si el número asignado está presente en el subarreglo
+            if (subarreglo.includes(numeroAsignado.toString())) {
+              contador = contador + 1;
+            }
+          }
+          if(contador > 7){
+            cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
+            const { rows: updatepasadas } = await pool.query(
+              "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
+              [cadena]
+            );
+          }
+          else if (contador === 7) {
+            codigostablas7.push(subarreglo[subarreglo.length - 2]);
+            cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
+            const { rows: updatepasadas } = await pool.query(
+              "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
+              [cadena]
+            );
+          } else if (contador === 6) {
+            codigostablas6.push(subarreglo[subarreglo.length - 2]);
+          } else if (contador === 5) {
+            codigostablas5.push(subarreglo[subarreglo.length - 2]);
+          }
+        }
+        
+        const tempo1 = {
+          numeral: 5,
+          datos: codigostablas5,
+        };
+        const tempo2 = {
+          numeral: 6,
+          datos: codigostablas6,
+        };
+        const tempo3 = {
+          numeral: "GANADORAS",
+          datos: codigostablas7,
+        };
+        info.push(tempo1);
+        info.push(tempo2);
+        info.push(tempo3);
 
         return res.status(200).json({
           exists: true,
