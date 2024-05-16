@@ -76,7 +76,7 @@ export const juegoController = {
         "SELECT tablas_normal FROM venta;"
       );
       const { rows: datosjuegos } = await pool.query(
-        "SELECT * FROM juegos WHERE estado = 'I' AND tipo_juego=0;"
+        "SELECT * FROM juegos WHERE estado = 'I' AND tipo_juego = 0;"
       );
       const array = JSON.parse(datosjuegos[0].data);
       //const data = "[false,false,true,false,true,false,true,true,false,false,true,false,true,false,false,true,false,true,false,true,false,true,true,false,false,false,true,false,false,true,true,true,false,true,false,true,true,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,true,false,false,true,true,true,false,true,false,true,true,true,false,false,true]"
@@ -113,7 +113,7 @@ export const juegoController = {
         const codigostablas23 = [];
         const codigostablas24 = [];
         const codigostablas25 = [];
-        let cadena = "";
+        let cadenosa = "";
         for (const subarreglo of FnuevoArreglo) {
           let contador = 1;
           let contador2 = 0;
@@ -128,15 +128,15 @@ export const juegoController = {
             }
           }
           if (contador2 > 0) {
-            cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
+            cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
             const { rows: updatepasadas } = await pool.query(
               "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
-              [cadena]
+              [cadenosa]
             );
           } else {
             const { rows: updatepasadas } = await pool.query(
               "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
-              [cadena]
+              [cadenosa]
             );
           }
           if (contador === 25) {
@@ -197,7 +197,7 @@ export const juegoController = {
         "SELECT tablas_rapida FROM venta;"
       );
       const { rows: datosjuegos } = await pool.query(
-        "SELECT * FROM juegos WHERE estado = 'I' AND tipo_juego=1;"
+        "SELECT * FROM juegos WHERE estado = 'I' AND tipo_juego = 1;"
       );
       const array = JSON.parse(datosjuegos[0].data);
       const numerosActivados = [];
@@ -206,12 +206,12 @@ export const juegoController = {
           numerosActivados.push(i + 1);
         }
       }
-      let cadena = ""
+      let cadena = "";
       for (let l = 0; l < rowstablas.length; l++) {
         if (l === 0) {
-          cadena = rowstablas[l].tablas_normal;
+          cadena = rowstablas[l].tablas_rapida;
         } else {
-          cadena = cadena + "," + rowstablas[l].tablas_normal;
+          cadena = cadena + "," + rowstablas[l].tablas_rapida;
         }
       }
       const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
@@ -230,28 +230,29 @@ export const juegoController = {
         const codigostablas5 = [];
         const codigostablas6 = [];
         const codigostablas7 = [];
-        let cadena;
+        let cadenosa;
         for (const subarreglo of FnuevoArreglo) {
+          console.log(subarreglo);
           let contador = 1;
           let contador2 = 0;
           for (const numeroAsignado of numerosActivados) {
             // Verificar si el número asignado está presente en el subarreglo
             if (subarreglo.includes(numeroAsignado.toString())) {
               contador = contador + 1;
-            }else{
+            } else {
               contador2 = contador2 + 1;
             }
           }
           if (contador2 > 0) {
-            cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
+            cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
             const { rows: updatepasadas } = await pool.query(
               "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
-              [cadena]
+              [cadenosa]
             );
           } else {
             const { rows: updatepasadas } = await pool.query(
               "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
-              [cadena]
+              [cadenosa]
             );
           }
           if (contador === 7) {
