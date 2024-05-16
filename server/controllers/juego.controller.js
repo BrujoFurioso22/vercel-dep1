@@ -116,25 +116,31 @@ export const juegoController = {
         let cadena = "";
         for (const subarreglo of FnuevoArreglo) {
           let contador = 1;
+          let contador2 = 0;
           for (const numeroAsignado of numerosActivados) {
             // Verificar si el número asignado está presente en el subarreglo
             if (subarreglo.includes(numeroAsignado.toString())) {
               contador = contador + 1;
+            } else {
+              if (contador === 25) {
+                contador2 = contador2 + 1;
+              }
             }
           }
-          if( contador > 25){
+          if (contador2 > 0) {
             cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
             const { rows: updatepasadas } = await pool.query(
               "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
               [cadena]
             );
-          }
-          else if (contador === 25) {
-            codigostablas25.push(subarreglo[subarreglo.length - 2]);
+          } else {
             const { rows: updatepasadas } = await pool.query(
               "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
               [cadena]
             );
+          }
+          if (contador === 25) {
+            codigostablas25.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 24) {
             codigostablas24.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 23) {
@@ -145,7 +151,7 @@ export const juegoController = {
             codigostablas21.push(subarreglo[subarreglo.length - 2]);
           }
         }
-        
+
         const tempo21 = {
           numeral: 21,
           datos: codigostablas21,
@@ -227,33 +233,36 @@ export const juegoController = {
         let cadena;
         for (const subarreglo of FnuevoArreglo) {
           let contador = 1;
+          let contador2 = 0;
           for (const numeroAsignado of numerosActivados) {
             // Verificar si el número asignado está presente en el subarreglo
             if (subarreglo.includes(numeroAsignado.toString())) {
               contador = contador + 1;
+            }else{
+              contador2 = contador2 + 1;
             }
           }
-          if(contador > 7){
+          if (contador2 > 0) {
             cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
             const { rows: updatepasadas } = await pool.query(
-              "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
+              "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
+              [cadena]
+            );
+          } else {
+            const { rows: updatepasadas } = await pool.query(
+              "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
               [cadena]
             );
           }
-          else if (contador === 7) {
+          if (contador === 7) {
             codigostablas7.push(subarreglo[subarreglo.length - 2]);
-            cadena = cadena + " [" + subarreglo[subarreglo.length - 2] + "," + contador + "]";
-            const { rows: updatepasadas } = await pool.query(
-              "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
-              [cadena]
-            );
           } else if (contador === 6) {
             codigostablas6.push(subarreglo[subarreglo.length - 2]);
           } else if (contador === 5) {
             codigostablas5.push(subarreglo[subarreglo.length - 2]);
           }
         }
-        
+
         const tempo1 = {
           numeral: 5,
           datos: codigostablas5,
