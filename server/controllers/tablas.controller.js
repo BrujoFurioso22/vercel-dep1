@@ -308,9 +308,8 @@ export const tablasController = {
         const { rows: pasadasnormal } = await pool.query(
           "SELECT pasadas_normal FROM public.pasadas WHERE id = 1;",
         );
-        console.log(pasadasnormal);
         let cadenaamostrar = "";
-        if (pasadasnormal.length > 0 && pasadasnormal[0].pasadas_normal !== null) {
+        if (pasadasnormal.length > 0 && (pasadasnormal[0].pasadas_normal !== null || pasadasnormal[0].pasadas_normal !== "")) {
           const cadeanacompleta = pasadasnormal[0].pasadas_normal;
           const pares = cadeanacompleta.match(/\['[^']+', \d+\]/g);
           const obtenerValor = (codigo) => {
@@ -381,10 +380,39 @@ export const tablasController = {
           }
         }
         const FnuevoArreglo = nuevoArreglo[0].split(',');
+
+        const { rows: pasadas_rapida } = await pool.query(
+          "SELECT pasadas_rapida FROM public.pasadas WHERE id = 1;",
+        );
+        let cadenaamostrar = "";
+        if (pasadas_rapida.length > 0 && (pasadas_rapida[0].pasadas_rapida !== null || pasadas_rapida[0].pasadas_rapida !== "")) {
+          const cadeanacompleta = pasadas_rapida[0].pasadas_rapida;
+          const pares = cadeanacompleta.match(/\['[^']+', \d+\]/g);
+          const obtenerValor = (codigo) => {
+            // Buscar el par que contiene el código dado
+            const par = pares.find(par => par.includes(codigo));
+            if (par) {
+              // Extraer el valor del par encontrado
+              const valor = par.match(/\d+/);
+              return valor ? parseInt(valor[0]) : null; // Convertir el valor a un número entero
+            } else {
+              return null; // Devolver null si no se encuentra el código dado
+            }
+          };
+          const valorCorrespondiente = obtenerValor(codigotabla);
+          if(valorCorrespondiente !== null){
+            cadenaamostrar = "Esta tabla está pasada con " + valorCorrespondiente + " jugadas";
+          }else{
+            cadenaamostrar = "";
+          }
+        }else{
+          cadenaamostrar = "";
+        }
         const var2 = [
           {
             numtabla: FnuevoArreglo[7],
             alias: FnuevoArreglo[8],
+            cadena: cadenaamostrar,
             datos: {
               1: FnuevoArreglo[0],
               3: FnuevoArreglo[4],
@@ -410,6 +438,122 @@ export const tablasController = {
       const { cccliente } = req.body;
       const { rows: rowsTablaNormal } = await pool.query(
         "SELECT tablas_normal FROM public.venta, public.users WHERE venta.id_cliente=users.id and users.cc =$1",
+        [cccliente]
+      );
+      //console.log(rowsTablaNormal[0].tablas_normal);
+      const { rows: rowsTablaRapida } = await pool.query(
+        "SELECT tablas_rapida FROM public.venta, public.users WHERE venta.id_cliente=users.id and users.cc =$1",
+        [cccliente]
+      );
+
+      let var1 = [],
+        var2 = [];
+
+      if (rowsTablaNormal.length > 0) {
+        let cadena = ""
+        for (let l = 0; l < rowsTablaNormal.length; l++) {
+          if (l === 0) {
+            cadena = rowsTablaNormal[l].tablas_normal;
+          } else {
+            cadena = cadena + "," + rowsTablaNormal[l].tablas_normal;
+          }
+        }
+        const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+        const tempo = [];
+        for (const elemento of arregloTodo) {
+          tempo.push(elemento);
+        }
+        tempo.splice(0, 1);
+        tempo.splice(tempo.length - 1,);
+        const FnuevoArreglo = [];
+        for (let i = 0; i < tempo.length; i++) {
+          FnuevoArreglo.push(tempo[i].split(','));
+        }
+        for (let k = 0; k < FnuevoArreglo.length; k++) {
+          var1.push({
+            numtabla: FnuevoArreglo[k][24],
+            alias: FnuevoArreglo[k][25],
+            datos: {
+              1: FnuevoArreglo[k][0],
+              2: FnuevoArreglo[k][5],
+              3: FnuevoArreglo[k][10],
+              4: FnuevoArreglo[k][14],
+              5: FnuevoArreglo[k][19],
+              6: FnuevoArreglo[k][1],
+              7: FnuevoArreglo[k][6],
+              8: FnuevoArreglo[k][11],
+              9: FnuevoArreglo[k][15],
+              10: FnuevoArreglo[k][20],
+              11: FnuevoArreglo[k][2],
+              12: FnuevoArreglo[k][7],
+              14: FnuevoArreglo[k][16],
+              15: FnuevoArreglo[k][21],
+              16: FnuevoArreglo[k][3],
+              17: FnuevoArreglo[k][8],
+              18: FnuevoArreglo[k][12],
+              19: FnuevoArreglo[k][17],
+              20: FnuevoArreglo[k][22],
+              21: FnuevoArreglo[k][4],
+              22: FnuevoArreglo[k][9],
+              23: FnuevoArreglo[k][13],
+              24: FnuevoArreglo[k][18],
+              25: FnuevoArreglo[k][23]
+            },
+          });
+        }
+      }
+
+      if (rowsTablaRapida.length > 0) {
+        let cadena = ""
+        for (let l = 0; l < rowsTablaRapida.length; l++) {
+          if (l === 0) {
+            cadena = rowsTablaRapida[l].tablas_rapida;
+          } else {
+            cadena = cadena + "," + rowsTablaRapida[l].tablas_rapida;
+          }
+        }
+        const arregloTodo = cadena.split(/\[|\]/).map(item => item.trim()).filter(item => item !== ',' && item !== ' ');
+        const tempo = [];
+        for (const elemento of arregloTodo) {
+          tempo.push(elemento);
+        }
+        tempo.splice(0, 1);
+        tempo.splice(tempo.length - 1,);
+        const FnuevoArreglo = [];
+        for (let i = 0; i < tempo.length; i++) {
+          FnuevoArreglo.push(tempo[i].split(','));
+        }
+        for (let k = 0; k < FnuevoArreglo.length; k++) {
+          var2.push({
+            numtabla: FnuevoArreglo[k][7],
+            alias: FnuevoArreglo[k][8],
+            datos: {
+              1: FnuevoArreglo[k][0],
+              3: FnuevoArreglo[k][4],
+              4: FnuevoArreglo[k][1],
+              6: FnuevoArreglo[k][5],
+              7: FnuevoArreglo[k][2],
+              8: FnuevoArreglo[k][3],
+              9: FnuevoArreglo[k][6],
+            },
+          });
+        }
+      }
+      return res.status(200).json({
+        ok: true,
+        data1: var1,
+        data2: var2,
+
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.msg });
+    }
+  },
+  obtenerTablasPasadasNormales: async (req, res) => {
+    try {
+      const { cccliente } = req.body;
+      const { rows: rowsTablaPasadas } = await pool.query(
+        "SELECT pasadas_normal FROM public.venta, public.users WHERE venta.id_cliente=users.id and users.cc =$1",
         [cccliente]
       );
       //console.log(rowsTablaNormal[0].tablas_normal);
