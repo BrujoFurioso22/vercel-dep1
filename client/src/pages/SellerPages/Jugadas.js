@@ -383,6 +383,7 @@ const GridContainerTab1 = styled.div`
 `;
 
 const GridComponent1 = ({ items }) => {
+  console.log(items);
   return (
     <GridContainerTab1>
       {items
@@ -491,7 +492,7 @@ const Jugadas = () => {
       setConsultaRealizada(true);
     }
     let resTablaLlena = [];
-    console.log(tdJ);
+    // console.log(tdJ);
     if (tdJ === 0) {
       resTablaLlena = await ObtenerTablasGanadoras();
       if (resTablaLlena.length > 0) {
@@ -510,11 +511,12 @@ const Jugadas = () => {
       }
     } else if (tdJ === 1) {
       resTablaLlena = await ObtenerTablasGanadorasRapida();
-      console.log(resTablaLlena);
+      // console.log(resTablaLlena);
       if (resTablaLlena.length > 0) {
         const hasNonEmptyDatos = resTablaLlena.some(
           (item) => item.datos.length > 0
         );
+        console.log(resTablaLlena);
         if (hasNonEmptyDatos) {
           setDataTotales(resTablaLlena);
         }
