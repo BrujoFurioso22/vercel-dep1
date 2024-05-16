@@ -2,10 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import { ConsultarTablasSegunIDTabla } from "../../consultasBE/Tablas";
-import { EstructuraTabla1 } from "../UserPages/EstructuraTabla1";
-import { EstructuraTabla2 } from "../UserPages/EstructuraTabla2";
-import { ObtenerUsuarioPorCC } from "../../consultasBE/User";
 import {
   ActualizarBloqueoUsuario,
   ActualizarDatosUsuarioVendedor,
@@ -267,39 +263,7 @@ function UserForm({ users, cc ,consultar}) {
   );
 }
 
-const usuariosSample = [
-  {
-    cc: "0958489438",
-    name: "Jorge Luis Castro Amparo",
-    alias: "El Charito",
-    password: "locastro120",
-    bloq: false,
-  },
-  {
-    cc: "04568459585",
-    name: "Charls Hector Jordan",
-    alias: "El Mingas",
-    password: "isan2834",
-    bloq: true,
-  },
-  {
-    cc: "019383945859",
-    name: "Laura Nube Morales",
-    alias: "La Hamburguesa Simple",
-    password: "loquita293",
-    bloq: true,
-  },
-  {
-    cc: "+593008583929",
-    name: "Nicolas Gonzalo Guillen",
-    alias: "El pianista",
-    password: "norlp9023",
-    bloq: false,
-  },
-];
-
 const ManageUsersVend = () => {
-  const [codigoConsulta, setCodigoConsulta] = useState("");
   const [usuariosVend, setUsuariosVend] = useState([]);
   const [editID, setEditID] = useState(0);
   const ConsultarUsuarios = async () => {

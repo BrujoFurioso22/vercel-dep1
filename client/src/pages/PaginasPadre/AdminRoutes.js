@@ -1,14 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import VenderTablas from "../SellerPages/VenderTablas";
-import TablasVendidas from "../SellerPages/TablasVendidas";
-import ConsultarTablasEnVivo from "../SellerPages/ConsultarTablasEnVivo";
-import Preview from "../../components/pdfMaker/Preview";
-import EditInfoTemplates from "../SellerPages/EditInfoTemplates";
-import ConsultarDatosCliente from "../SellerPages/ConsultarClientes";
-import Jugadas from "../SellerPages/Jugadas";
 import ManageUsersVend from "../AdminPages/ManageUsersVend";
+import EliminarVentas from "../AdminPages/EliminarVentas";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -30,6 +24,7 @@ const AdminRoutes = () => {
     <ContenedorPadre>
       <Routes>
         <Route path="manageUsers" element={<ManageUsersVend />} />
+        <Route path="delVentas" element={<EliminarVentas />} />
       </Routes>
     </ContenedorPadre>
   );

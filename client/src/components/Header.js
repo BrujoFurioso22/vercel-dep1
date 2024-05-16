@@ -294,6 +294,7 @@ const MenuD = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
+    max-width: 150px;
   }
   @media ${device.mobile1} {
     display: flex;
@@ -390,6 +391,9 @@ const Header = ({ oculta }) => {
       <MenuD>
         <CustomNavLink to="/adm/manageUsers">
           Administrar Usuarios
+        </CustomNavLink>
+        <CustomNavLink to="/adm/delVentas">
+          Eliminar Ventas
         </CustomNavLink>
       </MenuD>
     );

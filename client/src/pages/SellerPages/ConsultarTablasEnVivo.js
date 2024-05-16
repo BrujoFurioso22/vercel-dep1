@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
 import {
   ConsultarTablasSegunIDTabla,
+  ObtenerJugadas,
   ObtenerTablasGanadoras,
   ObtenerTablasLetrasGanadoras,
 } from "../../consultasBE/Tablas";
@@ -86,6 +87,8 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   const [letraTabla, setLetraTabla] = useState("");
   const [numerosLlenados, setNumerosLlenados] = useState(0);
   const [letrasFormadas, setLetrasFormadas] = useState("");
+  const [jugada, setJugada] = useState(null);
+  // const [jugada,setJugada]=useState(null)
   const findNumeralByCode = (code, data) => {
     for (const item of data) {
       if (item.datos.includes(code)) {
@@ -103,34 +106,44 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   };
   const BuscarTabla = async () => {
     setVerif(true);
-    setNumerosLlenados(0)
-    setLetrasFormadas("")
+    setNumerosLlenados(0);
+    setLetrasFormadas("");
     const resp = await ConsultarTablasSegunIDTabla(codigo);
     setSeConsulto(true);
+
+    const ConsultarJugadas = async () => {
+      const res = await ObtenerJugadas();
+      console.log(res);
+      if (!res) {
+        return null;
+      } else {
+        return res[0];
+      }
+    };
 
     if (resp.data) {
       let dat = resp.data.data;
       if (dat.length > 0) {
         setData(dat);
-        let lT=dat[0].numtabla.charAt(0);
+        let lT = dat[0].numtabla.charAt(0);
         setLetraTabla(lT);
-        const res = await ObtenerTablasGanadoras();
-        if (res) {
-          const encontro = findNumeralByCode(codigo, res);
-          setNumerosLlenados(encontro);
-          console.log(encontro);
-        }
-        console.log(letraTabla);
-        if (lT === "N") {
-          const res1 = await ObtenerTablasLetrasGanadoras();
-          if (res1.data1.length > 0) {
-            console.log(res1.ganadas);
-            const cadena = findPositionsByCode(codigo, res1.ganadas);
-            setLetrasFormadas(cadena);
-            // setTablasLetra(transformData(resTablaLetras));
+
+        const jugada = await ConsultarJugadas();
+        setJugada(jugada);
+        if (jugada.estado === "I") {
+          const res = await ObtenerTablasGanadoras();
+          if (res) {
+            const encontro = findNumeralByCode(codigo, res);
+            setNumerosLlenados(encontro);
+          }
+          if (lT === "N") {
+            const res1 = await ObtenerTablasLetrasGanadoras();
+            if (res1.data1.length > 0) {
+              const cadena = findPositionsByCode(codigo, res1.ganadas);
+              setLetrasFormadas(cadena);
+            }
           }
         }
-
         // console.log(dat);
       }
     }
@@ -180,25 +193,28 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
                   <EstructuraTabla2 dataTables={data[0]} />
                 )}
               </div>
-              <div className="datos">
-                <span>
-                  {numerosLlenados === 0
-                    ? `${
-                        letraTabla === "N"
-                          ? "La tabla aun no llega a tener más de 20 números llenados"
-                          : "La tabla aun no llega a tener más de 5 números llenados"
-                      }`
-                    : numerosLlenados === "GANADORAS"
-                    ? "TABLA LLENA"
-                    : `${numerosLlenados} números en tabla`}
-                </span>
-                {letraTabla === "N" &&<span>
-                  {letrasFormadas === ""
-                    ? "No se han formado letras"
-                    : `Letras Formadas: ${letrasFormadas}`}
-                </span>}
-                
-              </div>
+              {jugada !== null && (
+                <div className="datos">
+                  <span>
+                    {numerosLlenados === 0
+                      ? `${
+                          letraTabla === "N"
+                            ? "La tabla aun no llega a tener más de 20 números llenados"
+                            : "La tabla aun no llega a tener más de 5 números llenados"
+                        }`
+                      : numerosLlenados === "GANADORAS"
+                      ? "TABLA LLENA"
+                      : `${numerosLlenados} números en tabla`}
+                  </span>
+                  {letraTabla === "N" && (
+                    <span>
+                      {letrasFormadas === ""
+                        ? "No se han formado letras"
+                        : `Letras Formadas: ${letrasFormadas}`}
+                    </span>
+                  )}
+                </div>
+              )}
             </Contenedor2>
           </Contenedor1>
         ) : (
