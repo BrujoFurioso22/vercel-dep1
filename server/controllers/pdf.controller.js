@@ -4,7 +4,7 @@ import { ServerStyleSheet } from "styled-components";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
 import { PDFDocument } from "pdf-lib";
-import Chromium from "@sparticuz/chromium";
+import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 
 export const pdfController = {
@@ -14,10 +14,10 @@ export const pdfController = {
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } = req.body;
       browser = await puppeteer.launch({
-        args: Chromium.args,
-        defaultViewport: Chromium.defaultViewport,
-        executablePath: await Chromium.executablePath(),
-        headless: Chromium.headless,
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
         ignoreHTTPSErrors: true,
       });
 
@@ -115,6 +115,7 @@ export const pdfController = {
           format: "A4",
           printBackground: true,
         });
+        console.log(pdfBuffer);
         // await browser.close();
         res.contentType("application/pdf");
         return res.status(200).send(pdfBuffer);
