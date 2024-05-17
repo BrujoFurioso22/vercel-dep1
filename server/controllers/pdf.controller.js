@@ -2,7 +2,7 @@ import { htmlTemplate1 } from "../components/template1.js";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
 import chromium from "chrome-aws-lambda";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 import pdf from "html-pdf";
 export const pdfController = {
   generatePDF: async (req, res) => {
