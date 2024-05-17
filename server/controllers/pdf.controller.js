@@ -9,11 +9,11 @@ export const pdfController = {
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } = req.body;
       const browser = await puppeteer.launch({
-        ignoreDefaultArgs: ['--disable-extensions'],
+        ignoreDefaultArgs: ["--disable-extensions"],
         args: chrome.args,
         defaultViewport: chrome.defaultViewport,
         executablePath: await chrome.executablePath(),
-        headless: "new",
+        headless: true,
         ignoreHTTPSErrors: true,
       });
 
