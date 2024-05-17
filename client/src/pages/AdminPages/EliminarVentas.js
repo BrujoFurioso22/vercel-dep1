@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
+import { ElimVentas } from "../../consultasBE/Admin";
 
 const ContenedorPagina = styled.div`
   position: relative;
@@ -67,12 +68,12 @@ const ContenedorConfirmacion = styled.div`
       font-weight: 600;
       border-radius: 10px;
       color: white;
-font-size: 16px;
+      font-size: 16px;
     }
     & > .cancelar {
       background-color: gray;
     }
-    & > .aceptar{
+    & > .aceptar {
       background-color: green;
       color: white;
     }
@@ -81,13 +82,24 @@ font-size: 16px;
 
 const EliminarVentas = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showEstadoEliminacion, setShowEstadoEliminacion] = useState(0);
 
   const handleDeleteClick = () => {
     setShowConfirmation(true);
+    setShowEstadoEliminacion(0);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setShowConfirmation(false);
+    setShowEstadoEliminacion(9);
+
+    const res = await ElimVentas();
+    console.log(res);
+    if (res) {
+      setShowEstadoEliminacion(2);
+    } else {
+      setShowEstadoEliminacion(1);
+    }
     // Lógica para eliminar todo
     console.log("Eliminado todo");
   };
@@ -107,7 +119,10 @@ const EliminarVentas = () => {
           {showConfirmation && (
             <ContenedorConfirmacion>
               <span>¿Seguro que quiere eliminar todo?</span>
-              <span>Ten en cuenta que se borrarán todas las ventas realizadas hace más de dos semanas</span>
+              <span>
+                Ten en cuenta que se borrarán todas las ventas realizadas hace
+                más de dos semanas
+              </span>
               <div className="ContenedorBotones">
                 <button onClick={handleCancel} className="cancelar">
                   Cancelar
@@ -116,6 +131,34 @@ const EliminarVentas = () => {
                   Aceptar
                 </button>
               </div>
+            </ContenedorConfirmacion>
+          )}
+          {showEstadoEliminacion !== 0 && (
+            <ContenedorConfirmacion>
+              <h4>
+                {showEstadoEliminacion === 1 ? (
+                  "0 ventas para eliminar, las ventas tal vez ya fueron eliminadas."
+                ) : showEstadoEliminacion === 2 ? (
+                  "Ventas de hace más de 2 semanas borradas exitosamente."
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "2px",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <img
+                      style={{ width: "30px" }}
+                      src={`${process.env.REACT_APP_URL_CLIENT}/Blocks.svg`}
+                      alt=""
+                    />
+                    <span>Elimando Ventas...</span>
+                  </div>
+                )}
+              </h4>
             </ContenedorConfirmacion>
           )}
         </Contenedor1>

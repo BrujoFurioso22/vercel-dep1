@@ -97,13 +97,12 @@ export const ventasController = {
       const { rows: rowsprimera } = await pool.query("DELETE FROM venta WHERE fecha < CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil' - INTERVAL '2 weeks'",
       );
       if (rowsprimera.length > 0) {
-        return res.status(200);  
+        return res.status(200).json({ok:true});  
       }else{
-        return res.status(400);
+        return res.status(200).json({ok:false});
       }
     } catch (error) {
-      res.json({ msg: error.msg });
-      return res.status(500);
+      return res.status(500).json({ok:false});
     }
   },
 };

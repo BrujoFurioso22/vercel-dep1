@@ -194,17 +194,18 @@ const CrearVendedor = () => {
   const handleConfirm = async () => {
     console.log("Formulario confirmado:", formData);
     setShowConfirmation(false);
+
     const res = await CrearVendedorAdmin({
       nombrecliente: formData.nombre,
       cccliente: formData.cc,
       alias: formData.alias,
       password: formData.password,
     });
-    console.log(res);
+
     setShowFormulario(false);
     if (res) {
       setPopupMessage(
-        `Se ha creado correctamente el usuario con CC: ${formData.cc} y password: ${formData.password}`
+        `Se ha creado correctamente el usuario con CC: ${formData.cc} y Contraseña: ${formData.password}`
       );
     } else {
       setPopupMessage(

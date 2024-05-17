@@ -51,3 +51,20 @@ export async function ActualizarDatosUsuarioVendedor({
     return err;
   }
 }
+export async function ElimVentas() {
+  try {
+    const res = await axios.get(`${url}/api/ventas/eliminarventas`);
+    // console.log(res);
+    if (res.status === 200) {
+      if (res.data.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch (err) {
+    return err;
+  }
+}

@@ -215,10 +215,11 @@ export const userController = {
       const {rows:rowscliente} = await pool.query("SELECT * FROM users WHERE cc = $1;",
         [cccliente]
       );
+      console.log(rowscliente);
 
       if (rowscliente.length > 0) {
         console.log("no inserte");
-        return res.status(400);
+        return res.status(400).json({ok:false});
       } else {
         const encriptado = encryptText(password, secretKey);
         const final = `${encriptado}${secretKey}`;
@@ -228,12 +229,12 @@ export const userController = {
           [nombrecliente, cccliente, final, alias]
         );
         console.log("ya inserte");
-        return res.status(200);
+        return res.status(200).json({ok:true});
       }
     } catch (error) {
       console.error(error);
       console.log("estoy en error");
-      res.status(500).json({ message: "An error occurred" });
+      return res.status(500).json({ message: "An error occurred" });
     }
   },
 
