@@ -75,18 +75,7 @@ export const juegoController = {
       const { rows: rowstablas } = await pool.query(
         "SELECT tablas_normal FROM venta;"
       );
-      const { rows: datosjuegos } = await pool.query(
-        "SELECT * FROM juegos WHERE estado = 'I' AND tipo_juego = 0;"
-      );
-      const array = JSON.parse(datosjuegos[0].data);
-      //const data = "[false,false,true,false,true,false,true,true,false,false,true,false,true,false,false,true,false,true,false,true,false,true,true,false,false,false,true,false,false,true,true,true,false,true,false,true,true,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,true,false,false,true,true,true,false,true,false,true,true,true,false,false,true]"
-      //const array = JSON.parse(data);
-      const numerosActivados = [];
-      for (let i = 0; i < array.length; i++) {
-        if (array[i]) {
-          numerosActivados.push(i + 1);
-        }
-      }
+
       let cadena = ""
       for (let l = 0; l < rowstablas.length; l++) {
         if (l === 0) {
@@ -107,35 +96,35 @@ export const juegoController = {
         FnuevoArreglo.push(tempo[i].split(','));
       }
       let info = [];
-      if (numerosActivados.length > 0) {
+      const { rows: datajogo } = await pool.query(
+        "SELECT historial FROM juegos WHERE estado = 'I' AND tipo_juego = 0;"
+      );
+      if (datajogo.length > 0) {
         const codigostablas21 = [];
         const codigostablas22 = [];
         const codigostablas23 = [];
         const codigostablas24 = [];
         const codigostablas25 = [];
-        let cadenosa = "";
+        const pasadas = [];
         for (const subarreglo of FnuevoArreglo) {
           let contador = 1;
-          let contador2 = 0;
-          for (const numeroAsignado of numerosActivados) {
-            // Verificar si el número asignado está presente en el subarreglo
-            if (contador === 25) {
-              contador2 = contador2 + 1;
-            } else if (subarreglo.includes(numeroAsignado.toString())) {
-              contador = contador + 1;
+          const subarregloDeEnteros = subarreglo.map(Number);
+          const historial = datajogo[0].historial.split(",");
+          const historialEnteros = historial.map(numero => parseInt(numero.trim(), 10));
+          let contabilizarpasadas = 0;
+          for (let k = 0; k < historialEnteros.length; k++) {
+            if (contador < 25) {
+              for (let j = 0; j < subarregloDeEnteros.length; j++) {
+                if (historialEnteros[k] === subarregloDeEnteros[j]) {
+                  contador++;
+                }
+              }
+            } else {
+              contabilizarpasadas++;
             }
           }
-          if (contador2 > 0) {
-            cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador2 + "]";
-            const { rows: updatepasadas } = await pool.query(
-              "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
-              [cadenosa]
-            );
-          } else {
-            const { rows: updatepasadas } = await pool.query(
-              "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
-              [cadenosa]
-            );
+          if (contabilizarpasadas > 0) {
+            pasadas.push("[" + subarreglo[subarreglo.length - 2] + "," + contabilizarpasadas + "]");
           }
           if (contador === 25) {
             codigostablas25.push(subarreglo[subarreglo.length - 2]);
@@ -149,7 +138,19 @@ export const juegoController = {
             codigostablas21.push(subarreglo[subarreglo.length - 2]);
           }
         }
-
+        if (pasadas.length > 0) {
+          const cadenaUnida = pasadas.join(" ");
+          const { rows: updatepasadas } = await pool.query(
+            "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
+            [cadenaUnida]
+          );
+        } else {
+          const vacio = "";
+          const { rows: updatepasadas } = await pool.query(
+            "UPDATE public.pasadas SET pasadas_normal = $1 WHERE id = 1;",
+            [vacio]
+          );
+        }
         const tempo21 = {
           numeral: 21,
           datos: codigostablas21,
@@ -194,17 +195,8 @@ export const juegoController = {
       const { rows: rowstablas } = await pool.query(
         "SELECT tablas_rapida FROM venta;"
       );
-      const { rows: datosjuegos } = await pool.query(
-        "SELECT * FROM juegos WHERE estado = 'I' AND tipo_juego = 1;"
-      );
-      const array = JSON.parse(datosjuegos[0].data);
-      const numerosActivados = [];
-      for (let i = 0; i < array.length; i++) {
-        if (array[i]) {
-          numerosActivados.push(i + 1);
-        }
-      }
-      let cadena = "";
+
+      let cadena = ""
       for (let l = 0; l < rowstablas.length; l++) {
         if (l === 0) {
           cadena = rowstablas[l].tablas_rapida;
@@ -224,34 +216,33 @@ export const juegoController = {
         FnuevoArreglo.push(tempo[i].split(','));
       }
       let info = [];
-      if (numerosActivados.length > 0) {
+      const { rows: datajogo } = await pool.query(
+        "SELECT historial FROM juegos WHERE estado = 'I' AND tipo_juego = 1;"
+      );
+      if (datajogo.length > 0) {
         const codigostablas5 = [];
         const codigostablas6 = [];
         const codigostablas7 = [];
-        let cadenosa = "";
+        const pasadas = [];
         for (const subarreglo of FnuevoArreglo) {
-          // console.log(subarreglo);
           let contador = 1;
-          let contador2 = 0;
-          for (const numeroAsignado of numerosActivados) {
-            // Verificar si el número asignado está presente en el subarreglo
-            if (contador === 25) {
-              contador2 = contador2 + 1;
-            } else if (subarreglo.includes(numeroAsignado.toString())) {
-              contador = contador + 1;
+          const subarregloDeEnteros = subarreglo.map(Number);
+          const historial = datajogo[0].historial.split(",");
+          const historialEnteros = historial.map(numero => parseInt(numero.trim(), 10));
+          let contabilizarpasadas = 0;
+          for (let k = 0; k < historialEnteros.length; k++) {
+            if (contador < 25) {
+              for (let j = 0; j < subarregloDeEnteros.length; j++) {
+                if (historialEnteros[k] === subarregloDeEnteros[j]) {
+                  contador++;
+                }
+              }
+            } else {
+              contabilizarpasadas++;
             }
           }
-          if (contador2 > 0) {
-            cadenosa = cadenosa + " [" + subarreglo[subarreglo.length - 2] + "," + contador2 + "]";
-            const { rows: updatepasadas } = await pool.query(
-              "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
-              [cadenosa]
-            );
-          } else {
-            const { rows: updatepasadas } = await pool.query(
-              "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
-              [cadenosa]
-            );
+          if (contabilizarpasadas > 0) {
+            pasadas.push("[" + subarreglo[subarreglo.length - 2] + "," + contabilizarpasadas + "]");
           }
           if (contador === 7) {
             codigostablas7.push(subarreglo[subarreglo.length - 2]);
@@ -261,7 +252,19 @@ export const juegoController = {
             codigostablas5.push(subarreglo[subarreglo.length - 2]);
           }
         }
-
+        if (pasadas.length > 0) {
+          const cadenaUnida = pasadas.join(" ");
+          const { rows: updatepasadas } = await pool.query(
+            "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
+            [cadenaUnida]
+          );
+        } else {
+          const vacio = "";
+          const { rows: updatepasadas } = await pool.query(
+            "UPDATE public.pasadas SET pasadas_rapida = $1 WHERE id = 1;",
+            [vacio]
+          );
+        }
         const tempo1 = {
           numeral: 5,
           datos: codigostablas5,
@@ -363,7 +366,6 @@ export const juegoController = {
       // console.log("Aqui empiezo");
       const arregloCompleto = [];
       for (let i = 0; i < arraysSeleccionados.length; i++) {
-
         const posicionesletra = arraysSeleccionados[i];
         const arregloletra = [];
         arregloletra.push(letras[i]);
