@@ -1,7 +1,7 @@
 import { htmlTemplate1 } from "../components/template1.js";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
-import chromium from "chrome-aws-lambda";
+import chrome from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 import pdf from "html-pdf";
 export const pdfController = {
@@ -9,10 +9,10 @@ export const pdfController = {
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } = req.body;
       const browser = await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
+        args: chrome.args,
+        defaultViewport: chrome.defaultViewport,
+        executablePath: await chrome.executablePath(),
+        headless: "new",
         ignoreHTTPSErrors: true,
       });
 
@@ -140,29 +140,29 @@ export const pdfController = {
   //             margin-left: -10px;
   //         }
   //         .grid-cell:nth-child(5n) {
-  //           border-right: none; 
+  //           border-right: none;
   //         }
-          
+
   //         .grid-cell:nth-child(-n + 5) {
-  //           border-top: none; 
+  //           border-top: none;
   //         }
-          
+
   //         .grid-cell:nth-child(5n + 1) {
   //           border-left: none;
   //         }
-          
+
   //         .grid-cell:nth-last-child(-n + 5) {
-  //           border-bottom: none; 
+  //           border-bottom: none;
   //         }
-          
+
   //         .grid-cell.bottom-left {
   //           border-radius: 0 0 0 15px;
   //         }
-          
+
   //         .grid-cell.bottom-right {
   //           border-radius: 0 0 15px 0;
   //         }
-  
+
   //         .grid-cell-r:nth-child(3n) {
   //           border-right: none;
   //         }
@@ -175,7 +175,7 @@ export const pdfController = {
   //         .grid-cell-r:nth-last-child(-n + 3) {
   //           border-bottom: none;
   //         }
-          
+
   //     </style>
   //         <title>El Gran Bingo Chabelita</title>
   //       </head>
