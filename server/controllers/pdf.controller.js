@@ -1,7 +1,7 @@
 import { htmlTemplate1 } from "../components/template1.js";
 import { pool } from "../database.js";
 import { ServerStyleSheet } from "styled-components";
-import puppeteer from "puppeteer'core";
+import puppeteer from "puppeteer-core";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
 import { PDFDocument } from "pdf-lib";
