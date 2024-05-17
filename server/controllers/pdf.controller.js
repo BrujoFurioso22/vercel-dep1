@@ -2,7 +2,8 @@ import { htmlTemplate1 } from "../components/template1.js";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
 import chrome from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
+// import puppeteer from "puppeteer-core";
+import puppeteer from "puppeteer";
 export const pdfController = {
   generatePDF: async (req, res) => {
     try {
@@ -16,7 +17,7 @@ export const pdfController = {
       //   ignoreHTTPSErrors: true,
       // });
       const browser = await puppeteer.launch({
-        headless: true,
+        headless: "new",
       });
 
       const page = await browser.newPage();
@@ -113,7 +114,7 @@ export const pdfController = {
           format: "A4",
           printBackground: true,
         });
-        
+
         await browser.close();
         res.contentType("application/pdf");
         return res.status(200).send(pdfBuffer);
