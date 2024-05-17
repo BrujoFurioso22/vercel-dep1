@@ -6,7 +6,6 @@ import puppeteer from "puppeteer-core";
 export const pdfController = {
   generatePDF: async (req, res) => {
     try {
-      res.setHeader('Access-Control-Allow-Origin: *);
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } = req.body;
       const browser = await puppeteer.launch({
         ignoreDefaultArgs: ["--disable-extensions"],

@@ -13,13 +13,9 @@ const app = express();
 
 app.use(express.json());
 app.use(corsMiddleware());
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-  });
 
 // Desactivar la cabecera 'x-powered-by'
-app.disable('x-powered-by');
+// app.disable('x-powered-by');
 
 app.use(express.static('public'));
 
