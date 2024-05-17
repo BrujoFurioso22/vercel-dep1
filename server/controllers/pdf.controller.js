@@ -13,10 +13,11 @@ export const pdfController = {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } =
         req.body;
         const browser = await puppeteer.launch({
-          args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+          args: chrome.args,
           defaultViewport: chrome.defaultViewport,
           executablePath: await chrome.executablePath,
           headless: chrome.headless,
+          ignoreHTTPSErrors:true,
         });
   
       const page = await browser.newPage();
