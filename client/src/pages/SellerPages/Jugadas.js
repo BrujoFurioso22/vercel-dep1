@@ -145,6 +145,8 @@ const ContenedorJugadas = ({
   setMostrarTJ,
   setJuego,
   TP,
+  data1,
+  data2,
 }) => {
   const [seguro, setSeguro] = useState(0);
   const [numero, setNumero] = useState("");
@@ -248,9 +250,39 @@ const ContenedorJugadas = ({
       setData(res);
     }
   };
+  function obtenerGanadoresYLetras(data1, data2) {
+    // Obtener los ganadores de data1
+    let ganadoresData1 = [];
+    data1.forEach((item) => {
+      if (item.numeral === "GANADORAS") {
+        ganadoresData1 = item.datos.join(", "); // Concatenar ganadores en un string
+      }
+    });
 
+    // Crear la estructura final combinando data1 y data2
+    let resultado = {
+      ganadores: ganadoresData1,
+      letras: {},
+    };
+
+    for (let letra in data2) {
+      resultado.letras[letra] = data2[letra].ganadas;
+    }
+
+    return resultado;
+  }
+
+  const PreFinJuego = async () => {
+    setSeguro(1);
+  };
   const FinJugada = async () => {
-    const res = await FinalizarJugada({ id: data.id });
+    const resultado = obtenerGanadoresYLetras(data1, data2);
+    // Convertir el resultado a una cadena JSON
+    const resultadoJSONString = JSON.stringify(resultado);
+    const res = await FinalizarJugada({
+      id: data.id,
+      ganadas: resultadoJSONString,
+    });
     if (res) {
       setSeguro(0);
       setTablaLlena([]);
@@ -317,7 +349,7 @@ const ContenedorJugadas = ({
             ))}
           </GridContainer>
           {seguro === 0 ? (
-            <BotonFinalizarJuego onClick={() => setSeguro(1)}>
+            <BotonFinalizarJuego onClick={PreFinJuego}>
               Finalizar Juego
             </BotonFinalizarJuego>
           ) : (
@@ -570,6 +602,8 @@ const Jugadas = () => {
                 setMostrarTJ={setMostrarTipoJuego}
                 setJuego={setTipodeJuego}
                 TP={tipodeJuego}
+                data1={dataTotales}
+                data2={dataTablasLetas}
               ></ContenedorJugadas>
             )}
 

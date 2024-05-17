@@ -2,22 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import GeneratePdfButton from "../../components/pdfMaker/pdfMaker";
 import {
-  ConsultarVentas,
-  ConsultarVentasCliente,
-  ConsultarVentasTotales,
+  ConsultarHistorialJuegos,
 } from "../../consultasBE/Tablas";
-import { ObtenerIDUsuario } from "../../consultasBE/User";
-import GenerarPDFs1 from "../../components/pdfMaker/pdfMakerBack";
-// const ContenedorPadre = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: flex-start;
-//   align-items: center;
-//   position: relative;
-//   width: 100%;
-// `;
 
 const ContenedorPagina = styled.div`
   position: relative;
@@ -87,6 +74,7 @@ const TablaPersonalizada = styled.table`
     padding: 12px 15px;
     text-align: center;
     border-bottom: 1px solid #dddddd;
+    max-width: 500px;
   }
 
   th {
@@ -108,41 +96,24 @@ const TablaPersonalizada = styled.table`
   }
 `;
 const headerNames = {
-  id: "ID Venta",
-  idcliente: "ID Cli.",
-  cc: "Cédula/Teléfono",
-  nombre: "Cliente",
-  fecha: "Fecha",
-  cantidadnormal: "# 1",
-  cantidadrapida: "# 2",
-  numerotransaccion: "Num Tr",
-  cantidadinero: "$ Tr.",
+  id: "ID",
+  estado: "Estado",
+  data: "",
+  fecha_hora: "Fecha Inicio",
+  fecha_finalizacion: "Fecha Final",
+  historial: "Historial Números",
+  tipo_juego: "Tipo Juego",
+  tablas_ganadas: "Ganadas",
 };
-const headerNamesClientes = {
-  idcliente: "ID Cli.",
-  nombre: "Cliente",
-  cc: "Cédula/Teléfono",
-  cantidadnormal: "# 1",
-  cantidadrapida: "# 2",
-  cantidadinero: "$ Tr.",
-};
-
 const visibleColumns = {
-  id: false,
-  idcliente: true,
-  cc: true,
-  nombre: true,
-  fecha: true,
-  numerotransaccion: true,
-  cantidadinero: true,
-};
-const visibleColumnsClientes = {
-  idcliente: true,
-  nombre: true,
-  cc: true,
-  cantidadnormal: true,
-  cantidadrapida: true,
-  cantidadinero: true,
+  id: true,
+  estado: true,
+  fecha_hora: true,
+  data: false,
+  fecha_finalizacion: true,
+  historial: true,
+  tipo_juego: true,
+  tablas_ganadas: true,
 };
 const ContenedorBuscar = styled.div`
   margin: 5px;
@@ -214,16 +185,19 @@ const ContenedorBotones = styled.div`
     }
   }
 `;
-
-function formatDate(dateString) {
-  const date = new Date(dateString); // Parsear la fecha
-  const day = String(date.getDate()).padStart(2, "0"); // Día en formato 2 dígitos
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Mes en formato 2 dígitos
-  const year = date.getFullYear(); // Año
-
-  return `${day}/${month}/${year}`; // Devolver en formato dd/mm/yyyy
+function formatoLegible(fechaISO) {
+  const fecha = new Date(fechaISO);
+  return fecha.toLocaleString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: false,
+  });
 }
-const CardTable = ({ datos, headerNames, visibleColumns}) => {
+const CardTable = ({ datos, headerNames, visibleColumns }) => {
   // Filtrar las cabeceras que están marcadas como visibles
   const flatDatos = datos.flat();
 
@@ -241,16 +215,16 @@ const CardTable = ({ datos, headerNames, visibleColumns}) => {
               className="celda"
               data-label={headerNames[header] || header}
             >
-              {header === "fecha"
-                ? formatDate(fila[header])
-                : header === "cantidadinero"
-                ? fila[header] !== null
-                  ? `$ ${fila[header]}`
-                  : "-"
-                : header === "numerotransaccion"
-                ? fila[header] !== ""
-                  ? fila[header]
-                  : "-"
+              {header === "fecha_hora"
+                ? formatoLegible(fila[header])
+                : header === "estado"
+                ? fila[header] === "F"
+                  ? "Finalizado"
+                  : "En Juego"
+                : header === "tipo_juego"
+                ? fila[header] === 0
+                  ? "Normal"
+                  : "La Única"
                 : fila[header]}
             </div>
           ))}
@@ -276,7 +250,6 @@ const Tablas = ({ datos }) => {
               {headers.map((header) => (
                 <th key={header}>{headerNames[header] || header}</th>
               ))}
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -287,16 +260,16 @@ const Tablas = ({ datos }) => {
                     data-label={headerNames[header]}
                     key={`${venta.idVenta}-${header}`}
                   >
-                    {header === "fecha"
-                      ? formatDate(venta[header])
-                      : header === "cantidadinero"
-                      ? venta[header] !== null
-                        ? `$ ${venta[header]}`
-                        : "-"
-                      : header === "numerotransaccion"
-                      ? venta[header] !== ""
-                        ? venta[header]
-                        : "-"
+                    {header === "fecha_hora"
+                      ? formatoLegible(venta[header])
+                      : header === "estado"
+                      ? venta[header] === "F"
+                        ? "Finalizado"
+                        : "En Juego"
+                      : header === "tipo_juego"
+                      ? venta[header] === 0
+                        ? "Normal"
+                        : "La Única"
                       : venta[header]}
                   </td>
                 ))}
@@ -306,8 +279,8 @@ const Tablas = ({ datos }) => {
         </TablaPersonalizada>
         <CardTable
           datos={flatDatos}
-          headerNames={headerNames }
-          visibleColumns={visibleColumns }
+          headerNames={headerNames}
+          visibleColumns={visibleColumns}
         />
       </Contenedor1>
     </div>
@@ -317,16 +290,15 @@ const Tablas = ({ datos }) => {
 const HistorialJugadas = () => {
   const idv = localStorage.getItem("id");
   const [datosTabla, setDatosTabla] = useState([]);
-  const [datosFiltrados, setDatosFiltrados] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Nuevo estado para manejar la carga
-  const [busqueda, setBusqueda] = useState("");
+  // const [busqueda, setBusqueda] = useState("");
 
   const ConsultarHistorialJuegosFunction = async () => {
     setIsLoading(true); // Inicia la carga
     try {
       const res = await ConsultarHistorialJuegos();
       // console.log(res.data.data);
-      setDatosTabla(res.data.data || []);
+      setDatosTabla(res || []);
     } catch (error) {
       console.error("Error al consultar historial:", error);
       setDatosTabla([]);
@@ -338,48 +310,20 @@ const HistorialJugadas = () => {
     ConsultarHistorialJuegosFunction();
   }, []);
 
-  useEffect(() => {
-    if (datosTabla.length > 0) {
-      const var2 = datosTabla.flat();
-      const var3 = var2.filter((venta) =>
-        Object.values(venta).some((valor) =>
-          valor?.toString().toLowerCase().includes(busqueda.toLowerCase())
-        )
-      );
-      setDatosFiltrados(var3);
-    } else {
-      setDatosFiltrados([]);
-    }
-  }, [busqueda, datosTabla]);
-
-  const manejarCambioBusqueda = (evento) => {
-    setBusqueda(evento.target.value);
-  };
 
   return (
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
         <h1>Historial de Juegos</h1>
-        <ContenedorBuscar>
-          <span>Buscar:</span>
-          <input
-            className="buscarInput"
-            type="text"
-            value={busqueda}
-            onChange={manejarCambioBusqueda}
-          />
-        </ContenedorBuscar>
         {isLoading ? (
           <div>Cargando...</div>
         ) : datosTabla.length === 0 ? (
           <div>No hay data disponible</div>
-        ) : datosFiltrados.length === 0 ? (
-          <div>No existen datos según filtro</div>
         ) : (
           <Tablas
-            datos={datosFiltrados.sort(
-              (a, b) => new Date(b.fecha) - new Date(a.fecha)
+            datos={datosTabla.sort(
+              (a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora)
             )}
           />
         )}

@@ -54,10 +54,10 @@ export async function ConsultarVentasCliente(idvendedor) {
     const res = await axios.post(`${url}/api/ventas/obtenerventasporcliente`, {
       idvendedor: idvendedor,
     });
-    if(res.status===200){
+    if (res.status === 200) {
       return res.data.data;
-    }else{
-      return []
+    } else {
+      return [];
     }
   } catch (err) {
     return err;
@@ -176,14 +176,13 @@ export async function ObtenerJugadas() {
 export async function ConsultarHistorialJuegos() {
   try {
     const res = await axios.get(`${url}/api/juegos/historialjuegos`);
-    console.log(res);
-    // if (res.data.exists) {
-    //   return res.data.data;
-    // } else {
-    //   return res.data.exists;
-    // }
+    if (res.status === 200) {
+      return res.data.data;
+    } else {
+      return [];
+    }
   } catch (err) {
-    return err;
+    return [];
   }
 }
 export async function CrearNuevaJugada({ data, tipojuego, historial }) {
@@ -211,7 +210,7 @@ export async function UpdateJugada({ id, data, historial }) {
     const res = await axios.post(`${url}/api/juegos/actualizardata`, {
       id,
       data,
-      historial
+      historial,
     });
 
     if (res) {
@@ -226,10 +225,10 @@ export async function UpdateJugada({ id, data, historial }) {
     return err;
   }
 }
-export async function FinalizarJugada({ id }) {
+export async function FinalizarJugada({ id ,ganadas }) {
   try {
     const res = await axios.post(`${url}/api/juegos/finalizarjuego`, {
-      id,
+      id,ganadas
     });
     if (res) {
       if (res.data.ok) {

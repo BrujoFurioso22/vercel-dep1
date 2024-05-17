@@ -29,7 +29,7 @@ const ContenedorHeader = styled.div`
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
   z-index: 100;
   &.home {
-    background: #00002d
+    background: #00002d;
   }
 `;
 
@@ -290,7 +290,7 @@ const ContenedorMenuLateral = styled.div`
 `;
 const MenuD = styled.div`
   /* display: none; */
-  &>a{
+  & > a {
     height: 100%;
     display: flex;
     align-items: center;
@@ -380,6 +380,9 @@ const Header = ({ oculta }) => {
         <CustomNavLink to="/seller/tablasenvivo">
           Consultar Tablas
         </CustomNavLink>
+        <CustomNavLink to="/seller/historialJugadas">
+          Historial Jugadas
+        </CustomNavLink>
         <CustomNavLink to="/seller/infoClientes">Info Cliente</CustomNavLink>
         <CustomNavLink to="/seller/editarInfo">Editar Info</CustomNavLink>
         {/* <CustomNavLink to="/seller/preview">PR</CustomNavLink> */}
@@ -392,12 +395,8 @@ const Header = ({ oculta }) => {
         <CustomNavLink to="/adm/manageUsers">
           Administrar Usuarios
         </CustomNavLink>
-        <CustomNavLink to="/adm/delVentas">
-          Eliminar Ventas
-        </CustomNavLink>
-        <CustomNavLink to="/adm/crearVendedor">
-          Crear Vendedor
-        </CustomNavLink>
+        <CustomNavLink to="/adm/delVentas">Eliminar Ventas</CustomNavLink>
+        <CustomNavLink to="/adm/crearVendedor">Crear Vendedor</CustomNavLink>
       </MenuD>
     );
   };
