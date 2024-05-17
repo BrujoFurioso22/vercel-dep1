@@ -40,3 +40,25 @@ export async function ObtenerIDUsuario(cedulacelular) {
     return err;
   }
 }
+export async function CrearVendedorAdmin({
+  nombrecliente,
+  cccliente,
+  alias,
+  password,
+}) {
+  try {
+    const res = await axios.post(`${url}/api/users/crearvendedor`, {
+      nombrecliente,
+      cccliente,
+      alias,
+      password,
+    });
+    if(res.status === 200){
+      return true
+    }else{
+      return false;
+    }
+  } catch (err) {
+    return false;
+  }
+}

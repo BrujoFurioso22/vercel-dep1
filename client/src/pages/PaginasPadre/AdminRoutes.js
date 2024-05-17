@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import ManageUsersVend from "../AdminPages/ManageUsersVend";
 import EliminarVentas from "../AdminPages/EliminarVentas";
-import CrearVendedor from "../AdminPages/Crear Vendedor";
+import CrearVendedor from "../AdminPages/CrearVendedor";
 
 const ContenedorPadre = styled.div`
   display: flex;

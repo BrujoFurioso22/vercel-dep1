@@ -89,6 +89,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
   const [numerosLlenados, setNumerosLlenados] = useState(null);
   const [letrasFormadas, setLetrasFormadas] = useState("");
   const [jugada, setJugada] = useState(null);
+  const [pasadas, setPasadas] = useState("");
   // const [jugada,setJugada]=useState(null)
   const findNumeralByCode = (code, data) => {
     for (const item of data) {
@@ -127,7 +128,9 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
       // console.log(resp);
 
       let dat = resp.data.data;
-      
+      console.log(resp.data);
+      setPasadas(resp.data.cadena)
+
       console.log(dat);
       if (dat.length > 0) {
         setData(dat);
@@ -214,8 +217,12 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
                 )}
               </div>
 
-              {((jugada !== null && letraTabla === "N" && jugada.tipo_juego === 0) ||
-                (jugada !== null && letraTabla === "R" && jugada.tipo_juego === 1)) &&
+              {((jugada !== null &&
+                letraTabla === "N" &&
+                jugada.tipo_juego === 0) ||
+                (jugada !== null &&
+                  letraTabla === "R" &&
+                  jugada.tipo_juego === 1)) &&
                 (numerosLlenados !== null ? (
                   <div className="datos">
                     <span>
@@ -236,13 +243,25 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
                           : `Letras Formadas: ${letrasFormadas}`}
                       </span>
                     )}
+                    {pasadas !== "" && <span>{pasadas}</span>}
                   </div>
                 ) : (
-                  <div style={{display:"flex",justifyContent:"center",alignItems:"center", gap:"2px",flexDirection:"column"}}><img
-                  style={{ width: "30px" }}
-                  src={`${process.env.REACT_APP_URL_CLIENT}/Blocks.svg`}
-                  alt=""
-                /><span>Cargando Análisis...</span></div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "2px",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <img
+                      style={{ width: "30px" }}
+                      src={`${process.env.REACT_APP_URL_CLIENT}/Blocks.svg`}
+                      alt=""
+                    />
+                    <span>Cargando Análisis...</span>
+                  </div>
                 ))}
             </Contenedor2>
           </Contenedor1>

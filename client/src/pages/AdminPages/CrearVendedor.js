@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
+import { CrearVendedorAdmin } from "../../consultasBE/User";
 
 const ContenedorPagina = styled.div`
   position: relative;
@@ -126,6 +127,19 @@ const BotonConfirmar = styled(BotonAccion)`
   background-color: green;
 `;
 
+const PopupMensaje = styled.div`
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: var(--sombra-ligera);
+  border-radius: 10px;
+  z-index: 1000;
+  text-align: center;
+`;
+
 const CrearVendedor = () => {
   const [formData, setFormData] = useState({
     cc: "",
@@ -139,6 +153,9 @@ const CrearVendedor = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [showFormulario, setShowFormulario] = useState(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -174,97 +191,129 @@ const CrearVendedor = () => {
     }
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     console.log("Formulario confirmado:", formData);
     setShowConfirmation(false);
-    // Aquí puedes agregar la lógica para enviar el formulario
+    const res = await CrearVendedorAdmin({
+      nombrecliente: formData.nombre,
+      cccliente: formData.cc,
+      alias: formData.alias,
+      password: formData.password,
+    });
+    console.log(res);
+    setShowFormulario(false);
+    if (res) {
+      setPopupMessage(
+        `Se ha creado correctamente el usuario con CC: ${formData.cc} y password: ${formData.password}`
+      );
+    } else {
+      setPopupMessage(
+        "El número de cédula o teléfono ya se encuentra registrado o ha ocurrido un error"
+      );
+    }
+    setShowPopup(true);
   };
 
   const handleCancel = () => {
     setShowConfirmation(false);
   };
 
+  const handleCerrarPopup = () => {
+    setShowPopup(false);
+    setFormData({
+      cc: "",
+      nombre: "",
+      alias: "",
+      password: "",
+      confirmPassword: "",
+    });
+    setShowFormulario(true);
+  };
+
   return (
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
+      {showFormulario && (
         <Contenedor1>
-          <Formulario onSubmit={handleSubmit}>
-            <InputWrapper>
-              <Input
-                type="text"
-                name="cc"
-                placeholder="Cédula/Teléfono"
-                value={formData.cc}
-                onChange={handleChange}
-              />
-              {errors.cc && <ErrorLabel>{errors.cc}</ErrorLabel>}
-            </InputWrapper>
-            <InputWrapper>
-              <Input
-                type="text"
-                name="nombre"
-                placeholder="Nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-              />
-              {errors.nombre && <ErrorLabel>{errors.nombre}</ErrorLabel>}
-            </InputWrapper>
-            <InputWrapper>
-              <Input
-                type="text"
-                name="alias"
-                placeholder="Alias"
-                value={formData.alias}
-                onChange={handleChange}
-              />
-              {errors.alias && <ErrorLabel>{errors.alias}</ErrorLabel>}
-            </InputWrapper>
-            <InputWrapper>
-              <InputWrapper1>
+          
+            <Formulario onSubmit={handleSubmit}>
+              <InputWrapper>
                 <Input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Contraseña"
-                  value={formData.password}
+                  type="text"
+                  name="cc"
+                  placeholder="Cédula/Teléfono"
+                  value={formData.cc}
                   onChange={handleChange}
                 />
-                <OjoIcono onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? (
-                    <i className="bi bi-eye-fill"></i>
-                  ) : (
-                    <i className="bi bi-eye-slash-fill"></i>
-                  )}
-                </OjoIcono>
-              </InputWrapper1>
-              {errors.password && <ErrorLabel>{errors.password}</ErrorLabel>}
-            </InputWrapper>
-            <InputWrapper>
-              <InputWrapper1>
+                {errors.cc && <ErrorLabel>{errors.cc}</ErrorLabel>}
+              </InputWrapper>
+              <InputWrapper>
                 <Input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder="Confirmar Contraseña"
-                  value={formData.confirmPassword}
+                  type="text"
+                  name="nombre"
+                  placeholder="Nombre"
+                  value={formData.nombre}
                   onChange={handleChange}
                 />
-                <OjoIcono
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <i className="bi bi-eye-fill"></i>
-                  ) : (
-                    <i className="bi bi-eye-slash-fill"></i>
-                  )}
-                </OjoIcono>
-              </InputWrapper1>
-              {errors.confirmPassword && (
-                <ErrorLabel>{errors.confirmPassword}</ErrorLabel>
-              )}
-            </InputWrapper>
-            <Button type="submit">Crear Vendedor</Button>
-          </Formulario>
-        </Contenedor1>
+                {errors.nombre && <ErrorLabel>{errors.nombre}</ErrorLabel>}
+              </InputWrapper>
+              <InputWrapper>
+                <Input
+                  type="text"
+                  name="alias"
+                  placeholder="Alias"
+                  value={formData.alias}
+                  onChange={handleChange}
+                />
+                {errors.alias && <ErrorLabel>{errors.alias}</ErrorLabel>}
+              </InputWrapper>
+              <InputWrapper>
+                <InputWrapper1>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Contraseña"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                  <OjoIcono onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? (
+                      <i className="bi bi-eye-fill"></i>
+                    ) : (
+                      <i className="bi bi-eye-slash-fill"></i>
+                    )}
+                  </OjoIcono>
+                </InputWrapper1>
+                {errors.password && <ErrorLabel>{errors.password}</ErrorLabel>}
+              </InputWrapper>
+              <InputWrapper>
+                <InputWrapper1>
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Confirmar Contraseña"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                  <OjoIcono
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (
+                      <i className="bi bi-eye-fill"></i>
+                    ) : (
+                      <i className="bi bi-eye-slash-fill"></i>
+                    )}
+                  </OjoIcono>
+                </InputWrapper1>
+                {errors.confirmPassword && (
+                  <ErrorLabel>{errors.confirmPassword}</ErrorLabel>
+                )}
+              </InputWrapper>
+              <Button type="submit">Crear Vendedor</Button>
+            </Formulario>
+          
+        </Contenedor1>)}
         {showConfirmation && (
           <ContenedorConfirmacion>
             <h3>Confirmar Datos</h3>
@@ -288,6 +337,12 @@ const CrearVendedor = () => {
               <BotonConfirmar onClick={handleConfirm}>Confirmar</BotonConfirmar>
             </ContenedorBotones>
           </ContenedorConfirmacion>
+        )}
+        {showPopup && (
+          <PopupMensaje>
+            <p>{popupMessage}</p>
+            <Button onClick={handleCerrarPopup}>Cerrar</Button>
+          </PopupMensaje>
         )}
       </ContenedorPagina>
     </ContenedorPadre>
