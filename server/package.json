@@ -13,7 +13,6 @@
   "description": "",
   "dependencies": {
     "body-parser": "^1.20.2",
-    "chrome-aws-lambda": "^10.1.0",
     "connect-timeout": "^1.9.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -24,9 +23,12 @@
     "nodemon": "^3.1.0",
     "pdf-lib": "^1.17.1",
     "pg": "^8.11.5",
-    "puppeteer-core": "^10.4.0",
+    "puppeteer-core": "^22.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "styled-components": "^6.1.11"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium": "^123.0.1"
   }
 }

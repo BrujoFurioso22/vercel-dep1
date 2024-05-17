@@ -1,24 +1,26 @@
 import { htmlTemplate1 } from "../components/template1.js";
 import { pool } from "../database.js";
 import { ServerStyleSheet } from "styled-components";
-import puppeteer from "puppeteer-core";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
 import { PDFDocument } from "pdf-lib";
-import chromium from "chrome-aws-lambda";
+import Chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
+
 export const pdfController = {
   generatePDF: async (req, res) => {
+    let result = null;
+    let browser = null;
     try {
-      const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } =
-        req.body;
-        const browser = await chromium.puppeteer.launch({
-          args: chromium.args,
-          defaultViewport: chromium.defaultViewport,
-          executablePath: await chromium.executablePath,
-          headless: chromium.headless,
-          ignoreHTTPSErrors:true,
-        });
-  
+      const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } = req.body;
+      browser = await puppeteer.launch({
+        args: Chromium.args,
+        defaultViewport: Chromium.defaultViewport,
+        executablePath: await Chromium.executablePath(),
+        headless: Chromium.headless,
+        ignoreHTTPSErrors: true,
+      });
+
       const page = await browser.newPage();
       const pdfs = [];
       let inicioHTML = ` <!DOCTYPE html>
@@ -122,6 +124,10 @@ export const pdfController = {
     } catch (error) {
       console.error("Error generating PDF", error);
       res.status(500).send("Error generating PDF");
+    }finally{
+      if (browser !== null) {
+        await browser.close();
+      }
     }
   },
 };
