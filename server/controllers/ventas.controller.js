@@ -92,4 +92,18 @@ export const ventasController = {
       res.json({ msg: error.msg });
     }
   },
+  eliminarventas: async (req, res) => {
+    try {
+      const { rows: rowsprimera } = await pool.query("DELETE FROM venta WHERE fecha < CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil' - INTERVAL '2 weeks'",
+      );
+      if (rowsprimera.length > 0) {
+        return res.status(200);  
+      }else{
+        return res.status(400);
+      }
+    } catch (error) {
+      res.json({ msg: error.msg });
+      return res.status(500);
+    }
+  },
 };

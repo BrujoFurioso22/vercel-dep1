@@ -422,6 +422,7 @@ export const tablasController = {
         } else {
           cadenaamostrar = "";
         }
+        console.log(cadenaamostrar);
         const var2 = [
           {
             numtabla: FnuevoArreglo[7],

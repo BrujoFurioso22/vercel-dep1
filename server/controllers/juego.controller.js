@@ -17,6 +17,21 @@ export const juegoController = {
       res.status(500).json({ message: "An error occurred" });
     }
   },
+  buscarHistorialJuegos: async (req, res) => {
+    try {
+      const { rows: rowsID } = await pool.query(
+        "SELECT * FROM public.juegos;"
+      );
+      if (rowsID.length > 0) {
+        return res.status(200).json({ exists: true, data: rowsID });
+      } else {
+        return res.status(400).json({ exists: false });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  },
   nuevoJuego: async (req, res) => {
     try {
       const { data, tipojuego, historial } = req.body;
@@ -56,10 +71,10 @@ export const juegoController = {
   finalizarJuego: async (req, res) => {
     try {
       // console.log(req);
-      const { id } = req.body;
+      const { id, ganadas, } = req.body;
       const { rows } = await pool.query(
-        "UPDATE public.juegos SET estado='F' WHERE id = $1 and estado='I';",
-        [id]
+        "UPDATE public.juegos SET estado='F', tablas_ganadas=$1, fecha_finalizacion = CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil' WHERE id = $1 and estado='I';",
+        [ganadas, id]
       );
       if (rows) {
         return res.status(200).json({ ok: true });
