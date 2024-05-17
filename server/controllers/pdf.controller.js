@@ -7,13 +7,16 @@ export const pdfController = {
   generatePDF: async (req, res) => {
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } = req.body;
+      // const browser = await puppeteer.launch({
+      //   ignoreDefaultArgs: ["--disable-extensions"],
+      //   args: chrome.args,
+      //   defaultViewport: chrome.defaultViewport,
+      //   executablePath: await chrome.executablePath(),
+      //   headless: true,
+      //   ignoreHTTPSErrors: true,
+      // });
       const browser = await puppeteer.launch({
-        ignoreDefaultArgs: ["--disable-extensions"],
-        args: chrome.args,
-        defaultViewport: chrome.defaultViewport,
-        executablePath: await chrome.executablePath(),
         headless: true,
-        ignoreHTTPSErrors: true,
       });
 
       const page = await browser.newPage();
@@ -105,12 +108,12 @@ export const pdfController = {
         htmls = htmls + `</body></html>`;
         // pdfs.push(pdfBuffer);
 
-        await page.setContent(htmls, { waitUntil: "networkidle0",timeout: 0 });
+        await page.setContent(htmls, { waitUntil: "networkidle0", timeout: 0 });
         const pdfBuffer = await page.pdf({
           format: "A4",
           printBackground: true,
         });
-        console.log(pdfBuffer);
+        
         await browser.close();
         res.contentType("application/pdf");
         return res.status(200).send(pdfBuffer);
