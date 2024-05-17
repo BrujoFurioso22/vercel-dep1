@@ -514,8 +514,11 @@ const Jugadas = () => {
   const ConsultarJugadas = async () => {
     const res = await ObtenerJugadas();
     let tdJ = "";
+    console.log(res);
     if (!res) {
       setData(null);
+      setConsultaRealizada(true);
+
     } else {
       setData(res[0]);
       tdJ = res[0].tipo_juego;

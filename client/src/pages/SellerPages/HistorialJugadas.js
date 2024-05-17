@@ -185,16 +185,42 @@ const visibleColumns = {
   tablas_ganadas: true,
 };
 function formatoLegible(fechaISO) {
-  const fecha = new Date(fechaISO);
-  return fecha.toLocaleString("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: false,
-  });
+  // console.log(fechaISO);
+  if (fechaISO !== null) {
+    const fecha = new Date(fechaISO);
+    return fecha.toLocaleString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: false,
+    });
+  } else {
+    return "-";
+  }
+}
+function formatearResultado(jsonString) {
+  const data = JSON.parse(jsonString);
+  if (data !== null) {
+    return (
+      <div style={{ maxHeight: "100px", overflow: "auto" }}>
+        <span>
+          <strong>Ganadores:</strong> {data.ganadores}
+        </span>
+        <div>
+          {Object.keys(data.letras).map((letra) => (
+            <div key={letra}>
+              <strong>{letra}:</strong> {data.letras[letra].join(", ")}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  } else {
+    return "Finalize el juego para visualizar los ganadores";
+  }
 }
 const CardTable = ({ datos, headerNames, visibleColumns }) => {
   // Filtrar las cabeceras que están marcadas como visibles
@@ -224,6 +250,8 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
                 ? fila[header] === 0
                   ? "Normal"
                   : "La Única"
+                : header === "tablas_ganadas"
+                ? formatearResultado(fila[header])
                 : fila[header]}
             </div>
           ))}
@@ -269,6 +297,8 @@ const Tablas = ({ datos }) => {
                       ? venta[header] === 0
                         ? "Normal"
                         : "La Única"
+                      : header === "tablas_ganadas"
+                      ? formatearResultado(venta[header])
                       : venta[header]}
                   </td>
                 ))}
