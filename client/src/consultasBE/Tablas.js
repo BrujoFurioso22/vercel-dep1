@@ -173,6 +173,19 @@ export async function ObtenerJugadas() {
     return err;
   }
 }
+export async function ConsultarHistorialJuegos() {
+  try {
+    const res = await axios.get(`${url}/api/juegos/historialjuegos`);
+    console.log(res);
+    // if (res.data.exists) {
+    //   return res.data.data;
+    // } else {
+    //   return res.data.exists;
+    // }
+  } catch (err) {
+    return err;
+  }
+}
 export async function CrearNuevaJugada({ data, tipojuego, historial }) {
   try {
     const res = await axios.post(`${url}/api/juegos/nuevojuego`, {
@@ -230,6 +243,7 @@ export async function FinalizarJugada({ id }) {
     return err;
   }
 }
+
 export async function ObtenerTablasGanadoras() {
   try {
     const res = await axios.get(`${url}/api/juegos/consultaraganar`);

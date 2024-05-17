@@ -111,7 +111,6 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     setNumerosLlenados(null);
     setLetrasFormadas("");
     const resp = await ConsultarTablasSegunIDTabla(codigo);
-    console.log(resp);
     setSeConsulto(true);
 
     const ConsultarJugadas = async () => {
@@ -128,10 +127,8 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
       // console.log(resp);
 
       let dat = resp.data.data;
-      console.log(resp.data);
-      setPasadas(resp.data.cadena)
+      setPasadas(resp.data.data[0].cadena);
 
-      console.log(dat);
       if (dat.length > 0) {
         setData(dat);
         let lT = dat[0].numtabla.charAt(0);
