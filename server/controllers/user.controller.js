@@ -212,25 +212,29 @@ export const userController = {
       // console.log(req);
       const { nombrecliente, cccliente, alias, password } = req.body;
       
-      const quse = await pool.query("SELECT * FROM users WHERE cc = $1;",
-        [cccliente]
-      );
-      const rowscliente = quse.rows;
-      if (rowscliente.length === 0) {
-        const encriptado = encryptText(password, secretKey);
-        const final = `${encriptado}${secretKey}`;
-        const rol = 23;
-        const { rows: rowsinsert } = await pool.query(
-          "INSERT INTO users(name, cc, password, rol, alias ) VALUES ($1, $2, $3, $4, $5);",
-          [nombrecliente, cccliente, final, rol, alias]
+      do {
+        const quse = await pool.query("SELECT * FROM users WHERE cc = $1;",
+          [cccliente]
         );
+        const rowscliente = quse.rows;
+
+        if (rowscliente.length === 0) {
+          const encriptado = encryptText(contraseniaGenerada, secretKey);
+          const final = `${encriptado}${secretKey}`;
+
+          const tempo = await pool.query(
+            "INSERT INTO users(name, cc, password) VALUES ($1, $2, $3);",
+            [nombrecliente, cccliente, final]
+          );
+        } else {
+          idcliente = rowscliente[0].id;
+          isInserted = true;
+        }
+      } while (!isInserted);
+      if (isInserted) {
+        return res.status(200);
       } else {
-        return res.status(200).json({ ok: false })
-      }
-      if (rowsinsert) {
-        return res.status(200).json({ ok: true })
-      } else {
-        return res.status(404).json({ ok: false });
+        return res.status(404);
       }
     } catch (error) {
       console.error(error);
