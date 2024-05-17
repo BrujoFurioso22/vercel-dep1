@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
-import {
-  ConsultarHistorialJuegos,
-} from "../../consultasBE/Tablas";
+import { ConsultarHistorialJuegos } from "../../consultasBE/Tablas";
 
 const ContenedorPagina = styled.div`
   position: relative;
@@ -95,26 +93,7 @@ const TablaPersonalizada = styled.table`
     display: none;
   }
 `;
-const headerNames = {
-  id: "ID",
-  estado: "Estado",
-  data: "",
-  fecha_hora: "Fecha Inicio",
-  fecha_finalizacion: "Fecha Final",
-  historial: "Historial Números",
-  tipo_juego: "Tipo Juego",
-  tablas_ganadas: "Ganadas",
-};
-const visibleColumns = {
-  id: true,
-  estado: true,
-  fecha_hora: true,
-  data: false,
-  fecha_finalizacion: true,
-  historial: true,
-  tipo_juego: true,
-  tablas_ganadas: true,
-};
+
 const ContenedorBuscar = styled.div`
   margin: 5px;
   display: flex;
@@ -185,6 +164,26 @@ const ContenedorBotones = styled.div`
     }
   }
 `;
+const headerNames = {
+  id: "ID",
+  estado: "Estado",
+  data: "",
+  fecha_hora: "Fecha Inicio",
+  fecha_finalizacion: "Fecha Final",
+  historial: "Historial Números",
+  tipo_juego: "Tipo Juego",
+  tablas_ganadas: "Ganadas",
+};
+const visibleColumns = {
+  id: true,
+  estado: true,
+  fecha_hora: true,
+  data: false,
+  fecha_finalizacion: true,
+  historial: true,
+  tipo_juego: true,
+  tablas_ganadas: true,
+};
 function formatoLegible(fechaISO) {
   const fecha = new Date(fechaISO);
   return fecha.toLocaleString("es-ES", {
@@ -215,7 +214,7 @@ const CardTable = ({ datos, headerNames, visibleColumns }) => {
               className="celda"
               data-label={headerNames[header] || header}
             >
-              {header === "fecha_hora"
+              {header === "fecha_hora" || header === "fecha_finalizacion"
                 ? formatoLegible(fila[header])
                 : header === "estado"
                 ? fila[header] === "F"
@@ -260,7 +259,7 @@ const Tablas = ({ datos }) => {
                     data-label={headerNames[header]}
                     key={`${venta.idVenta}-${header}`}
                   >
-                    {header === "fecha_hora"
+                    {header === "fecha_hora" || header === "fecha_finalizacion"
                       ? formatoLegible(venta[header])
                       : header === "estado"
                       ? venta[header] === "F"
@@ -309,7 +308,6 @@ const HistorialJugadas = () => {
   useEffect(() => {
     ConsultarHistorialJuegosFunction();
   }, []);
-
 
   return (
     <ContenedorPadre>
