@@ -5,18 +5,17 @@ import puppeteer from "puppeteer-core";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
 import { PDFDocument } from "pdf-lib";
-import chrome from "chrome-aws-lambda";
-
+import chromium from "chrome-aws-lambda";
 export const pdfController = {
   generatePDF: async (req, res) => {
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } =
         req.body;
-        const browser = await puppeteer.launch({
-          args: chrome.args,
-          defaultViewport: chrome.defaultViewport,
-          executablePath: await chrome.executablePath,
-          headless: chrome.headless,
+        const browser = await chromium.puppeteer.launch({
+          args: chromium.args,
+          defaultViewport: chromium.defaultViewport,
+          executablePath: await chromium.executablePath,
+          headless: chromium.headless,
           ignoreHTTPSErrors:true,
         });
   
@@ -114,7 +113,7 @@ export const pdfController = {
           format: "A4",
           printBackground: true,
         });
-        await browser.close();
+        // await browser.close();
         res.contentType("application/pdf");
         return res.status(200).send(pdfBuffer);
       }
