@@ -74,8 +74,8 @@ export const pdfController = {
         return res.status(200).send(pdfBuffer);
       }
     } catch (error) {
-      console.error("Error generating PDF", error);
-      res.status(500).send("Error generating PDF");
+      console.error("Error generating PDF:", error);
+      return res.status(500).send("Error generating PDF: " + error.message);
     } finally {
       if (page) await page.close();
       if (browser) await browser.close();
