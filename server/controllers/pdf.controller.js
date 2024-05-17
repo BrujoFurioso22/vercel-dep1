@@ -1,10 +1,7 @@
 import { htmlTemplate1 } from "../components/template1.js";
-import { pool } from "../database.js";
-import { ServerStyleSheet } from "styled-components";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
-import { PDFDocument } from "pdf-lib";
-import chromium from "@sparticuz/chromium";
+import chromium from "chrome-aws-lambda";
 import puppeteer from "puppeteer-core";
 
 export const pdfController = {
@@ -17,7 +14,7 @@ export const pdfController = {
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(),
-        headless: chromium.headless,
+        headless: "new",
         ignoreHTTPSErrors: true,
       });
 
