@@ -91,11 +91,8 @@ export const pdfController = {
             });
             htmls = htmls + htmlMinify;
           }
-          // console.log(htmlMinify);
         }
       }
-      // console.log(dataJuego1);
-      // console.log(dataJuego2);
       if (dataJuego1.length === 0 && dataJuego2.length === 0) {
         return res.status(205).json({});
       } else {
@@ -109,18 +106,7 @@ export const pdfController = {
           format: "A4",
           printBackground: true,
         });
-        // const finalPdf = await combinePdfs(pdfs);
-        // const finalPdf = Buffer.concat(pdfs);
-        // console.log(finalPdf);
-        // await browser.close();
         res.contentType("application/pdf");
-
-        // res.setHeader("Content-Type", "application/pdf");
-        // res.setHeader(
-        //   "Content-Disposition",
-        //   'attachment; filename="combined.pdf"'
-        // );
-        // console.log(htmls);
         return res.status(200).send(pdfBuffer);
       }
 
@@ -128,9 +114,6 @@ export const pdfController = {
     } catch (error) {
       console.error("Error generating PDF", error);
       res.status(500).send("Error generating PDF");
-    } finally {
-      // if (page) await page.close();
-      // if (browser) await browser.close();
     }
   },
 };
