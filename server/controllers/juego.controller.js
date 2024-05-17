@@ -78,8 +78,9 @@ export const juegoController = {
       );
       if (rows) {
         return res.status(200).json({ ok: true });
+      } else {
+        return res.status(404).json({ ok: false });
       }
-      return res.status(404).json({ ok: false });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "An error occurred" });
