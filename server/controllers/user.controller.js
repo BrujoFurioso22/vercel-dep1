@@ -211,33 +211,28 @@ export const userController = {
     try {
       // console.log(req);
       const { nombrecliente, cccliente, alias, password } = req.body;
-      
-      let isInserted = false;
-      do {
-        const quse = await pool.query("SELECT * FROM users WHERE cc = $1;",
-          [cccliente]
-        );
-        const rowscliente = quse.rows;
 
-        if (rowscliente.length === 0) {
-          const encriptado = encryptText(password, secretKey);
-          const final = `${encriptado}${secretKey}`;
+      const {rows:rowscliente} = await pool.query("SELECT * FROM users WHERE cc = $1;",
+        [cccliente]
+      );
 
-          const tempo = await pool.query(
-            "INSERT INTO users(name, cc, password, alias) VALUES ($1, $2, $3, $4);",
-            [nombrecliente, cccliente, final, alias]
-          );
-        } else {
-          isInserted = true;
-        }
-      } while (!isInserted);
-      if (isInserted) {
-        return res.status(200);
+      if (rowscliente.length > 0) {
+        console.log("no inserte");
+        return res.status(400);
       } else {
-        return res.status(404);
+        const encriptado = encryptText(password, secretKey);
+        const final = `${encriptado}${secretKey}`;
+
+        const quse = await pool.query(
+          "INSERT INTO users(name, cc, password, alias) VALUES ($1, $2, $3, $4);",
+          [nombrecliente, cccliente, final, alias]
+        );
+        console.log("ya inserte");
+        return res.status(200);
       }
     } catch (error) {
       console.error(error);
+      console.log("estoy en error");
       res.status(500).json({ message: "An error occurred" });
     }
   },
