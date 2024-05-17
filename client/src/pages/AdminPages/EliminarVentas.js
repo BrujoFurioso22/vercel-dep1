@@ -94,14 +94,11 @@ const EliminarVentas = () => {
     setShowEstadoEliminacion(9);
 
     const res = await ElimVentas();
-    console.log(res);
     if (res) {
       setShowEstadoEliminacion(2);
     } else {
       setShowEstadoEliminacion(1);
     }
-    // Lógica para eliminar todo
-    console.log("Eliminado todo");
   };
 
   const handleCancel = () => {
