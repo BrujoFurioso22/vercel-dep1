@@ -107,7 +107,7 @@ const EliminarVentas = () => {
           {showConfirmation && (
             <ContenedorConfirmacion>
               <span>¿Seguro que quiere eliminar todo?</span>
-              <span>Ten en cuenta que se borrara todas las ventas realizadas</span>
+              <span>Ten en cuenta que se borrarán todas las ventas realizadas hace más de dos semanas</span>
               <div className="ContenedorBotones">
                 <button onClick={handleCancel} className="cancelar">
                   Cancelar
