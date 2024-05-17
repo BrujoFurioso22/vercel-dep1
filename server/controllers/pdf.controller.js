@@ -6,11 +6,9 @@ import puppeteer from "puppeteer-core";
 
 export const pdfController = {
   generatePDF: async (req, res) => {
-    let result = null;
-    let browser = null;
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } = req.body;
-      browser = await puppeteer.launch({
+      const browser = await puppeteer.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(),
@@ -122,10 +120,6 @@ export const pdfController = {
     } catch (error) {
       console.error("Error generating PDF", error);
       res.status(500).send("Error generating PDF");
-    }finally{
-      if (browser !== null) {
-        await browser.close();
-      }
     }
   },
 };
