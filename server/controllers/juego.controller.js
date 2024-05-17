@@ -71,9 +71,9 @@ export const juegoController = {
   finalizarJuego: async (req, res) => {
     try {
       // console.log(req);
-      const { id, ganadas, } = req.body;
+      const { id, ganadas } = req.body;
       const { rows } = await pool.query(
-        "UPDATE public.juegos SET estado='F', tablas_ganadas=$1, fecha_finalizacion = CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil' WHERE id = $1 and estado='I';",
+        "UPDATE public.juegos SET estado='F', tablas_ganadas=$1, fecha_finalizacion = CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil' WHERE id = $2 and estado='I';",
         [ganadas, id]
       );
       if (rows) {
