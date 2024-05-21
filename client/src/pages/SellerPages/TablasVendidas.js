@@ -171,6 +171,7 @@ const TablaCard = styled.div`
     flex-direction: column;
     width: 48%; /* Permite dos tarjetas por fila */
     margin: 1% 0.5%;
+    word-break: break-all;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     background-color: #fff;
