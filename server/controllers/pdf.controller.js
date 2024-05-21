@@ -1,24 +1,25 @@
 import { htmlTemplate1 } from "../components/template1.js";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
-import chrome from "@sparticuz/chromium";
+// import chrome from "@sparticuz/chromium";
+import Chromium from "@sparticuz/chromium";
 // import puppeteer from "puppeteer-core";
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 export const pdfController = {
   generatePDF: async (req, res) => {
     try {
       const { dataJuego1, dataJuego2, dataInfo1, dataInfo2 } = req.body;
-      // const browser = await puppeteer.launch({
-      //   ignoreDefaultArgs: ["--disable-extensions"],
-      //   args: chrome.args,
-      //   defaultViewport: chrome.defaultViewport,
-      //   executablePath: await chrome.executablePath(),
-      //   headless: true,
-      //   ignoreHTTPSErrors: true,
-      // });
       const browser = await puppeteer.launch({
-        headless: "new",
+        args: Chromium.args,
+        defaultViewport: Chromium.defaultViewport,
+        executablePath: await Chromium.executablePath(),
+        headless: Chromium.headless,
+        ignoreHTTPSErrors: true,
       });
+      // const browser = await puppeteer.launch({
+      //   headless: "new",
+      // });
 
       const page = await browser.newPage();
       const pdfs = [];
@@ -75,9 +76,12 @@ export const pdfController = {
       </style>
           <title>El Gran Bingo Chabelita</title>
         </head>
-        <body style="width:100%;margin:0;display: flex;
+        <body style="width:100%;
+        margin:0;
+        display: flex;
         justify-content: center;
-        align-items: center;flex-direction:column">`;
+        align-items: center;
+        flex-direction:column">`;
       let htmls = inicioHTML;
 
       async function generatePdfFromChunk(
@@ -109,14 +113,16 @@ export const pdfController = {
         htmls = htmls + `</body></html>`;
         // pdfs.push(pdfBuffer);
 
-        await page.setContent(htmls, { waitUntil: "networkidle0", timeout: 0 });
+        await page.setContent(htmls);
+        
         const pdfBuffer = await page.pdf({
           format: "A4",
           printBackground: true,
         });
 
-        await browser.close();
-        res.contentType("application/pdf");
+        // console.log(pdfBuffer);
+        // await browser.close();
+        // return res.status(200).json({pdf: pdfBuffer, html:htmls});
         return res.status(200).send(pdfBuffer);
       }
 

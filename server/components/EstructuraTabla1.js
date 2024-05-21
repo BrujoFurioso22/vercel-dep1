@@ -42,7 +42,7 @@ const GridH = ({ data }) => {
         index === 0 ? "bottom-left" : index === 24 ? "bottom-right" : "";
 
       return `
-      <div style="background-color: transparent;
+      <div style="background-color: rgba(237, 237, 237, 0.4);
       height: 15mm;
       display: flex;
       justify-content: center;

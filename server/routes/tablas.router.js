@@ -9,8 +9,3 @@ tablasRouter.post("/obtenertablascliente", tablasController.obtenerTablasCliente
 tablasRouter.post("/obtenertablasventa", tablasController.obtenerTablasVenta);
 tablasRouter.get("/probarcosas", tablasController.probarInsercionNueva);
 
-
-// router.get("/:id", bookController.getById)
-// router.post("/", bookController.create)
-// router.put("/:id", bookController.updateById)
-// router.delete("/:id", bookController.deleteById)

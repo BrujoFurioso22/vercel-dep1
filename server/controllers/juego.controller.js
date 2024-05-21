@@ -198,7 +198,7 @@ export const juegoController = {
           data1: info,
         });
       } else {
-        console.log("No se encontraron números activados.");
+        // console.log("No se encontraron números activados.");
         return res.status(404).json({ exists: false });
       }
     } catch (error) {
@@ -302,7 +302,7 @@ export const juegoController = {
           data1: info,
         });
       } else {
-        console.log("No se encontraron números activados.");
+        // console.log("No se encontraron números activados.");
         return res.status(404).json({ exists: false });
       }
     } catch (error) {

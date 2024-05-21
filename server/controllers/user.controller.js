@@ -145,7 +145,6 @@ export const userController = {
           }
           )
         }
-        console.log(data);
         return res.status(200).json({
           exists: true,
           datos: data
@@ -215,10 +214,8 @@ export const userController = {
       const {rows:rowscliente} = await pool.query("SELECT * FROM users WHERE cc = $1;",
         [cccliente]
       );
-      console.log(rowscliente);
 
       if (rowscliente.length > 0) {
-        console.log("no inserte");
         return res.status(400).json({ok:false});
       } else {
         const encriptado = encryptText(password, secretKey);
@@ -228,58 +225,11 @@ export const userController = {
           "INSERT INTO users(name, cc, password, alias) VALUES ($1, $2, $3, $4);",
           [nombrecliente, cccliente, final, alias]
         );
-        console.log("ya inserte");
         return res.status(200).json({ok:true});
       }
     } catch (error) {
       console.error(error);
-      console.log("estoy en error");
       return res.status(500).json({ message: "An error occurred" });
     }
   },
-
-  // create: async(req, res) => {
-  //     try {
-  //         const { name, price } = req.body
-
-  //         const sql = 'INSERT INTO books(name, price) VALUES($1, $2) RETURNING *'
-
-  //         const { rows } = await postgre.query(sql, [name, price])
-
-  //         res.json({msg: "OK", data: rows[0]})
-
-  //     } catch (error) {
-  //         res.json({msg: error.msg})
-  //     }
-  // },
-  // updateById: async(req, res) => {
-  //     try {
-  //         const { name, price } = req.body
-
-  //         const sql = 'UPDATE books set name = $1, price = $2 where book_id = $3 RETURNING *'
-
-  //         const { rows } = await postgre.query(sql, [name, price, req.params.id])
-
-  //         res.json({msg: "OK", data: rows[0]})
-
-  //     } catch (error) {
-  //         res.json({msg: error.msg})
-  //     }
-  // },
-  // deleteById: async(req, res) => {
-  //     try {
-  //         const sql = 'DELETE FROM books where book_id = $1 RETURNING *'
-
-  //         const { rows } = await postgre.query(sql, [req.params.id])
-
-  //         if (rows[0]) {
-  //             return res.json({msg: "OK", data: rows[0]})
-  //         }
-
-  //         return res.status(404).json({msg: "not found"})
-
-  //     } catch (error) {
-  //         res.json({msg: error.msg})
-  //     }
-  // }
 };

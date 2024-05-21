@@ -12,7 +12,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@sparticuz/chromium": "^119.0.2",
     "body-parser": "^1.20.2",
     "connect-timeout": "^1.9.0",
     "cors": "^2.8.5",
@@ -26,12 +25,12 @@
     "pdf-lib": "^1.17.1",
     "pg": "^8.11.5",
     "puppeteer": "^19.11.1",
-    "puppeteer-core": "^21.5.1",
+    "puppeteer-core": "^19.11.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "styled-components": "^6.1.11"
   },
-  "engines": {
-    "node": "18"
+  "devDependencies": {
+    "@sparticuz/chromium": "^112.0.2"
   }
 }

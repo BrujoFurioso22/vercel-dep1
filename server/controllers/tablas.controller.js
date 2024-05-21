@@ -144,7 +144,6 @@ export const tablasController = {
 
             // Asignar números a las variables n1, n2, ..., n25
             const numerosAsignados = todosLosNumeros.slice(0, 24);
-            console.log("sefesfesf");
             let banderadecodigo = true
             let codigonormal = "";
             do {
@@ -156,7 +155,6 @@ export const tablasController = {
                 for (let i = 0; i < tablasnormales.length; i++) {
                   if (tablasnormales[i].tablas_normal.includes(codigonormal)) {
                     banderadecodigo = true;
-                    console.log(banderadecodigo);
                     break;
                   } else {
                     banderadecodigo = false;
@@ -174,7 +172,6 @@ export const tablasController = {
               cadenaparalatabla = cadenaparalatabla + "," + cadenaNumeros;
             }
           }
-          console.log(cadenaparalatabla);
           // return res.status(200).json({ ok: true });
         } catch (error) {
           console.log("Error1");
@@ -225,7 +222,6 @@ export const tablasController = {
                 for (let i = 0; i < tablasrapidas.length; i++) {
                   if (tablasrapidas[i].tablas_rapida.includes(codigorapido)) {
                     banderadecodigo = true;
-                    console.log(banderadecodigo);
                     break;
                   }
                   else {
@@ -245,7 +241,6 @@ export const tablasController = {
               cadenaparatablarapida = cadenaparatablarapida + "," + cadenaNumeros;
             }
           }
-          console.log(cadenaparatablarapida);
 
           // return res.status(200).json({ ok: true });
         } catch (error) {
@@ -373,7 +368,6 @@ export const tablasController = {
             },
           },
         ];
-        console.log(var1);
         return res.status(200).json({
           data: var1,
         });
@@ -422,7 +416,6 @@ export const tablasController = {
         } else {
           cadenaamostrar = "";
         }
-        console.log(cadenaamostrar);
         const var2 = [
           {
             numtabla: FnuevoArreglo[7],
@@ -439,7 +432,6 @@ export const tablasController = {
             },
           },
         ];
-        console.log(var2);
         return res.status(200).json({
           data: var2,
         });

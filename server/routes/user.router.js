@@ -11,7 +11,3 @@ userRouter.post("/actualizardatos", userController.actualizarDatos);
 userRouter.post("/actualizarestado", userController.actualizarEstado);
 userRouter.post("/crearvendedor", userController.CrearVendedor);
 
-// router.get("/:id", bookController.getById)
-// router.post("/", bookController.create)
-// router.put("/:id", bookController.updateById)
-// router.delete("/:id", bookController.deleteById)

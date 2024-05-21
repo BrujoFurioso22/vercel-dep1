@@ -46,7 +46,7 @@ const GridH = ({ data }) => {
       } else {
         return `
         <div style="display:flex;justify-content:center;align-items:center;padding:2mm">
-        <div style="background-color: var(--color-4);
+        <div style="background-color: #ededed;
           aspect-ratio:1;
           padding:5px;
           width:10mm;

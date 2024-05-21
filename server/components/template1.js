@@ -52,14 +52,15 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo }) => {
  
     <div style="font-family: 'Arial', sans-serif;
         width: 210mm;
-        min-height: 297mm;
         height: 100%;
         background: white;
-        padding: 2mm;
         color: black;
         display: flex;
+        padding: 5mm;
         flex-direction: column;
-        justify-content: space-between;"
+        justify-content: space-between;
+        page-break-after:always;
+        "
     class="page">
       <div style=" border: solid 1px rgba(0, 0, 0, 0.2);
       background-color: #f1f1f1;
@@ -141,7 +142,8 @@ export const htmlTemplate1 = ({ dataJuego, dataInfo }) => {
         <div style="width: 100%;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 5mm;" class="bingo-container-u">
+        padding: 1mm;
+        gap: 2mm;" class="bingo-container-u">
         
         ${juegoContent}
         </div>

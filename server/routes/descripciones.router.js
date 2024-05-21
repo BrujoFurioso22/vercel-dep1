@@ -8,8 +8,3 @@ descripcionesRouter.get("/obtenerdescripcionrapida", descripcionController.obten
 descripcionesRouter.post("/actualizardescripcionnormal", descripcionController.insertardescripcionesnormal);
 descripcionesRouter.post("/actualizardescripcionrapida", descripcionController.insertardescripcionesrapida);
 
-
-// router.get("/:id", bookController.getById)
-// router.post("/", bookController.create)
-// router.put("/:id", bookController.updateById)
-// router.delete("/:id", bookController.deleteById)

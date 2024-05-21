@@ -69,7 +69,7 @@ const SingleGrid = ({ letra }) => {
       display: grid;
       grid-template-columns: repeat(5, 3mm);
       gap: 1px;
-      margin-bottom: 10px;
+      margin-bottom: 1mm;
     ">
       ${gridItems}
     </div>

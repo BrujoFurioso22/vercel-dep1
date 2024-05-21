@@ -19,7 +19,7 @@ app.use(corsMiddleware());
 
 app.use(express.static('public'));
 
-app.use(timeout('100s'));  // 30 segundos de tiempo de espera
+app.use(timeout('100s'));  // 100 segundos de tiempo de espera
 
 
 // Utilizar el enrutador de usuarios

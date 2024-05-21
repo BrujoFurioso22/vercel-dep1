@@ -4,5 +4,3 @@ import { pdfController } from "../controllers/pdf.controller.js";
 export const pdfRouter = Router();
 
 pdfRouter.post("/generarPDF", pdfController.generatePDF);
-// userRouter.post("/userverif", userController.getVerificationUser);
-// userRouter.post("/getcliente", userController.getCliente);
