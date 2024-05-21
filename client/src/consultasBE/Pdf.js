@@ -16,7 +16,9 @@ export async function CrearPdf({
     if (res.status === 205) {
       return false;
     } else if (res.status === 200) {
-      const blob = new Blob([res.data], { type: "application/pdf" });
+      console.log(res);
+      console.log(res.data.html);
+      const blob = new Blob([res.data.pdf], { type: "application/pdf" });
       const urll = window.URL.createObjectURL(blob);
 
       // Sugerir un nombre de archivo
