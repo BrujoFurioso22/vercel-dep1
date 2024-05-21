@@ -30,7 +30,7 @@ export async function IngresarVenta(
     };
 
     const res = await axios.post(`${url}/api/tablas/insertarventa`, data, {
-      timeout: 100000,
+      timeout: 500000,
     });
     // console.log(res);
     return { ok: true, data: res.data };
