@@ -3,6 +3,7 @@ import cors from "cors";
 const DEFAULT_ACCEPTED_ORIGINS = [
   "https://vercel-dep1-client.vercel.app",
   "http://localhost:3005",
+  "https://vercel-dep1-server-pf351d82y-brujofurioso22s-projects.vercel.app",
 ];
 
 export const corsMiddleware = ({
