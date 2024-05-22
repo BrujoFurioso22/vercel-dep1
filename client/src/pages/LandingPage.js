@@ -161,7 +161,7 @@ const ContenedorElemento1 = styled.div`
     flex-direction: row;
     height: fit-content;
     width: 100%;
-    @media ${device.mobile} {
+    @media ${device.mobile1} {
       flex-direction: column;
       /* height: 80dvh;/ */
     }
@@ -173,7 +173,7 @@ const ContenedorElemento1 = styled.div`
       align-items: center;
       flex-direction: column;
       padding: 20px;
-      @media ${device.mobile} {
+      @media ${device.mobile1} {
         height: auto;
       }
     }
