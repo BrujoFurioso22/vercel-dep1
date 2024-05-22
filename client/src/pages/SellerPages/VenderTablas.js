@@ -185,12 +185,12 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
       parseInt(idv1),
       strSinEspacios,
       datos.nombreComprador,
-      datos.cantidades["Juego 1"] === undefined
+      datos.cantidades["Tablon"] === undefined
         ? 0
-        : parseInt(datos.cantidades["Juego 1"]),
-      datos.cantidades["Juego 2"] === undefined
+        : parseInt(datos.cantidades["Tablon"]),
+      datos.cantidades["La Unica"] === undefined
         ? 0
-        : parseInt(datos.cantidades["Juego 2"]),
+        : parseInt(datos.cantidades["La Unica"]),
       datos.cantidadTransferencia === ""
         ? 0
         : parseFloat(datos.cantidadTransferencia),
@@ -341,7 +341,7 @@ const FormularioVenta = () => {
   const [cantidadTransferencia, setCantidadTransferencia] = useState("");
 
   // Asignación de juegos para simplificar el ejemplo
-  const juegos = ["Juego 1", "Juego 2"];
+  const juegos = ["Tablon", "La Unica"];
   const todasLasCantidadesValidas = useCallback(() => {
     return juegosSeleccionados.every(
       (juego) => cantidades[juego] && cantidades[juego] > 0
@@ -587,7 +587,7 @@ const FormularioVenta = () => {
                     checked={juegosSeleccionados.includes(juego)}
                     onChange={() => handleJuegoSeleccionado(juego)}
                   />
-                  {juego}
+                  {juego === "Tablon" ? "Tablón":"La Única"}
                 </label>
               ))}
             </fieldset>
@@ -598,7 +598,7 @@ const FormularioVenta = () => {
           juegosSeleccionados.map((juego) => (
             <div key={juego} className="seccionVenta">
               <label>
-                {`Cantidad de ${juego}:`}
+                {`Cantidad de ${juego === "Tablon" ? "Tablón":"La Única"}:`}
                 <InputField
                   type="number"
                   value={cantidades[juego] || ""}

@@ -190,14 +190,16 @@ const ContenedorDerecho = styled.div`
         align-items: center;
         margin-top: 5px;
         padding: 15px;
+        min-width: 220px;
+        width: fit-content;
         box-shadow: var(--sombra-intensa);
         color: black;
         gap: 10px;
         border-radius: 10px;
         & > .botonSalir {
-          border: solid 2px var(--color-1);
-          background-color: var(--color-4);
-          color: var(--color-1);
+          border: solid 2px var(--color-2);
+          background-color: var(--color-2);
+          color: white;
           padding: 5px 10px;
           width: 100%;
           outline: none;
@@ -216,10 +218,11 @@ const ContenedorDerecho = styled.div`
 `;
 const BotonMenu = styled.button`
   font-size: 20px;
-  color: black;
-  background-color: var(--color-4);
+  color: white;
+  background-color: transparent;
+
   border-radius: 5px;
-  border: none;
+  border: solid 1px white;
   padding: 5px;
 `;
 
@@ -239,13 +242,32 @@ const ContenedorMenuLateral = styled.div`
     top: 0;
     right: 0px;
     height: 100vh;
-    background-color: var(--color-6);
+    background-color:rgba(71, 71, 71, 0.97);
     padding: 15px 20px;
     gap: 10px;
     transition: width 0.6s ease, opacity 0.8s ease;
 
     .botonCerrar {
       color: white;
+      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      & > span {
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black;
+        font-size: 20px;
+        font-weight: 800;
+        width: 30px;
+        border-radius: 50%;
+        aspect-ratio: 1;
+        padding: 2px 0 0 1px;
+        box-shadow: 0 0  5px white;
+        cursor: pointer;
+      }
     }
     &.display {
       display: flex;
@@ -267,7 +289,7 @@ const ContenedorMenuLateral = styled.div`
         /* border: solid 2px var(--color-2); */
         border: none;
         background-color: var(--alerta-error);
-        color: black;
+        color: white;
         padding: 5px 10px;
         outline: none;
         border-radius: 5px;
@@ -294,21 +316,22 @@ const MenuD = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
-    max-width: 150px;
+    max-width: 80%;
   }
   @media ${device.mobile1} {
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     width: 100%;
+    padding: 0 5%;
     flex-direction: column;
     & > a {
       text-decoration: none;
       color: white;
       background-color: var(--color-2);
       width: 100%;
-      min-width: fit-content;
+      min-width: 100%;
       padding: 8px;
       padding-left: 6%;
       border-radius: 8px;
@@ -427,9 +450,9 @@ const Header = ({ oculta }) => {
                   <i className="bi bi-person-circle" />
                   <div className="cuentaDrop">
                     <div>
-                      <span>{localStorage.getItem("nombre")}</span>
+                      <span>Bievenido, {localStorage.getItem("nombre")}!</span>
                       <button className="botonSalir" onClick={logout}>
-                        Cerrar Sesión
+                        Cerrar Sesión <i className="bi bi-box-arrow-right"></i>
                       </button>
                     </div>
                   </div>
@@ -464,7 +487,7 @@ const Header = ({ oculta }) => {
               toggleMenu(setDisplayMenu, setMenuVisible, menuVisible)
             }
           >
-            <i className="bi bi-x-lg"></i>
+            <i className="bi bi-chevron-right"></i>
           </span>
         </div>
         <div className="ContenedorMenuL">

@@ -32,7 +32,7 @@ export async function CrearPdf({
 
       if (!nombreArchivo) {
         // Si el usuario cancela el prompt, se detiene el proceso
-        return false;
+        return true;
       }
 
       // Asegurarse de que el nombre del archivo tenga la extensión .pdf

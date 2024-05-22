@@ -113,8 +113,8 @@ const headerNames = {
   cc: "Cédula/Teléfono",
   nombre: "Cliente",
   fecha: "Fecha",
-  cantidadnormal: "# 1",
-  cantidadrapida: "# 2",
+  cantidadnormal: "# Tablón",
+  cantidadrapida: "# La Única",
   numerotransaccion: "Num Tr",
   cantidadinero: "$ Tr.",
 };

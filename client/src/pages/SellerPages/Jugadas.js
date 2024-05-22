@@ -315,7 +315,7 @@ const ContenedorJugadas = ({
               Fecha Jugada: <em> {formatearFechaLegible(data.fecha_hora)} </em>
             </span>
             <h3 style={{ margin: "0" }}>
-              {TP === 0 ? "JUEGO NORMAL" : "LA ÚNICA"}
+              {TP === 0 ? "TABLÓN" : "LA ÚNICA"}
             </h3>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -590,8 +590,8 @@ const Jugadas = () => {
                   id=""
                 >
                   <option value="">Seleccione un juego</option>
-                  <option value="0">Tabla Llena</option>
-                  <option value="1">La única</option>
+                  <option value="1">La Única</option>
+                  <option value="0">Tablón</option>
                 </SelectField>
               </Contenedor1>
             )}
@@ -613,13 +613,13 @@ const Jugadas = () => {
             <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
               {dataTotales.length > 0 && (
                 <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
-                  <span>Números en Tabla</span>
+                  <span>Posibles a llenarse</span>
                   <GridComponent1 items={dataTotales} />
                 </Contenedor1>
               )}
               {hasNonEmptyTablas(dataTablasLetas) && (
                 <Contenedor1 style={{ gap: "2px", minWidth: "fit-content" }}>
-                  <span>Posibles letras en Tabla</span>
+                  <span>Posibles letras a formarse</span>
                   <GridComponent2 data={dataTablasLetas} />
                 </Contenedor1>
               )}

@@ -112,12 +112,19 @@ export const InputFieldCustom = ({ onChange, label, type }) => {
 };
 
 const Botonwpp = styled.a`
-  padding: 5px 10px;
+  padding: 5px 20px;
   background-color: var(--color-wpp);
   color: var(--color-blanco);
   text-decoration: none;
+  font-size: 20px;
   border: none;
   border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+
   cursor: pointer;
 `;
 
@@ -129,7 +136,8 @@ export const BotonWpp = ({ phoneNumber, message }) => {
       target="_blank"
       rel="noopener noreferrer"
     >
-      Enviar Mensaje a WhatsApp
+      <i className="bi bi-whatsapp"></i>
+      Contáctanos Ahora!
     </Botonwpp>
   );
 };

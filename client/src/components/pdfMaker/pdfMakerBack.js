@@ -137,7 +137,7 @@ const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
       dataJuego2: dataChunks2,
       dataInfo1: data1,
       dataInfo2: data2,
-      dato1:dato1
+      dato1: dato1,
     });
     if (result) {
       console.log("PDF downloaded successfully!");
@@ -157,19 +157,40 @@ const GenerarPDFs1 = ({ idventa, tipo = 0 }) => {
   return (
     <Boton className={bloq && "disabled"} onClick={ConsultarDatos}>
       {error ? (
-        <span>Error al Descargar</span>
+        <span style={{ gap: "5px" }}>
+          <i class="bi bi-x-octagon"></i>Error al Descargar
+        </span>
       ) : bloq ? (
-        <span>
-          {" "}
-          <img
-            style={{ width: "30px" }}
-            src={`${process.env.REACT_APP_URL_CLIENT}/Blocks.svg`}
-            alt=""
-          />
-          {"Descargando... "}
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            gap:"0px"
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+            }}
+          >
+            <img
+              style={{ width: "30px" }}
+              src={`${process.env.REACT_APP_URL_CLIENT}/Blocks.svg`}
+              alt=""
+            />
+            Descargando...
+          </div>
+          <div style={{ fontSize: "12px" }}>Esto puede demorar un poco</div>
         </span>
       ) : (
-        "PDF"
+        <span style={{ gap: "5px" }}>
+          <i className="bi bi-file-earmark-arrow-down"></i>PDF
+        </span>
       )}
     </Boton>
   );

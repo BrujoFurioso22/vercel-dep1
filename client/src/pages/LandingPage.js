@@ -139,6 +139,9 @@ const ContenedorElemento1 = styled.div`
   width: 100%;
   height: auto;
   .imgTabla {
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     width: 70%;
     height: fit-content;
     background: var(--color-5);
@@ -288,16 +291,27 @@ function LandingPage() {
           <h2>Ven, disfruta y gana...</h2>
           <div className="contenedor1">
             <div className="d1">
-              <h2>Tablón</h2>
+              <h2
+                style={{
+                  borderBottom: "solid 1px black",
+                  width: "70%",
+                  textAlign: "center",
+                }}
+              >
+                Tablón
+              </h2>
               <span>{cont1.contenido}</span>
+              <b>Letras a Jugar: {cont1.letras}</b>
               <div className="imgTabla">
                 <img src={juego1} alt="juego1" />
               </div>
-              <h4>
-                Fecha de próximo juego {"->"}{" "}
-                {Object.keys(cont1).length > 0 &&
-                  formatearFechaConHora(cont1.fecha_hora)}
-              </h4>
+              <span style={{ fontSize: "20px" }}>
+                Fecha de próximo juego {":"}{" "}
+                <b>
+                  {Object.keys(cont1).length > 0 &&
+                    formatearFechaConHora(cont1.fecha_hora)}
+                </b>
+              </span>
 
               <div>
                 <BotonWpp
@@ -309,17 +323,27 @@ function LandingPage() {
               </div>
             </div>
             <div className="d2">
-              <h2>Única</h2>
+              <h2
+                style={{
+                  borderBottom: "solid 1px black",
+                  width: "70%",
+                  textAlign: "center",
+                }}
+              >
+                La Única
+              </h2>
               <span>{cont2.contenido}</span>
 
               <div className="imgTabla">
                 <img src={juego2} alt="juego1" />
               </div>
-              <h4>
-                Fecha de próximo juego {"->"}{" "}
-                {Object.keys(cont2).length > 0 &&
-                  formatearFechaConHora(cont2.fecha_hora)}
-              </h4>
+              <span style={{ fontSize: "20px" }}>
+                Fecha de próximo juego {":"}{" "}
+                <b>
+                  {Object.keys(cont2).length > 0 &&
+                    formatearFechaConHora(cont2.fecha_hora)}
+                </b>
+              </span>
               <div>
                 {" "}
                 <BotonWpp
