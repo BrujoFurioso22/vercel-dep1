@@ -480,14 +480,14 @@ const FormularioVenta = () => {
   };
   const handleCantidadChange = (juego, cantidad) => {
     if (juego === "Tablon") {
-      if (cantidad <= 25) {
+      if ((cantidad <= 25 && cantidad >=1) || cantidad === "") {
         setCantidades((prevCantidades) => ({
           ...prevCantidades,
           [juego]: cantidad,
         }));
       }
     } else {
-      if (cantidad <= 15) {
+      if ((cantidad <= 15 && cantidad >=1) || cantidad === "") {
         setCantidades((prevCantidades) => ({
           ...prevCantidades,
           [juego]: cantidad,
