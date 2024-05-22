@@ -13,6 +13,7 @@ export async function CrearPdf({
       { dataJuego1, dataJuego2, dataInfo1, dataInfo2 },
       { responseType: "arraybuffer", timeout: 500000 }
     );
+    console.log(res);
     if (res.status === 205) {
       return false;
     } else if (res.status === 200) {
