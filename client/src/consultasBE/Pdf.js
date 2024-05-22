@@ -25,7 +25,7 @@ export async function CrearPdf({
       } else if (contentType === "application/zip") {
         fileExtension = "zip";
       }
-      let nombreArchivoPredeterminado = `BINGO_CHABELITA_${dato1}-${dataJuego1.length}-${dataJuego2.length}.pdf`;
+      let nombreArchivoPredeterminado = `BINGO_CHABELITA_${dato1}-${dataJuego1.length}-${dataJuego2.length}`;
 
       const blob = new Blob([res.data], { type: contentType });
       const link = document.createElement("a");
