@@ -208,7 +208,7 @@ const Modal = ({ isOpen, onClose, onConfirm, datos, limpiar }) => {
 
   const handleCerrarDespuesdeGuardar = () => {
     limpiar();
-    setVentaCorrecta(0)
+    setVentaCorrecta(0);
     onClose();
   };
 
@@ -479,10 +479,21 @@ const FormularioVenta = () => {
     });
   };
   const handleCantidadChange = (juego, cantidad) => {
-    setCantidades((prevCantidades) => ({
-      ...prevCantidades,
-      [juego]: cantidad,
-    }));
+    if (juego === "Tablon") {
+      if (cantidad <= 25) {
+        setCantidades((prevCantidades) => ({
+          ...prevCantidades,
+          [juego]: cantidad,
+        }));
+      }
+    } else {
+      if (cantidad <= 15) {
+        setCantidades((prevCantidades) => ({
+          ...prevCantidades,
+          [juego]: cantidad,
+        }));
+      }
+    }
   };
 
   const handleChangeTipoId = (value) => {
@@ -587,7 +598,7 @@ const FormularioVenta = () => {
                     checked={juegosSeleccionados.includes(juego)}
                     onChange={() => handleJuegoSeleccionado(juego)}
                   />
-                  {juego === "Tablon" ? "Tablón":"La Única"}
+                  {juego === "Tablon" ? "Tablón" : "La Única"}
                 </label>
               ))}
             </fieldset>
@@ -598,11 +609,12 @@ const FormularioVenta = () => {
           juegosSeleccionados.map((juego) => (
             <div key={juego} className="seccionVenta">
               <label>
-                {`Cantidad de ${juego === "Tablon" ? "Tablón":"La Única"}:`}
+                {`Cantidad de ${juego === "Tablon" ? "Tablón" : "La Única"}:`}
                 <InputField
                   type="number"
                   value={cantidades[juego] || ""}
                   onChange={(e) => handleCantidadChange(juego, e.target.value)}
+                  placeholder={juego === "Tablon" ? "Max: 25" : "Max: 15"}
                   min="1"
                 />
               </label>

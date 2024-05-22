@@ -437,12 +437,12 @@ const TablasVendidas = () => {
           >
             Ventas
           </span>
-          <span
+          {/* <span
             className={`${menuSeleccionado === 1 && "selected"}`}
             onClick={() => setMenuSeleccionado(1)}
           >
             Cliente
-          </span>
+          </span> */}
         </ContenedorBotones>
         <ContenedorBuscar>
           <span>Buscar:</span>

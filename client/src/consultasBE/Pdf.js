@@ -11,7 +11,7 @@ export async function CrearPdf({
     const res = await axios.post(
       `${url}/api/pdf/generarPDF`,
       { dataJuego1, dataJuego2, dataInfo1, dataInfo2 },
-      { responseType: "arraybuffer", timeout: 500000 }
+      { responseType: "blob", timeout: 500000 }
     );
     console.log(res);
     if (res.status === 205) {
