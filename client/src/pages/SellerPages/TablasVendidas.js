@@ -257,15 +257,19 @@ const CardTable = ({ datos, headerNames, visibleColumns, NM }) => {
             </div>
           ))}
           {/* <GeneratePdfButton idventa={parseInt(fila.id)} /> */}
-          {parseInt(fila["cantidadrapida"]) +
-            parseInt(fila["cantidadnormal"]) <=
+          {(parseInt(fila["cantidadrapida"]) +
+            parseInt(fila["cantidadnormal"])) <=
           180 ? (
             <GenerarPDFs1
               idventa={NM === 0 ? parseInt(fila.id) : fila.cc}
               tipo={NM}
             />
           ) : (
-            <span style={{fontSize:"12px"}}>Demasiados datos para<br/>generar un PDF</span>
+            <span style={{ fontSize: "12px" }}>
+              Demasiados datos para
+              <br />
+              generar un PDF
+            </span>
           )}
         </div>
       ))}
@@ -332,7 +336,11 @@ const Tablas = ({ datos, datosVentas, NM }) => {
                       tipo={NM}
                     />
                   ) : (
-                    <span style={{fontSize:"12px"}}>Demasiados datos para<br/>generar un PDF</span>
+                    <span style={{ fontSize: "12px" }}>
+                      Demasiados datos para
+                      <br />
+                      generar un PDF
+                    </span>
                   )}
                 </td>
               </tr>
