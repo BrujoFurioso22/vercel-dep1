@@ -1,12 +1,12 @@
 import { htmlTemplate1 } from "../components/template1.js";
 import { minify } from "html-minifier";
 import { htmlTemplate2 } from "../components/template2.js";
-import Chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
-import archiver from "archiver";
-import { PassThrough } from "stream";
+// import Chromium from "@sparticuz/chromium";
+// import puppeteer from "puppeteer-core";
+// import archiver from "archiver";
+// import { PassThrough } from "stream";
 
-import { createPool } from "generic-pool";
+// import { createPool } from "generic-pool";
 
 import Api2Pdf from "api2pdf";
 
@@ -481,7 +481,7 @@ export const pdfController = {
           marginTop: 0,
         };
         await a2pClient
-          .chromeHtmlToPdf(htmls, { options: options })
+          .chromeHtmlToPdf(htmlsM, { options: options })
           .then(function (result) {
             return res.status(200).json({ pdf: result });
           });
