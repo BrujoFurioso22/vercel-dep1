@@ -49,12 +49,12 @@ const Tablas = () => {
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
-        {parseInt(d1.length) + parseInt(d2.length) <= 180 ? (
+        {(parseInt(d1.length) + parseInt(d2.length) <= 180) && (parseInt(d1.length) + parseInt(d2.length)) > 1 ? (
           <GenerarPDFs1 tipo={2} />
         ) : (
-          <span style={{ fontSize: "12px" }}>
-            Demasiados datos para generar un PDF, solicite a su vendedor los
-            pdfs por ventas
+          <span style={{ fontSize: "15px", color:"red"}}>
+            * Demasiados datos para generar un PDF, solicite a su vendedor los
+            pdfs por ventas * 
           </span>
         )}
 
