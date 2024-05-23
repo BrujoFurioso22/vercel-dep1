@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Preview</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column; /* Para que el botón de impresión esté encima del iframe */
+    }
+    iframe {
+      width: 100%;
+      height: 90%; /* Ajustar el tamaño para dejar espacio para el botón */
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="openAndPrintPdf()">Imprimir PDF</button>
+  <iframe id="pdfContent" type="application/pdf"></iframe>
+  <script>
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      const blobUrl = params.get('blobUrl');
+      
+      if (blobUrl) {
+        document.getElementById('pdfContent').src = blobUrl;
+      } else {
+        document.body.innerHTML = '<p>No PDF content available</p>';
+      }
+    };
+
+    function openAndPrintPdf() {
+      const iframe = document.getElementById('pdfContent');
+      const blobUrl = iframe.src;
+      
+      if (blobUrl) {
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Print PDF</title>
+            <style>
+              body, html {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+              iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+              }
+            </style>
+          </head>
+          <body>
+            <iframe src="${blobUrl}" onload="this.contentWindow.print();"></iframe>
+          </body>
+          </html>
+        `);
+        newWindow.document.close();
+      } else {
+        console.error('No PDF content available');
+      }
+    }
+  </script>
+</body>
+</html>
