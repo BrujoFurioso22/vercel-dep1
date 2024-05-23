@@ -265,7 +265,7 @@ const CardTable = ({ datos, headerNames, visibleColumns, NM }) => {
               tipo={NM}
             />
           ) : (
-            <span>Demasiados datos para generar un PDF</span>
+            <span style={{fontSize:"12px"}}>Demasiados datos para<br/>generar un PDF</span>
           )}
         </div>
       ))}
@@ -332,7 +332,7 @@ const Tablas = ({ datos, datosVentas, NM }) => {
                       tipo={NM}
                     />
                   ) : (
-                    <span>Demasiados datos para generar un PDF</span>
+                    <span style={{fontSize:"12px"}}>Demasiados datos para<br/>generar un PDF</span>
                   )}
                 </td>
               </tr>
