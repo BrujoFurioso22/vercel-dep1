@@ -1,6 +1,5 @@
 import axios from "axios";
 import url from "./config/Url";
-const ruta = "/pdfPreview.html";
 export async function CrearPdf({
   dataJuego1,
   dataJuego2,
@@ -12,13 +11,16 @@ export async function CrearPdf({
     const res = await axios.post(
       `${url}/api/pdf/generarPDF`,
       { dataJuego1, dataJuego2, dataInfo1, dataInfo2 },
-      { responseType:"blob" , timeout: 500000 }
+      { timeout: 500000 }
     );
     console.log(res);
     if (res.status === 205) {
       return false;
     } else if (res.status === 200) {
       console.log(res);
+      const pdfUrl = res.data.pdf.FileUrl;
+      const newWindow = window.open(pdfUrl, "_blank");
+
       // console.log(res.data.html);
       // const contentType = res.headers["content-type"];
       // let fileExtension = "";
@@ -27,13 +29,13 @@ export async function CrearPdf({
       // } else if (contentType === "application/zip") {
       //   fileExtension = "zip";
       // }
-      let nombreArchivoPredeterminado = `BINGO_CHABELITA_${dato1}-${dataJuego1.length}-${dataJuego2.length}`;
+      // let nombreArchivoPredeterminado = `BINGO_CHABELITA_${dato1}-${dataJuego1.length}-${dataJuego2.length}`;
 
-      const blob = new Blob([res.data], { type: 'application/pdf' });
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = `${nombreArchivoPredeterminado}.pdf`;
-      link.click();
+      // const blob = new Blob([res.data], { type: 'application/pdf' });
+      // const link = document.createElement("a");
+      // link.href = window.URL.createObjectURL(blob);
+      // link.download = `${nombreArchivoPredeterminado}.pdf`;
+      // link.click();
       // const { html } = await res.data;
 
       // const blob = new Blob([html], { type: "text/html" });
@@ -48,9 +50,9 @@ export async function CrearPdf({
       // // sessionStorage.setItem(uniqueId, html);
       // // const newWindow = window.open(`${ruta}?id=${uniqueId}`, "_blank");
 
-      // if (!newWindow) {
-      //   console.error("Failed to open new window");
-      // }
+      if (!newWindow) {
+        window.open(pdfUrl, "_blank");
+      }
       return true;
     }
 
