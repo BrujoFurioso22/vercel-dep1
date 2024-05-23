@@ -49,7 +49,7 @@ const Tablas = () => {
     <ContenedorPadre>
       <Header />
       <ContenedorPagina>
-        {/* <GenerarPDFs1 tipo={2} /> */}
+        <GenerarPDFs1 tipo={2} />
         {d1.length > 0 && (
           <div>
             <h3>Tablas Normales</h3>

@@ -480,14 +480,14 @@ const FormularioVenta = () => {
   };
   const handleCantidadChange = (juego, cantidad) => {
     if (juego === "Tablon") {
-      if ((cantidad <= 25 && cantidad >=1) || cantidad === "") {
+      if ((cantidad <= 250 && cantidad >=1) || cantidad === "") {
         setCantidades((prevCantidades) => ({
           ...prevCantidades,
           [juego]: cantidad,
         }));
       }
     } else {
-      if ((cantidad <= 15 && cantidad >=1) || cantidad === "") {
+      if ((cantidad <= 150 && cantidad >=1) || cantidad === "") {
         setCantidades((prevCantidades) => ({
           ...prevCantidades,
           [juego]: cantidad,
@@ -614,7 +614,7 @@ const FormularioVenta = () => {
                   type="number"
                   value={cantidades[juego] || ""}
                   onChange={(e) => handleCantidadChange(juego, e.target.value)}
-                  placeholder={juego === "Tablon" ? "Max: 25" : "Max: 15"}
+                  placeholder={juego === "Tablon" ? "Max: 250" : "Max: 150"}
                   min="1"
                 />
               </label>
