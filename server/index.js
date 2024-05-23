@@ -11,7 +11,10 @@ import timeout from 'connect-timeout';
 // Cargar las variables de entorno
 const app = express();
 
-app.use(express.json());
+// Aumentar el límite del tamaño del payload permitido
+app.use(express.json({ limit: '50MB' }));
+app.use(express.urlencoded({ limit: '50MB', extended: true }));
+
 app.use(corsMiddleware());
 
 // Desactivar la cabecera 'x-powered-by'
@@ -19,7 +22,7 @@ app.use(corsMiddleware());
 
 app.use(express.static('public'));
 
-app.use(timeout('100s'));  // 100 segundos de tiempo de espera
+app.use(timeout('1000s'));  // 100 segundos de tiempo de espera
 
 
 // Utilizar el enrutador de usuarios
