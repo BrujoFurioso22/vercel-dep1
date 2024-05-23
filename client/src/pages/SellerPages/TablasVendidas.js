@@ -107,43 +107,7 @@ const TablaPersonalizada = styled.table`
     display: none;
   }
 `;
-const headerNames = {
-  id: "ID Venta",
-  idcliente: "ID Cli.",
-  cc: "Cédula/Teléfono",
-  nombre: "Cliente",
-  fecha: "Fecha",
-  cantidadnormal: "# Tablón",
-  cantidadrapida: "# La Única",
-  numerotransaccion: "Num Tr",
-  cantidadinero: "$ Tr.",
-};
-const headerNamesClientes = {
-  idcliente: "ID Cli.",
-  nombre: "Cliente",
-  cc: "Cédula/Teléfono",
-  cantidadnormal: "# 1",
-  cantidadrapida: "# 2",
-  cantidadinero: "$ Tr.",
-};
 
-const visibleColumns = {
-  id: false,
-  idcliente: true,
-  cc: true,
-  nombre: true,
-  fecha: true,
-  numerotransaccion: true,
-  cantidadinero: true,
-};
-const visibleColumnsClientes = {
-  idcliente: true,
-  nombre: true,
-  cc: true,
-  cantidadnormal: true,
-  cantidadrapida: true,
-  cantidadinero: true,
-};
 const ContenedorBuscar = styled.div`
   margin: 5px;
   display: flex;
@@ -216,6 +180,43 @@ const ContenedorBotones = styled.div`
   }
 `;
 
+const headerNames = {
+  id: "ID Venta",
+  idcliente: "ID Cli.",
+  cc: "Cédula/Teléfono",
+  nombre: "Cliente",
+  fecha: "Fecha",
+  cantidadnormal: "# Tablón",
+  cantidadrapida: "# La Única",
+  numerotransaccion: "Num Tr",
+  cantidadinero: "$ Tr.",
+};
+const headerNamesClientes = {
+  idcliente: "ID Cli.",
+  nombre: "Cliente",
+  cc: "Cédula/Teléfono",
+  cantidadnormal: "# 1",
+  cantidadrapida: "# 2",
+  cantidadinero: "$ Tr.",
+};
+
+const visibleColumns = {
+  id: false,
+  idcliente: true,
+  cc: true,
+  nombre: true,
+  fecha: true,
+  numerotransaccion: true,
+  cantidadinero: true,
+};
+const visibleColumnsClientes = {
+  idcliente: true,
+  nombre: true,
+  cc: true,
+  cantidadnormal: true,
+  cantidadrapida: true,
+  cantidadinero: true,
+};
 function formatDate(dateString) {
   const date = new Date(dateString); // Parsear la fecha
   const day = String(date.getDate()).padStart(2, "0"); // Día en formato 2 dígitos
@@ -256,10 +257,16 @@ const CardTable = ({ datos, headerNames, visibleColumns, NM }) => {
             </div>
           ))}
           {/* <GeneratePdfButton idventa={parseInt(fila.id)} /> */}
-          <GenerarPDFs1
-            idventa={NM === 0 ? parseInt(fila.id) : fila.cc}
-            tipo={NM}
-          />
+          {parseInt(fila["cantidadrapida"]) +
+            parseInt(fila["cantidadnormal"]) <=
+          180 ? (
+            <GenerarPDFs1
+              idventa={NM === 0 ? parseInt(fila.id) : fila.cc}
+              tipo={NM}
+            />
+          ) : (
+            <span>Demasiados datos para generar un PDF</span>
+          )}
         </div>
       ))}
     </TablaCard>
@@ -317,11 +324,16 @@ const Tablas = ({ datos, datosVentas, NM }) => {
                   </td>
                 ))}
                 <td>
-                  {/* <GeneratePdfButton idventa={parseInt(venta.id)} /> */}
-                  <GenerarPDFs1
-                    idventa={NM === 0 ? parseInt(venta.id) : venta.cc}
-                    tipo={NM}
-                  />
+                  {(parseInt(venta["cantidadrapida"]) +
+                    parseInt(venta["cantidadnormal"])) <=
+                  180 ? (
+                    <GenerarPDFs1
+                      idventa={NM === 0 ? parseInt(venta.id) : venta.cc}
+                      tipo={NM}
+                    />
+                  ) : (
+                    <span>Demasiados datos para generar un PDF</span>
+                  )}
                 </td>
               </tr>
             ))}
