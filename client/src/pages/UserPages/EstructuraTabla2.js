@@ -121,8 +121,9 @@ const GridH = ({ data }) => {
                 : {
                     backgroundColor: "var(--color-4)",
                     aspectRatio: "1",
-                    padding: "5px",
-                    width: "10mm",
+                    fontSize:"8mm",
+                    // padding: "5px",
+                    width: "12mm",
                     borderRadius: "100%",
                     border: "solid 1px black",
                     display: "flex",
