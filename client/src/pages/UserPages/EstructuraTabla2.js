@@ -17,9 +17,12 @@ const ContenedorGrid = styled.div`
   & > .title {
     border: solid 1px #000000;
     border-bottom: none;
-    padding: 10px;
+    padding: 3px;
+    padding-top: 8px;
     display: flex;
     font-weight: 800;
+    font-size: 8mm;
+    line-height: 7mm;
     justify-content: center;
     align-items: center;
     border-radius: 15px 15px 0 0;

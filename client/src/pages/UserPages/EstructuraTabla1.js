@@ -17,19 +17,20 @@ const ContenedorGrid = styled.div`
   & > .title {
     border: solid 1px #000000;
     border-bottom: none;
-    /* padding: 10px; */
+    padding: 2px;
     font-weight: 800;
-    font-size: 8mm;
+    font-size: 9mm;
+    line-height: 9mm;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 15px 15px 0 0;
     background-color: rgba(255, 255, 255, 0.85);
-    letter-spacing: 10px;
+    letter-spacing: 36px;
     text-align: center;
     &::after {
       content: "";
-      margin-left: -10px; /* Ajusta esto al valor de tu letter-spacing */
+      margin-left: -40px; 
     }
   }
 `;
