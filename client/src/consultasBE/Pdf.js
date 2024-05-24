@@ -22,6 +22,7 @@ export async function CrearPdf({
       const newWindow = window.open(pdfUrl, "_blank");
 
       // console.log(res.data.html);
+
       // const contentType = res.headers["content-type"];
       // let fileExtension = "";
       // if (contentType === "application/pdf") {
