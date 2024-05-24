@@ -224,6 +224,14 @@ const BotonMenu = styled.button`
   border-radius: 5px;
   border: solid 1px white;
   padding: 5px;
+  @media ${device.mobile1} {
+    &.home{
+      color: white;
+      border: solid 1px white;
+    }
+    color: black;
+      border: solid 1px black;
+  }
 `;
 
 const ContenedorMenuLateral = styled.div`
@@ -242,7 +250,7 @@ const ContenedorMenuLateral = styled.div`
     top: 0;
     right: 0px;
     height: 100vh;
-    background-color:rgba(71, 71, 71, 0.97);
+    background-color: rgba(71, 71, 71, 0.97);
     padding: 15px 20px;
     gap: 10px;
     transition: width 0.6s ease, opacity 0.8s ease;
@@ -265,7 +273,7 @@ const ContenedorMenuLateral = styled.div`
         border-radius: 50%;
         aspect-ratio: 1;
         padding: 2px 0 0 1px;
-        box-shadow: 0 0  5px white;
+        box-shadow: 0 0 5px white;
         cursor: pointer;
       }
     }
@@ -467,7 +475,7 @@ const Header = ({ oculta }) => {
 
         <ContenedorMenuLogin>
           <BotonMenu
-            className="boton-menu-hamburguesa"
+            className={`${classNameBg} boton-menu-hamburguesa`}
             onClick={() =>
               toggleMenu(setDisplayMenu, setMenuVisible, menuVisible)
             }

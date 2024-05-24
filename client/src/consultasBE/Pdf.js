@@ -17,7 +17,7 @@ export async function CrearPdf({
     if (res.status === 205) {
       return false;
     } else if (res.status === 200) {
-      console.log(res);
+      console.log(res.data.pdf);
       const pdfUrl = res.data.pdf.FileUrl;
       const newWindow = window.open(pdfUrl, "_blank");
 
