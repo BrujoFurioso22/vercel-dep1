@@ -50,6 +50,7 @@ const Grid = styled.div`
 const GridCell = styled.div`
   background-color: transparent;
   height: 15mm;
+  font-size: 11mm;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -113,6 +114,7 @@ const GridH = ({ data }) => {
           position={
             index === 0 ? "bottom-left" : index === 24 ? "bottom-right" : null
           }
+          style={index === 12 ? {fontSize:"15px"}:null}
         >
           {item}
         </GridCell>
