@@ -317,7 +317,7 @@ function LandingPage() {
                 <BotonWpp
                   phoneNumber={"593980649852"}
                   message={
-                    "¡Hola! Estoy interesado en adquirir una tabla de tipo *1*. Me gustaría saber cuál es el precio actual y si tienen disponibilidad. Gracias de antemano por su atención."
+                    "¡Hola! Estoy interesado en adquirir tablas para el BINGO. Me gustaría saber cuál es el precio actual y si tienen disponibilidad. Gracias de antemano por su atención."
                   }
                 />
               </div>
@@ -349,7 +349,7 @@ function LandingPage() {
                 <BotonWpp
                   phoneNumber={"593980649852"}
                   message={
-                    "¡Hola! Estoy interesado en adquirir una tabla de tipo *2*. Me gustaría saber cuál es el precio actual y si tienen disponibilidad. Gracias de antemano por su atención."
+                    "¡Hola! Estoy interesado en adquirir tablas para el BINGO. Me gustaría saber cuál es el precio actual y si tienen disponibilidad. Gracias de antemano por su atención."
                   }
                 />
               </div>
