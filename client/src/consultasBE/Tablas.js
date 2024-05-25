@@ -225,10 +225,11 @@ export async function UpdateJugada({ id, data, historial }) {
     return err;
   }
 }
-export async function FinalizarJugada({ id ,ganadas }) {
+export async function FinalizarJugada({ id, ganadas }) {
   try {
     const res = await axios.post(`${url}/api/juegos/finalizarjuego`, {
-      id,ganadas
+      id,
+      ganadas,
     });
     if (res) {
       if (res.data.ok) {
@@ -273,9 +274,11 @@ export async function ObtenerTablasGanadorasRapida() {
     return err;
   }
 }
-export async function ObtenerTablasLetrasGanadoras() {
+export async function ObtenerTablasLetrasGanadoras({ numerosorden }) {
   try {
-    const res = await axios.get(`${url}/api/juegos/consultarletrasaganar`);
+    const res = await axios.post(`${url}/api/juegos/consultarletrasaganar`, {
+      numerosorden,
+    });
     console.log(res);
 
     if (res) {

@@ -144,6 +144,7 @@ const ContenedorJugadas = ({
   setLetrasTabla,
   setMostrarTJ,
   setJuego,
+  setUltNumero,
   TP,
   data1,
   data2,
@@ -182,6 +183,7 @@ const ContenedorJugadas = ({
         }
         // Convertir el array de vuelta a una cadena
         const updatedCadena = numbers.join(", ").trim();
+        setUltNumero(updatedCadena);
 
         const res = await UpdateJugada({
           id: data.id,
@@ -219,6 +221,8 @@ const ContenedorJugadas = ({
       }
       // Convertir el array de vuelta a una cadena
       const updatedCadena = numbers.join(", ").trim();
+      setUltNumero(updatedCadena);
+
       const res = await UpdateJugada({
         id: data.id,
         data: data1,
@@ -314,9 +318,7 @@ const ContenedorJugadas = ({
             <span>
               Fecha Jugada: <em> {formatearFechaLegible(data.fecha_hora)} </em>
             </span>
-            <h3 style={{ margin: "0" }}>
-              {TP === 0 ? "TABLÓN" : "LA ÚNICA"}
-            </h3>
+            <h3 style={{ margin: "0" }}>{TP === 0 ? "TABLÓN" : "LA ÚNICA"}</h3>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>
@@ -494,6 +496,7 @@ const Jugadas = () => {
   const [dataTablasLetas, setTablasLetra] = useState({});
   const [mostrarTipoJuego, setMostrarTipoJuego] = useState(true);
   const [consultaRealizada, setConsultaRealizada] = useState(false);
+  const [ultNum, setUltNum] = useState("");
 
   const transformData = (data) => {
     const result = {};
@@ -518,7 +521,6 @@ const Jugadas = () => {
     if (!res) {
       setData(null);
       setConsultaRealizada(true);
-
     } else {
       setData(res[0]);
       tdJ = res[0].tipo_juego;
@@ -539,7 +541,9 @@ const Jugadas = () => {
           setDataTotales(resTablaLlena);
         }
       }
-      const resTablaLetras = await ObtenerTablasLetrasGanadoras();
+      const resTablaLetras = await ObtenerTablasLetrasGanadoras({
+        numerosorden: ultNum,
+      });
       console.log(resTablaLetras);
 
       if (resTablaLetras.data1.length > 0) {
@@ -604,6 +608,7 @@ const Jugadas = () => {
                 setLetrasTabla={setTablasLetra}
                 setMostrarTJ={setMostrarTipoJuego}
                 setJuego={setTipodeJuego}
+                setUltNumero={setUltNum}
                 TP={tipodeJuego}
                 data1={dataTotales}
                 data2={dataTablasLetas}
