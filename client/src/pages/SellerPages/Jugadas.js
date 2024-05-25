@@ -518,6 +518,7 @@ const Jugadas = () => {
     const res = await ObtenerJugadas();
     let tdJ = "";
     console.log(res);
+    let uncadena = "";
     if (!res) {
       setData(null);
       setConsultaRealizada(true);
@@ -527,6 +528,8 @@ const Jugadas = () => {
       setTipodeJuego(tdJ);
       setMostrarTipoJuego(false);
       setConsultaRealizada(true);
+      // setUltNum(res[0].historial)
+      uncadena = res[0].historial;
     }
     let resTablaLlena = [];
     // console.log(tdJ);
@@ -542,7 +545,7 @@ const Jugadas = () => {
         }
       }
       const resTablaLetras = await ObtenerTablasLetrasGanadoras({
-        numerosorden: ultNum,
+        numerosorden: ultNum === "" ? uncadena : ultNum,
       });
       console.log(resTablaLetras);
 
