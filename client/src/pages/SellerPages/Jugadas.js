@@ -144,7 +144,6 @@ const ContenedorJugadas = ({
   setLetrasTabla,
   setMostrarTJ,
   setJuego,
-  setUltNumero,
   TP,
   data1,
   data2,
@@ -183,7 +182,6 @@ const ContenedorJugadas = ({
         }
         // Convertir el array de vuelta a una cadena
         const updatedCadena = numbers.join(", ").trim();
-        setUltNumero(updatedCadena);
 
         const res = await UpdateJugada({
           id: data.id,
@@ -221,7 +219,6 @@ const ContenedorJugadas = ({
       }
       // Convertir el array de vuelta a una cadena
       const updatedCadena = numbers.join(", ").trim();
-      setUltNumero(updatedCadena);
 
       const res = await UpdateJugada({
         id: data.id,
@@ -496,8 +493,6 @@ const Jugadas = () => {
   const [dataTablasLetas, setTablasLetra] = useState({});
   const [mostrarTipoJuego, setMostrarTipoJuego] = useState(true);
   const [consultaRealizada, setConsultaRealizada] = useState(false);
-  const [ultNum, setUltNum] = useState("");
-
   const transformData = (data) => {
     const result = {};
 
@@ -517,7 +512,6 @@ const Jugadas = () => {
   const ConsultarJugadas = async () => {
     const res = await ObtenerJugadas();
     let tdJ = "";
-    console.log(res);
     let uncadena = "";
     if (!res) {
       setData(null);
@@ -545,9 +539,8 @@ const Jugadas = () => {
         }
       }
       const resTablaLetras = await ObtenerTablasLetrasGanadoras({
-        numerosorden: ultNum === "" ? uncadena : ultNum,
+        numerosorden: uncadena ,
       });
-      console.log(resTablaLetras);
 
       if (resTablaLetras.data1.length > 0) {
         // console.log(resTablaLetras);
@@ -611,7 +604,6 @@ const Jugadas = () => {
                 setLetrasTabla={setTablasLetra}
                 setMostrarTJ={setMostrarTipoJuego}
                 setJuego={setTipodeJuego}
-                setUltNumero={setUltNum}
                 TP={tipodeJuego}
                 data1={dataTotales}
                 data2={dataTablasLetas}
