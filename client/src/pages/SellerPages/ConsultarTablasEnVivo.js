@@ -124,7 +124,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     };
 
     if (resp.data) {
-      // console.log(resp);
+      console.log(resp);
 
       let dat = resp.data.data;
       setPasadas(resp.data.data[0].cadena);
@@ -157,10 +157,13 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
             }
 
             if (tdeJ === 0 && lT === "N") {
-              const res1 = await ObtenerTablasLetrasGanadoras();
-              if (res1.data1.length > 0) {
-                const cadena = findPositionsByCode(codigo, res1.ganadas);
-                setLetrasFormadas(cadena);
+              // const res1 = await ObtenerTablasLetrasGanadoras();
+              if (resp.data.data[0].cadenaletras !== "") {
+                
+                const cadena = resp.data.data[0].cadenaletras;
+                const cadenaMostar = cadena.replace(/\./g, '.<br/>');
+                console.log(cadenaMostar);
+                setLetrasFormadas(cadenaMostar);
               }
             }
           }
@@ -186,6 +189,22 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
     setJugada(null);
     setData([]);
   };
+  function DisplayTextLetras({ letrasFormadas }) {
+    // Si letrasFormadas está vacío, muestra un mensaje por defecto
+    const content = letrasFormadas === "" 
+      ? "No se han formado letras" 
+      : { __html: `Letras Formadas: <br/> ${letrasFormadas}` };
+      console.log(content);
+  
+    return (
+      <span>
+        {letrasFormadas === ""
+          ? content
+          : <div dangerouslySetInnerHTML={content} />
+        }
+      </span>
+    );
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
@@ -236,13 +255,7 @@ const VerificarCodigo = ({ codigo, setCodigo }) => {
                               : "La tabla aun no llega a tener más de 5 números llenados"
                           }`}
                     </span>
-                    {letraTabla === "N" && (
-                      <span>
-                        {letrasFormadas === ""
-                          ? "No se han formado letras"
-                          : `Letras Formadas: ${letrasFormadas}`}
-                      </span>
-                    )}
+                    {letraTabla === "N" && DisplayTextLetras({letrasFormadas})}
                     {pasadas !== "" && <span>{pasadas}</span>}
                   </div>
                 ) : (
