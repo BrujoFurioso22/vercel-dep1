@@ -103,43 +103,6 @@ const TablaDinamica = ({ data, columnasOcultas, nombresColumnas }) => {
 
 const RegistroVentas = () => {
   const [datos, setDatos] = useState([]);
-  // const datos = [
-  //   {
-  //     id: 1,
-  //     nombreVendedor: "Vend1",
-  //     cantidadTablon: 20,
-  //     cantidadUnica: 10,
-  //     Total: 30,
-  //   },
-  //   {
-  //     id: 2,
-  //     nombreVendedor: "Vend2",
-  //     cantidadTablon: 3,
-  //     cantidadUnica: 10,
-  //     Total: 13,
-  //   },
-  //   {
-  //     id: 3,
-  //     nombreVendedor: "Vend3",
-  //     cantidadTablon: 4,
-  //     cantidadUnica: 8,
-  //     Total: 12,
-  //   },
-  //   {
-  //     id: 4,
-  //     nombreVendedor: "Vend4",
-  //     cantidadTablon: 25,
-  //     cantidadUnica: 15,
-  //     Total: 40,
-  //   },
-  //   {
-  //     id: 5,
-  //     nombreVendedor: "Vend5",
-  //     cantidadTablon: 12,
-  //     cantidadUnica: 11,
-  //     Total: 23,
-  //   },
-  // ];
 
   const columnasOcultas = []; // Columnas que no quieres mostrar
   const nombresColumnas = {
