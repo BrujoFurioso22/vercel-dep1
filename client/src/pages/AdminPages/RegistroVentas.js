@@ -38,7 +38,8 @@ const TablaEstilizada = styled.table`
   width: 100%;
   border-collapse: collapse;
 
-  th, td {
+  th,
+  td {
     padding: 8px;
     text-align: left;
     border-left: 1px solid #ccc;
@@ -46,11 +47,13 @@ const TablaEstilizada = styled.table`
     text-align: center;
   }
 
-  th:first-child, td:first-child {
+  th:first-child,
+  td:first-child {
     border-left: none; // Borde más grueso y oscuro para el primer elemento
   }
 
-  th:last-child, td:last-child {
+  th:last-child,
+  td:last-child {
     border-right: none; // Borde más grueso y oscuro para el último elemento
   }
 
@@ -60,9 +63,10 @@ const TablaEstilizada = styled.table`
 `;
 
 const TablaDinamica = ({ data, columnasOcultas, nombresColumnas }) => {
-  const columnas = Object.keys(data[0]).filter(
-    (col) => !columnasOcultas.includes(col)
-  );
+  const columnas =
+    data.length > 0
+      ? Object.keys(data[0]).filter((col) => !columnasOcultas.includes(col))
+      : [];
 
   return (
     <TablaContenedor>
@@ -75,13 +79,21 @@ const TablaDinamica = ({ data, columnasOcultas, nombresColumnas }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((fila, index) => (
-            <tr key={index}>
-              {columnas.map((col) => (
-                <td key={`${index}-${col}`}>{fila[col]}</td>
-              ))}
+          {data.length > 0 ? (
+            data.map((fila, index) => (
+              <tr key={index}>
+                {columnas.map((col) => (
+                  <td key={`${index}-${col}`}>{fila[col]}</td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={columnas.length} style={{ textAlign: "center" }}>
+                No hay ventas
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </TablaEstilizada>
     </TablaContenedor>
@@ -90,11 +102,41 @@ const TablaDinamica = ({ data, columnasOcultas, nombresColumnas }) => {
 
 const RegistroVentas = () => {
   const datos = [
-    { id: 1, nombreVendedor: "Vend1", cantidadTablon: 20, cantidadUnica:10,Total:30 },
-    { id: 2, nombreVendedor: "Vend2", cantidadTablon: 3, cantidadUnica:10,Total:13 },
-    { id: 3, nombreVendedor: "Vend3", cantidadTablon: 4, cantidadUnica:8,Total:12 },
-    { id: 4, nombreVendedor: "Vend4", cantidadTablon: 25, cantidadUnica:15,Total:40 },
-    { id: 5, nombreVendedor: "Vend5", cantidadTablon: 12, cantidadUnica:11,Total:23 },
+    {
+      id: 1,
+      nombreVendedor: "Vend1",
+      cantidadTablon: 20,
+      cantidadUnica: 10,
+      Total: 30,
+    },
+    {
+      id: 2,
+      nombreVendedor: "Vend2",
+      cantidadTablon: 3,
+      cantidadUnica: 10,
+      Total: 13,
+    },
+    {
+      id: 3,
+      nombreVendedor: "Vend3",
+      cantidadTablon: 4,
+      cantidadUnica: 8,
+      Total: 12,
+    },
+    {
+      id: 4,
+      nombreVendedor: "Vend4",
+      cantidadTablon: 25,
+      cantidadUnica: 15,
+      Total: 40,
+    },
+    {
+      id: 5,
+      nombreVendedor: "Vend5",
+      cantidadTablon: 12,
+      cantidadUnica: 11,
+      Total: 23,
+    },
   ];
 
   const columnasOcultas = ["id"]; // Columnas que no quieres mostrar
@@ -102,7 +144,7 @@ const RegistroVentas = () => {
     nombreVendedor: "VENDEDOR",
     cantidadTablon: "# TABLÓN",
     cantidadUnica: "# LA ÚNICA",
-    Total:"TOTAL"
+    Total: "TOTAL",
   };
   return (
     <ContenedorPadre>
