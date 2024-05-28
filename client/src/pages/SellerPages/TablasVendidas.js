@@ -356,15 +356,15 @@ const Tablas = ({ datos, datosVentas, NM }) => {
       </Contenedor1>
       <Contenedor2>
         <div className="grid-container">
-          <div className="header"># Ventas</div>
-          <div className="header">Normal</div>
-          <div className="header">Rápida</div>
-          <div className="header">Total</div>
-          <div className="header">Vendedor</div>
+          <div className="header"># VENTAS</div>
+          <div className="header">TABLÓN</div>
+          <div className="header">LA ÚNICA</div>
+          <div className="header">TOTAL</div>
+          <div className="header">VENDEDOR</div>
           <div className="cell">{datosVentas.juegos_normal_vendedor}</div>
           <div className="cell">{datosVentas.juegos_rapida_vendedor}</div>
           <div className="cell">{datosVentas.juegos_total_vendedor}</div>
-          <div className="header">Total</div>
+          <div className="header">TOTAL</div>
           <div className="cell">{datosVentas.total_normal}</div>
           <div className="cell">{datosVentas.total_rapida}</div>
           <div className="cell">{datosVentas.total_juegos}</div>
