@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ManageUsersVend from "../AdminPages/ManageUsersVend";
 import EliminarVentas from "../AdminPages/EliminarVentas";
 import CrearVendedor from "../AdminPages/CrearVendedor";
+import RegistroVentas from "../AdminPages/RegistroVentas";
 
 const ContenedorPadre = styled.div`
   display: flex;
@@ -27,6 +28,7 @@ const AdminRoutes = () => {
         <Route path="manageUsers" element={<ManageUsersVend />} />
         <Route path="delVentas" element={<EliminarVentas />} />
         <Route path="crearVendedor" element={<CrearVendedor />} />
+        <Route path="registroVentas" element={<RegistroVentas />} />
       </Routes>
     </ContenedorPadre>
   );

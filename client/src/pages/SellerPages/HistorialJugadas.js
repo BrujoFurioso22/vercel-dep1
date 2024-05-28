@@ -185,10 +185,10 @@ const visibleColumns = {
   tablas_ganadas: true,
 };
 function formatoLegible(fechaISO) {
-  // console.log(fechaISO);
   if (fechaISO !== null) {
     const fecha = new Date(fechaISO);
     return fecha.toLocaleString("es-ES", {
+      timeZone: "UTC",
       year: "numeric",
       month: "long",
       day: "numeric",
