@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { useAuth } from "../auth/AuthContext";
 import { BotonTipo1 } from "./styled-componets/ComponentsPrincipales";
 import { device } from "./styled-componets/MediaQ";
-import logo from "../imgs/LogoChabelita1.ico";
+import logo from "../imgs/LogoAustro.ico";
 
 const ContenedorHeader = styled.div`
   display: flex;

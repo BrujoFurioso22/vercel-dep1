@@ -276,9 +276,9 @@ function LandingPage() {
       <ContenidoPagina>
         <ContenedorPP>
           <BingoText style={{ textAlign: "center" }}>
-            BINGO
+            GRAN BINGO
             <br />
-            CHABELITA
+            DEL AUSTRO
           </BingoText>
           <ContenedorVerMas>
             <div className="c1" onClick={scrollToElement}>
