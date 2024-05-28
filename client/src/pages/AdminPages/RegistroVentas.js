@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { ContenedorPadre } from "../../components/styled-componets/ComponentsPrincipales";
+import { ConsultarVentas } from "../../consultasBE/Admin";
 
 const ContenedorPagina = styled.div`
   position: relative;
@@ -101,51 +102,61 @@ const TablaDinamica = ({ data, columnasOcultas, nombresColumnas }) => {
 };
 
 const RegistroVentas = () => {
-  const datos = [
-    {
-      id: 1,
-      nombreVendedor: "Vend1",
-      cantidadTablon: 20,
-      cantidadUnica: 10,
-      Total: 30,
-    },
-    {
-      id: 2,
-      nombreVendedor: "Vend2",
-      cantidadTablon: 3,
-      cantidadUnica: 10,
-      Total: 13,
-    },
-    {
-      id: 3,
-      nombreVendedor: "Vend3",
-      cantidadTablon: 4,
-      cantidadUnica: 8,
-      Total: 12,
-    },
-    {
-      id: 4,
-      nombreVendedor: "Vend4",
-      cantidadTablon: 25,
-      cantidadUnica: 15,
-      Total: 40,
-    },
-    {
-      id: 5,
-      nombreVendedor: "Vend5",
-      cantidadTablon: 12,
-      cantidadUnica: 11,
-      Total: 23,
-    },
-  ];
+  const [datos, setDatos] = useState([]);
+  // const datos = [
+  //   {
+  //     id: 1,
+  //     nombreVendedor: "Vend1",
+  //     cantidadTablon: 20,
+  //     cantidadUnica: 10,
+  //     Total: 30,
+  //   },
+  //   {
+  //     id: 2,
+  //     nombreVendedor: "Vend2",
+  //     cantidadTablon: 3,
+  //     cantidadUnica: 10,
+  //     Total: 13,
+  //   },
+  //   {
+  //     id: 3,
+  //     nombreVendedor: "Vend3",
+  //     cantidadTablon: 4,
+  //     cantidadUnica: 8,
+  //     Total: 12,
+  //   },
+  //   {
+  //     id: 4,
+  //     nombreVendedor: "Vend4",
+  //     cantidadTablon: 25,
+  //     cantidadUnica: 15,
+  //     Total: 40,
+  //   },
+  //   {
+  //     id: 5,
+  //     nombreVendedor: "Vend5",
+  //     cantidadTablon: 12,
+  //     cantidadUnica: 11,
+  //     Total: 23,
+  //   },
+  // ];
 
-  const columnasOcultas = ["id"]; // Columnas que no quieres mostrar
+  const columnasOcultas = []; // Columnas que no quieres mostrar
   const nombresColumnas = {
-    nombreVendedor: "VENDEDOR",
-    cantidadTablon: "# TABLÓN",
-    cantidadUnica: "# LA ÚNICA",
-    Total: "TOTAL",
+    name: "VENDEDOR",
+    alias: "ALIAS",
+    total_normal: "# TABLÓN",
+    total_rapida: "# LA ÚNICA",
+    total_juegos: "TOTAL",
   };
+
+  const ConsultaVentasVendedores = async () => {
+    const respuesta = await ConsultarVentas();
+    setDatos(respuesta);
+  };
+  useEffect(() => {
+    ConsultaVentasVendedores();
+  }, []);
   return (
     <ContenedorPadre>
       <Header />
