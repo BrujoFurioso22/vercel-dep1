@@ -72,9 +72,9 @@ export async function ElimVentas() {
 export async function ConsultarVentas() {
   try {
     const res = await axios.get(`${url}/api/ventas/obtenertotalesadministrador`);
-    // console.log(res);
+    console.log(res);
     if (res.status === 200) {
-      return res.data.data.datos;
+      return res.data.data;
     } else {
       return [];
     }

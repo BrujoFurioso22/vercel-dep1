@@ -84,7 +84,7 @@ const TablaDinamica = ({ data, columnasOcultas, nombresColumnas }) => {
             data.map((fila, index) => (
               <tr key={index}>
                 {columnas.map((col) => (
-                  <td key={`${index}-${col}`}>{fila[col]}</td>
+                  <td key={`${index}-${col}`}>{fila[col] === "" ? "-":fila[col]}</td>
                 ))}
               </tr>
             ))
@@ -115,6 +115,7 @@ const RegistroVentas = () => {
 
   const ConsultaVentasVendedores = async () => {
     const respuesta = await ConsultarVentas();
+    console.log(respuesta);
     setDatos(respuesta);
   };
   useEffect(() => {
