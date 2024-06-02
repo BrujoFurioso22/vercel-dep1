@@ -278,11 +278,9 @@ export async function ObtenerTablasGanadorasRapida() {
 }
 export async function ObtenerTablasLetrasGanadoras({ numerosorden }) {
   try {
-    console.log(numerosorden);
     const res = await axios.post(`${url}/api/juegos/consultarletrasaganar`, {
       numerosorden,
     });
-    console.log(res);
 
     if (res) {
       if (res.data.exists) {

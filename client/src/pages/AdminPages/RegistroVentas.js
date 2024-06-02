@@ -115,7 +115,6 @@ const RegistroVentas = () => {
 
   const ConsultaVentasVendedores = async () => {
     const respuesta = await ConsultarVentas();
-    console.log(respuesta);
     setDatos(respuesta);
   };
   useEffect(() => {
