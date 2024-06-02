@@ -21,8 +21,6 @@ export async function ObtenerUsuarioPorCC(cedulacelular) {
 }
 export async function VerificarUsuario(cedulacelular, password) {
   try {
-    console.log(cedulacelular);
-    console.log(password);
     const res = await axios.post(`${url}/api/users/userverif`, {
       cedulacelular: cedulacelular,
       password: password,
