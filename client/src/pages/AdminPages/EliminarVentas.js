@@ -133,9 +133,9 @@ const EliminarVentas = () => {
             <ContenedorConfirmacion>
               <h4>
                 {showEstadoEliminacion === 1 ? (
-                  "0 ventas para eliminar, las ventas tal vez ya fueron eliminadas."
+                  "Ventas borradas exitosamente."
                 ) : showEstadoEliminacion === 2 ? (
-                  "Ventas de hace más de 2 semanas borradas exitosamente."
+                  "Ventas borradas exitosamente."
                 ) : (
                   <div
                     style={{
