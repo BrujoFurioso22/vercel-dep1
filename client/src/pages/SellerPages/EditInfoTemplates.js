@@ -481,6 +481,7 @@ const EditarInformacion = () => {
     premios: [],
     cantidad_letras: 4,
     letras: [],
+    premio_letra:"",
     fecha_hora: "",
   });
   const [data2, setData2] = useState({
