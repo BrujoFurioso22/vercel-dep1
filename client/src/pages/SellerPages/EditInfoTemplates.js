@@ -351,15 +351,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                   }
                 />
               </span>
-              <span className="col-derecha">Premio Letras:</span>
-              <span className="col-izquierda">
-                {"$"}
-                <InputField
-                  value={data1.premio_letra}
-                  type="number"
-                  onChange={(e) => handleChange1("premio_letra", e.target.value)}
-                />
-              </span>
+              
               <span className="col-izquierda">
                 <InputField
                   value={data1.letras.join("-")}
@@ -370,6 +362,15 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                       data1.cantidad_letras
                     )
                   }
+                />
+              </span>
+              <span className="col-derecha">Premio Letras:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={data1.premio_letra}
+                  type="number"
+                  onChange={(e) => handleChange1("premio_letra", e.target.value)}
                 />
               </span>
               <span className="col-derecha">Premios:</span>
