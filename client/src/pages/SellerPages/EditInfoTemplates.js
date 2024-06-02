@@ -268,6 +268,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
         fecha_hora: data1.fecha_hora,
         cantidad_letras: parseInt(data1.cantidad_letras),
         letras: letras1.join(","),
+        premio_letras: parseFloat(data1.premio_letra)
       });
       const res1 = await UpdateTablaRapidaDes({
         contenido: data2.contenido,
@@ -348,6 +349,15 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
                   onChange={(e) =>
                     handleChangeNumLetras("cantidad_letras", e.target.value)
                   }
+                />
+              </span>
+              <span className="col-derecha">Premio Letras:</span>
+              <span className="col-izquierda">
+                {"$"}
+                <InputField
+                  value={data1.premio_letra}
+                  type="number"
+                  onChange={(e) => handleChange1("premio_letra", e.target.value)}
                 />
               </span>
               <span className="col-izquierda">

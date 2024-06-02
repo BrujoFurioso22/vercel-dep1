@@ -106,6 +106,7 @@ export async function UpdateTablaNormalDes({
   fecha_hora,
   cantidad_letras,
   letras,
+  premio_letra,
 }) {
   try {
     const res = await axios.post(
@@ -119,6 +120,7 @@ export async function UpdateTablaNormalDes({
         fecha_hora,
         cantidad_letras,
         letras,
+        premio_letra,
       }
     );
     return res;
