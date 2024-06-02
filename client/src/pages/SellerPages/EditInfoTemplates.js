@@ -268,7 +268,7 @@ const CuadroInfo = ({ data1, data2, handleChange1, handleChange2 }) => {
         fecha_hora: data1.fecha_hora,
         cantidad_letras: parseInt(data1.cantidad_letras),
         letras: letras1.join(","),
-        premio_letras: parseFloat(data1.premio_letra)
+        premio_letra: parseFloat(data1.premio_letra)
       });
       const res1 = await UpdateTablaRapidaDes({
         contenido: data2.contenido,

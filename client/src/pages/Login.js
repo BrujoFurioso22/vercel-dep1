@@ -93,10 +93,6 @@ function Login() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    
-
-    console.log(cedulacelular);
-    console.log(password);
     const users = await VerificarUsuario(cedulacelular, password);
     // console.log(users);
     if (users.status===200) {
